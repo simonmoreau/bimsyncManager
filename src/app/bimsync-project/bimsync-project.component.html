@@ -1,0 +1,76 @@
+<p>
+  bimsync-project works!
+</p>
+
+<a class="btn btn-primary" href="https://api.bimsync.com/oauth2/authorize?client_id=6E63g0C2zVOwlNm&response_type=code&redirect_uri=http://localhost:4200/callback">Connect</a>
+<button class="btn btn-primary" (click)='CreateProject()'>Create project</button>
+<table class="table" *ngIf='createdProject'>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{createdProject.name}}</td>
+            <td>{{createdProject.description}}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<form #bimsyncProjectForm="ngForm" (ngSubmit)="onSubmit()" [hidden]="submitted">
+  <section class="form-block">
+      <label>Create a new bimsync project</label>
+      <div class="form-group">
+          <label for="projectName">Project name</label>
+          <label for="projectName"
+              aria-haspopup="true"
+              role="tooltip"
+              class="tooltip tooltip-validation tooltip-md"
+              [class.invalid]="projectNameImput.invalid && (projectNameImput.dirty || projectNameImput.touched)">
+              <input type="text" id="projectName" placeholder="Enter project name"
+                  required
+                  name="projectName"
+                  [(ngModel)]="projectName"
+                  #projectNameImput="ngModel">
+              <span class="tooltip-content">
+                  Project Name is Required.
+              </span>
+          </label>
+      </div>
+      <div class="form-group">
+        <label for="projectDescription">Project description</label>
+        <label for="projectDescription"
+            aria-haspopup="true"
+            role="tooltip"
+            class="tooltip tooltip-validation tooltip-md"
+            [class.invalid]="projectDescriptionImput.invalid && (projectDescriptionImput.dirty || projectDescriptionImput.touched)">
+            <input type="text" id="projectDescription" placeholder="Enter project description"
+                name="projectDescription"
+                [(ngModel)]="projectDescription"
+                #projectDescriptionImput="ngModel">
+        </label>
+    </div>
+      <button class="btn btn-primary" type="button" (click)="onSubmit()"
+          [disabled]="bimsyncProjectForm.form.invalid">Add</button>
+  </section>
+</form>
+
+<table class="table" *ngIf='projects && projects.length'>
+    <thead>
+        <tr>
+            <th>Decimal</th>
+            <th>Hexadecimal</th>
+            <th>Binary</th>
+            <th>Roman Numeral</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor='let project of projects'>
+            <td>{{project.name}}</td>
+            <td>{{project.description}}</td>
+        </tr>
+    </tbody>
+</table>
