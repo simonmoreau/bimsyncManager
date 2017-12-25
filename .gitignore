@@ -1,19 +1,31 @@
-# Build and Release Folders
-bin/
-bin-debug/
-bin-release/
-[Oo]bj/ # FlashDevelop obj
-[Bb]in/ # FlashDevelop bin
+.DS_STORE
 
-# Other files and folders
+/dist/
+bazel-*
+e2e_test.*
+node_modules
+bower_components
+tools/gulp-tasks/cldr/cldr-data/
+
+# Include when developing application packages.
+pubspec.lock
+.c9
+.idea/
 .settings/
+*.swo
+modules/.settings
+.vscode
+modules/.vscode
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
+# Don't check in secret files
+*secret.js
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+# Ignore npm/yarn debug log
+npm-debug.log
+yarn-error.log
+
+# build-analytics
+.build-analytics
+
+# rollup-test output
+/modules/rollup-test/dist/
