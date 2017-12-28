@@ -23,24 +23,24 @@ export class bimsyncProjectService {
             {
                 //params: new HttpParams().set('id', '56784'),
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer dBOwM0iWoVMHqjcETb3inX')
+                    .set('Authorization', 'Bearer ZVN4yEi3jWSYz7w3RidkHa')
                     .set('Content-Type', 'application/json')
               })
         .do(data => console.log('All: ' + JSON.stringify(data)))
         .catch(this.handleError);
     }
 
-    createNewProject(): Observable<IProject>{
+    createNewProject(Name : string, Description : string): Observable<IProject>{
         return this._http.post<IProject[]>(
             this._projectsUrl,
             {
-                name: 'foo',
-                description: 'bar'
+                name: Name,
+                description: Description
               },
             {
                 //params: new HttpParams().set('id', '56784'),
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer Qr26bBF5H0UKhRO24wOWLm')
+                    .set('Authorization', 'Bearer ZVN4yEi3jWSYz7w3RidkHa')
                     .set('Content-Type', 'application/json')
               })
         .do(data => console.log('All: ' + JSON.stringify(data)))

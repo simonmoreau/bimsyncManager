@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IAccessToken } from './access_token';
+import { IUser} from './user';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
@@ -19,9 +20,10 @@ export class BimsyncOauthComponent implements OnInit  {
     constructor(private _http: HttpClient, private activatedRoute: ActivatedRoute, private router: Router) { }
 
     // private instance variable to hold base url
-    private _projectsUrl = 'https://api.bimsync.com/oauth2/token';
+    private _projectsUrl = 'http://localhost:5000/api/users';
     private _authorization_code = '';
     private _access_token: IAccessToken;
+    private _user: IUser;
     private requestBody:string;
     errorMessage: string;
 
@@ -33,19 +35,25 @@ export class BimsyncOauthComponent implements OnInit  {
             //console.log(this._authorization_code);
         });
 
-        console.log('_authorization_code'+ this._authorization_code);
+        console.log('_authorization_code : '+ this._authorization_code);
 
-      this.requestBody = 'grant_type=authorization_code&code='+ this._authorization_code
-      +'&redirect_uri=http://localhost:4200/callback&client_id=&client_secret=';
+    //   this.requestBody = 'grant_type=authorization_code&code='+ this._authorization_code
+    //   +'&redirect_uri=http://localhost:4200/callback&client_id=&client_secret=';
 
-        //Get an acess token
-        this.getAccessToken()
-            .subscribe(access_token => {
-                this._access_token = access_token;
-            },
-            error => this.errorMessage = <any>error);
+        //Get the connected user
+        this.getUser()
+        .subscribe(user => {
+            this._user = user;
+        },
+        error => this.errorMessage = <any>error);
+
+        // this.getAccessToken()
+        //     .subscribe(access_token => {
+        //         this._access_token = access_token;
+        //     },
+        //     error => this.errorMessage = <any>error);
         
-        //console.log('_access_token'+ this._access_token.access_token);
+        console.log('User : '+ JSON.stringify(this._user));
 
         //Redirect to the home page
         this.router.navigate(['/home']);
@@ -56,6 +64,18 @@ export class BimsyncOauthComponent implements OnInit  {
             this._projectsUrl,this.requestBody,
             {
                 //params: new HttpParams().set('id', '56784'),
+                headers: new HttpHeaders()
+                    .set('Content-Type', 'application/x-www-form-urlencoded')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    getUser(): Observable<IUser>{
+        return this._http.post<IUser>(
+            this._projectsUrl ,'',
+            {
+                params: new HttpParams().set('code', this._authorization_code),
                 headers: new HttpHeaders()
                     .set('Content-Type', 'application/x-www-form-urlencoded')
             })

@@ -25,26 +25,13 @@ export class BimsyncProjectComponent {
     //https://api.bimsync.com/oauth2/authorize?client_id=hl94XJLXaQe3ogX&response_type=code&redirect_uri=http://localhost:4200/callback
   }
 
-  CreateProject(){
-    console.log('Create bimsync project');
-
-    this._bimsyncProjectService.createNewProject()
-    .subscribe(project => {
-      this.createdProject = project;
-  },
-      error => this.errorMessage = <any>error);
-  }
-
   oAuthbimsync(){
     console.log('oAuthbimsync');
 
     //this._bimsyncProjectService.createNewProject().
   }
 
-  onSubmit() {
-
-    console.log('onSubmit');
-
+  GetProjects(){
     this._bimsyncProjectService.getProjects()
     .subscribe(projects => {
         this.projects = projects;
@@ -54,7 +41,25 @@ export class BimsyncProjectComponent {
     return false;
   }
 
+  onSubmit() {
+
+    console.log('onSubmit');
+    this.CreateProject();
+  }
+
+  CreateProject(){
+    console.log('Create bimsync project');
+
+    this._bimsyncProjectService.createNewProject(this.projectName,this.projectDescription)
+    .subscribe(project => {
+      this.createdProject = project;
+  },
+      error => this.errorMessage = <any>error);
+  }
+
 }
+
+
 
 
 
