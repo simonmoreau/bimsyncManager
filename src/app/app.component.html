@@ -6,12 +6,25 @@
         <span class="title">bimsync Manager</span>
       </a>
     </div>
-      <div class="header-nav" [clr-nav-level]="1">
-          <a class="nav-link" href="#" [routerLink]="['/home']" routerLinkActive="active"><span class="nav-text">Home</span></a>
-          <a class="nav-link" href="#" [routerLink]="['/about']" routerLinkActive="active"><span class="nav-text">About</span></a>
-      </div>
-    <div class="header-actions">
+    <div class="header-nav" [clr-nav-level]="1">
+      <a class="nav-link" href="#" [routerLink]="['/home']" routerLinkActive="active">
+        <span class="nav-text">Home</span>
+      </a>
+      <a class="nav-link" href="#" [routerLink]="['/about']" routerLinkActive="active">
+        <span class="nav-text">About</span>
+      </a>
     </div>
+    <div class="header-actions" *ngIf="User; else loginTemplate">
+      Hello {{User.name}}
+    </div>
+    <ng-template #loginTemplate>
+      <div class="header-actions">
+        <a class="btn btn-primary" href="https://api.bimsync.com/oauth2/authorize?client_id=6E63g0C2zVOwlNm&response_type=code&redirect_uri=http://localhost:4200/callback">
+          <span class="nav-text">Connect</span>
+        </a>
+      </div>
+    </ng-template>
+
   </clr-header>
   <div class="content-container">
     <div class="content-area">

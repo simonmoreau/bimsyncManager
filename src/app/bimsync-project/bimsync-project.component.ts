@@ -12,7 +12,7 @@ import {bimsyncProjectService } from './bimsync-project.services';
   styleUrls: ['./bimsync-project.component.scss'],
   providers: [bimsyncProjectService]
 })
-export class BimsyncProjectComponent {
+export class BimsyncProjectComponent implements OnInit {
   projectName: string = '';
   projectDescription: string = '';
   errorMessage: string;
@@ -20,17 +20,12 @@ export class BimsyncProjectComponent {
   projects: IProject[] = [];
   createdProject: IProject;
 
-  constructor(private _bimsyncProjectService : bimsyncProjectService) {
-    //Link to :
-    //https://api.bimsync.com/oauth2/authorize?client_id=hl94XJLXaQe3ogX&response_type=code&redirect_uri=http://localhost:4200/callback
+  constructor(private _bimsyncProjectService : bimsyncProjectService) {}
+
+  ngOnInit() {
+    this.GetProjects();
   }
-
-  oAuthbimsync(){
-    console.log('oAuthbimsync');
-
-    //this._bimsyncProjectService.createNewProject().
-  }
-
+  
   GetProjects(){
     this._bimsyncProjectService.getProjects()
     .subscribe(projects => {
@@ -56,7 +51,6 @@ export class BimsyncProjectComponent {
   },
       error => this.errorMessage = <any>error);
   }
-
 }
 
 

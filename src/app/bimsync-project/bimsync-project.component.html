@@ -2,7 +2,7 @@
   bimsync-project works!
 </p>
 
-<a class="btn btn-primary" href="https://api.bimsync.com/oauth2/authorize?client_id=6E63g0C2zVOwlNm&response_type=code&redirect_uri=http://localhost:4200/callback">Connect</a>
+
 <button class="btn btn-primary" (click)='GetProjects()'>Get projects</button>
 <table class="table" *ngIf='createdProject'>
     <thead>
@@ -61,15 +61,13 @@
 <table class="table" *ngIf='projects && projects.length'>
     <thead>
         <tr>
-            <th>Decimal</th>
-            <th>Hexadecimal</th>
-            <th>Binary</th>
-            <th>Roman Numeral</th>
+            <th>Name</th>
+            <th>Description</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor='let project of projects'>
-            <td>{{project.name}}</td>
+            <td><a href="https://bimsync.com/project/{{project.id}}">{{project.name}}</a></td>
             <td>{{project.description}}</td>
         </tr>
     </tbody>

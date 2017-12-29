@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import { Body } from '@angular/http/src/body';
-import { AppService } from 'app/app.service';
+import { AppComponent} from 'app/app.component';
 import { ucs2 } from 'punycode';
 
 @Component({
@@ -23,7 +23,7 @@ export class BimsyncOauthComponent implements OnInit {
     private _access_token: IAccessToken;
     private _user: IUser;
     private requestBody: string;
-    private _appService: AppService;
+    private _appComponent: AppComponent;
     errorMessage: string;
 
     // Resolve HTTP using the constructor
@@ -31,8 +31,8 @@ export class BimsyncOauthComponent implements OnInit {
         private _http: HttpClient,
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private appService: AppService) {
-        this._appService = appService;
+    private appComponent: AppComponent) {
+        this._appComponent = appComponent;
     }
 
     ngOnInit() {
@@ -47,13 +47,13 @@ export class BimsyncOauthComponent implements OnInit {
         this.getUser()
             .subscribe(user => {
                 this._user = user;
-                this._appService.SetCurrentUser(user);
+                this._appComponent.User = user;
                 this.fetchBimsyncUser();
             },
             error => this.errorMessage = <any>error);
 
         //Redirect to the home page
-        this.router.navigate(['/home']);
+        this.router.navigate(['/projects']);
     }
 
     getAccessToken(): Observable<IAccessToken> {
@@ -84,10 +84,8 @@ export class BimsyncOauthComponent implements OnInit {
         //Get the connected user
         this.getBimsyncUser()
             .subscribe(bimsyncUser => {
-                let user: IUser = this._appService.GetCurrentUser();
-                user.bimsync_id = bimsyncUser.id;
-                user.name = bimsyncUser.name;
-                this._appService.SetCurrentUser(user);
+                this._appComponent.User.bimsync_id = bimsyncUser.id;
+                this._appComponent.User.name = bimsyncUser.name;
             },
             error => this.errorMessage = <any>error);
     }
@@ -97,7 +95,7 @@ export class BimsyncOauthComponent implements OnInit {
             'https://api.bimsync.com/v2/user',
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetCurrentUser().accessToken)
+                    .set('Authorization', 'Bearer ' + this._appComponent.User.accessToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))

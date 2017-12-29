@@ -2,22 +2,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IProject } from './project';
+import { AppComponent} from 'app/app.component';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
-import { AppService } from 'app/app.service';
 
 @Injectable()
 export class bimsyncProjectService {
 
     // private instance variable to hold base url
     private _projectsUrl = 'https://api.bimsync.com/v2/projects';
-    private _appService: AppService;
+    private _appComponent: AppComponent;
 
     // Resolve HTTP using the constructor
-    constructor(private _http: HttpClient,private appService: AppService) { 
-        this._appService = appService;
+    constructor(private _http: HttpClient,private appComponent: AppComponent) { 
+        this._appComponent = appComponent;
     }
 
     getProjects(): Observable<IProject[]> {
@@ -25,7 +25,7 @@ export class bimsyncProjectService {
             this._projectsUrl,
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetCurrentUser().accessToken)
+                    .set('Authorization', 'Bearer ' + this._appComponent.User.accessToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -42,7 +42,7 @@ export class bimsyncProjectService {
             {
                 //params: new HttpParams().set('id', '56784'),
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetCurrentUser().accessToken)
+                    .set('Authorization', 'Bearer ' + this._appComponent.User.accessToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
