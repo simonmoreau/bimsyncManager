@@ -1,9 +1,27 @@
-<p>
-  bimsync-project works!
-</p>
+<form #bimsyncProjectForm="ngForm" (ngSubmit)="onSubmit()" [hidden]="submitted">
+    <section class="form-block">
+        <label>Create a new bimsync project</label>
+        <div class="form-group">
+            <label for="projectName">Project name</label>
+            <label for="projectName" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-md" [class.invalid]="projectNameImput.invalid && (projectNameImput.dirty || projectNameImput.touched)">
+                <input type="text" id="projectName" placeholder="Enter project name" required name="projectName" [(ngModel)]="projectName"
+                    #projectNameImput="ngModel">
+                <span class="tooltip-content">
+                    Project Name is Required.
+                </span>
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="projectDescription">Project description</label>
+            <label for="projectDescription" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-md" [class.invalid]="projectDescriptionImput.invalid && (projectDescriptionImput.dirty || projectDescriptionImput.touched)">
+                <input type="text" id="projectDescription" placeholder="Enter project description" name="projectDescription" [(ngModel)]="projectDescription"
+                    #projectDescriptionImput="ngModel">
+            </label>
+        </div>
+        <button class="btn btn-primary" type="button" (click)="onSubmit()" [disabled]="bimsyncProjectForm.form.invalid">Add</button>
+    </section>
+</form>
 
-
-<button class="btn btn-primary" (click)='GetProjects()'>Get projects</button>
 <table class="table" *ngIf='createdProject'>
     <thead>
         <tr>
@@ -19,45 +37,6 @@
     </tbody>
 </table>
 
-
-<form #bimsyncProjectForm="ngForm" (ngSubmit)="onSubmit()" [hidden]="submitted">
-  <section class="form-block">
-      <label>Create a new bimsync project</label>
-      <div class="form-group">
-          <label for="projectName">Project name</label>
-          <label for="projectName"
-              aria-haspopup="true"
-              role="tooltip"
-              class="tooltip tooltip-validation tooltip-md"
-              [class.invalid]="projectNameImput.invalid && (projectNameImput.dirty || projectNameImput.touched)">
-              <input type="text" id="projectName" placeholder="Enter project name"
-                  required
-                  name="projectName"
-                  [(ngModel)]="projectName"
-                  #projectNameImput="ngModel">
-              <span class="tooltip-content">
-                  Project Name is Required.
-              </span>
-          </label>
-      </div>
-      <div class="form-group">
-        <label for="projectDescription">Project description</label>
-        <label for="projectDescription"
-            aria-haspopup="true"
-            role="tooltip"
-            class="tooltip tooltip-validation tooltip-md"
-            [class.invalid]="projectDescriptionImput.invalid && (projectDescriptionImput.dirty || projectDescriptionImput.touched)">
-            <input type="text" id="projectDescription" placeholder="Enter project description"
-                name="projectDescription"
-                [(ngModel)]="projectDescription"
-                #projectDescriptionImput="ngModel">
-        </label>
-    </div>
-      <button class="btn btn-primary" type="button" (click)="onSubmit()"
-          [disabled]="bimsyncProjectForm.form.invalid">Add</button>
-  </section>
-</form>
-
 <table class="table" *ngIf='projects && projects.length'>
     <thead>
         <tr>
@@ -67,7 +46,9 @@
     </thead>
     <tbody>
         <tr *ngFor='let project of projects'>
-            <td><a href="https://bimsync.com/project/{{project.id}}">{{project.name}}</a></td>
+            <td>
+                <a href="https://bimsync.com/project/{{project.id}}">{{project.name}}</a>
+            </td>
             <td>{{project.description}}</td>
         </tr>
     </tbody>

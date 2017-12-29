@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import { Body } from '@angular/http/src/body';
-import { AppComponent} from 'app/app.component';
+import { AppComponent } from 'app/app.component';
 import { ucs2 } from 'punycode';
 
 @Component({
@@ -31,7 +31,7 @@ export class BimsyncOauthComponent implements OnInit {
         private _http: HttpClient,
         private activatedRoute: ActivatedRoute,
         private router: Router,
-    private appComponent: AppComponent) {
+        private appComponent: AppComponent) {
         this._appComponent = appComponent;
     }
 
@@ -48,12 +48,13 @@ export class BimsyncOauthComponent implements OnInit {
             .subscribe(user => {
                 this._user = user;
                 this._appComponent.User = user;
+                //Redirect to the home page
+                this.router.navigate(['/projects']);
                 this.fetchBimsyncUser();
             },
             error => this.errorMessage = <any>error);
 
-        //Redirect to the home page
-        this.router.navigate(['/projects']);
+
     }
 
     getAccessToken(): Observable<IAccessToken> {
