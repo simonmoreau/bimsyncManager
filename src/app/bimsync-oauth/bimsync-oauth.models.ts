@@ -11,8 +11,10 @@ export interface IUser {
 }
 
 export interface IbimsyncUser {
+    createdAt: Date;
+    id: string;
     name: string;
-    bimsyncId: string;
+    username: string;
 }
 
 export interface IAccessToken {

@@ -48,6 +48,7 @@ export class BimsyncOauthComponent implements OnInit {
             .subscribe(user => {
                 this._user = user;
                 this._appService.SetCurrentUser(user);
+                this.fetchBimsyncUser();
             },
             error => this.errorMessage = <any>error);
 
@@ -83,8 +84,8 @@ export class BimsyncOauthComponent implements OnInit {
         //Get the connected user
         this.getBimsyncUser()
             .subscribe(bimsyncUser => {
-                let user:IUser = this._appService.GetCurrentUser();
-                user.bimsync_id = bimsyncUser.bimsyncId;
+                let user: IUser = this._appService.GetCurrentUser();
+                user.bimsync_id = bimsyncUser.id;
                 user.name = bimsyncUser.name;
                 this._appService.SetCurrentUser(user);
             },
@@ -93,7 +94,7 @@ export class BimsyncOauthComponent implements OnInit {
 
     getBimsyncUser(): Observable<IbimsyncUser> {
         return this._http.get<IbimsyncUser>(
-            'http://localhost:5000/api/users',
+            'https://api.bimsync.com/v2/user',
             {
                 headers: new HttpHeaders()
                     .set('Authorization', 'Bearer ' + this._appService.GetCurrentUser().accessToken)

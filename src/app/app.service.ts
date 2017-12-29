@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IUser} from './bimsync-oauth/user';
+import { IUser} from './bimsync-oauth/bimsync-oauth.models';
 import { _document } from '@angular/platform-browser/src/browser';
 
 @Injectable()
