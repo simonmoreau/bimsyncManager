@@ -9,3 +9,15 @@ export interface IUser {
     refreshToken: string;
     refreshDate?: any;
 }
+
+export interface IbimsyncUser {
+    name: string;
+    bimsyncId: string;
+}
+
+export interface IAccessToken {
+    access_token: Date;
+    refresh_token: string;
+    token_type: string;
+    expires_in: string;
+}

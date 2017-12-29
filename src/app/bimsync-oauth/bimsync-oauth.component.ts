@@ -1,31 +1,39 @@
 // Imports
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IAccessToken } from './access_token';
-import { IUser} from './user';
+import { IAccessToken, IbimsyncUser, IUser } from './bimsync-oauth.models';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import { Body } from '@angular/http/src/body';
+import { AppService } from 'app/app.service';
+import { ucs2 } from 'punycode';
 
 @Component({
-  selector: 'app-bimsync-oauth',
-  template: 'bimsync-oauth.component.html'
+    selector: 'app-bimsync-oauth',
+    template: 'bimsync-oauth.component.html'
 })
-export class BimsyncOauthComponent implements OnInit  {
-
-    // Resolve HTTP using the constructor
-    constructor(private _http: HttpClient, private activatedRoute: ActivatedRoute, private router: Router) { }
+export class BimsyncOauthComponent implements OnInit {
 
     // private instance variable to hold base url
     private _projectsUrl = 'http://localhost:5000/api/users';
     private _authorization_code = '';
     private _access_token: IAccessToken;
     private _user: IUser;
-    private requestBody:string;
+    private requestBody: string;
+    private _appService: AppService;
     errorMessage: string;
+
+    // Resolve HTTP using the constructor
+    constructor(
+        private _http: HttpClient,
+        private activatedRoute: ActivatedRoute,
+        private router: Router,
+        private appService: AppService) {
+        this._appService = appService;
+    }
 
     ngOnInit() {
 
@@ -35,25 +43,13 @@ export class BimsyncOauthComponent implements OnInit  {
             //console.log(this._authorization_code);
         });
 
-        console.log('_authorization_code : '+ this._authorization_code);
-
-    //   this.requestBody = 'grant_type=authorization_code&code='+ this._authorization_code
-    //   +'&redirect_uri=http://localhost:4200/callback&client_id=&client_secret=';
-
         //Get the connected user
         this.getUser()
-        .subscribe(user => {
-            this._user = user;
-        },
-        error => this.errorMessage = <any>error);
-
-        // this.getAccessToken()
-        //     .subscribe(access_token => {
-        //         this._access_token = access_token;
-        //     },
-        //     error => this.errorMessage = <any>error);
-        
-        console.log('User : '+ JSON.stringify(this._user));
+            .subscribe(user => {
+                this._user = user;
+                this._appService.SetCurrentUser(user);
+            },
+            error => this.errorMessage = <any>error);
 
         //Redirect to the home page
         this.router.navigate(['/home']);
@@ -61,7 +57,7 @@ export class BimsyncOauthComponent implements OnInit  {
 
     getAccessToken(): Observable<IAccessToken> {
         return this._http.post<IAccessToken>(
-            this._projectsUrl,this.requestBody,
+            this._projectsUrl, this.requestBody,
             {
                 //params: new HttpParams().set('id', '56784'),
                 headers: new HttpHeaders()
@@ -71,13 +67,37 @@ export class BimsyncOauthComponent implements OnInit  {
             .catch(this.handleError);
     }
 
-    getUser(): Observable<IUser>{
+    getUser(): Observable<IUser> {
         return this._http.post<IUser>(
-            this._projectsUrl ,'',
+            this._projectsUrl, '',
             {
                 params: new HttpParams().set('code', this._authorization_code),
                 headers: new HttpHeaders()
                     .set('Content-Type', 'application/x-www-form-urlencoded')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    fetchBimsyncUser() {
+        //Get the connected user
+        this.getBimsyncUser()
+            .subscribe(bimsyncUser => {
+                let user:IUser = this._appService.GetCurrentUser();
+                user.bimsync_id = bimsyncUser.bimsyncId;
+                user.name = bimsyncUser.name;
+                this._appService.SetCurrentUser(user);
+            },
+            error => this.errorMessage = <any>error);
+    }
+
+    getBimsyncUser(): Observable<IbimsyncUser> {
+        return this._http.get<IbimsyncUser>(
+            'http://localhost:5000/api/users',
+            {
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetCurrentUser().accessToken)
+                    .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);

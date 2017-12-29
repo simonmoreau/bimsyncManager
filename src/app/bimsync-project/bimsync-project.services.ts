@@ -1,50 +1,52 @@
 // Imports
-import { Injectable }     from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
-import { IProject} from   './project';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { IProject } from './project';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
-
+import { AppService } from 'app/app.service';
 
 @Injectable()
 export class bimsyncProjectService {
 
-     // Resolve HTTP using the constructor
-     constructor (private _http: HttpClient) {}
+    // private instance variable to hold base url
+    private _projectsUrl = 'https://api.bimsync.com/v2/projects';
+    private _appService: AppService;
 
-     // private instance variable to hold base url
-     private _projectsUrl = 'https://api.bimsync.com/v2/projects'; 
+    // Resolve HTTP using the constructor
+    constructor(private _http: HttpClient,private appService: AppService) { 
+        this._appService = appService;
+    }
 
-    getProjects(): Observable<IProject[]>{
+    getProjects(): Observable<IProject[]> {
         return this._http.get<IProject[]>(
             this._projectsUrl,
             {
-                //params: new HttpParams().set('id', '56784'),
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ZVN4yEi3jWSYz7w3RidkHa')
+                    .set('Authorization', 'Bearer ' + this._appService.GetCurrentUser().accessToken)
                     .set('Content-Type', 'application/json')
-              })
-        .do(data => console.log('All: ' + JSON.stringify(data)))
-        .catch(this.handleError);
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
     }
 
-    createNewProject(Name : string, Description : string): Observable<IProject>{
+    createNewProject(Name: string, Description: string): Observable<IProject> {
         return this._http.post<IProject[]>(
             this._projectsUrl,
             {
                 name: Name,
                 description: Description
-              },
+            },
             {
                 //params: new HttpParams().set('id', '56784'),
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ZVN4yEi3jWSYz7w3RidkHa')
+                    .set('Authorization', 'Bearer ' + this._appService.GetCurrentUser().accessToken)
                     .set('Content-Type', 'application/json')
-              })
-        .do(data => console.log('All: ' + JSON.stringify(data)))
-        .catch(this.handleError);
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
     }
 
     private handleError(err: HttpErrorResponse) {
