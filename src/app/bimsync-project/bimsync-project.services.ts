@@ -12,7 +12,7 @@ import 'rxjs/add/operator/do';
 export class bimsyncProjectService {
 
     // private instance variable to hold base url
-    private _projectsUrl = 'https://api.bimsync.com/v2/projects';
+    private _projectsUrl = 'https://api.bimsync.com/v2/';
     private _appComponent: AppComponent;
 
     // Resolve HTTP using the constructor
@@ -22,7 +22,7 @@ export class bimsyncProjectService {
 
     getProjects(): Observable<IProject[]> {
         return this._http.get<IProject[]>(
-            this._projectsUrl,
+            this._projectsUrl + 'projects',
             {
                 headers: new HttpHeaders()
                     .set('Authorization', 'Bearer ' + this._appComponent.User.accessToken)
@@ -34,7 +34,7 @@ export class bimsyncProjectService {
 
     createNewProject(Name: string, Description: string): Observable<IProject> {
         return this._http.post<IProject[]>(
-            this._projectsUrl,
+            this._projectsUrl + 'projects',
             {
                 name: Name,
                 description: Description
