@@ -10,6 +10,7 @@ import 'rxjs/add/operator/do';
 import { Body } from '@angular/http/src/body';
 import { AppComponent } from 'app/app.component';
 import { ucs2 } from 'punycode';
+import Json from '*.json';
 
 @Component({
     selector: 'app-bimsync-oauth',
@@ -20,9 +21,6 @@ export class BimsyncOauthComponent implements OnInit {
     // private instance variable to hold base url
     private _projectsUrl = 'http://localhost:5000/api/users';
     private _authorization_code = '';
-    private _access_token: IAccessToken;
-    private _user: IUser;
-    private requestBody: string;
     private _appComponent: AppComponent;
     errorMessage: string;
 
@@ -37,36 +35,33 @@ export class BimsyncOauthComponent implements OnInit {
 
     ngOnInit() {
 
+        let state = '';
         // subscribe to router event and retrive the callback code
         this.activatedRoute.queryParams.subscribe((params: Params) => {
             this._authorization_code = params['code'];
+            state = params['state'];
             //console.log(this._authorization_code);
         });
 
         //Get the connected user
-        this.getUser()
+        if (state == 'api'){
+            this.getUser()
             .subscribe(user => {
-                this._user = user;
                 this._appComponent.User = user;
+                //Save to local storage
+                localStorage.setItem('user',JSON.stringify(user));
                 //Redirect to the home page
                 this.router.navigate(['/projects']);
                 this.fetchBimsyncUser();
             },
             error => this.errorMessage = <any>error);
+        }
 
+        if (state=='bcf')
+        {
+            console.log('get bcf token');
+        }
 
-    }
-
-    getAccessToken(): Observable<IAccessToken> {
-        return this._http.post<IAccessToken>(
-            this._projectsUrl, this.requestBody,
-            {
-                //params: new HttpParams().set('id', '56784'),
-                headers: new HttpHeaders()
-                    .set('Content-Type', 'application/x-www-form-urlencoded')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
     }
 
     getUser(): Observable<IUser> {

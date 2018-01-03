@@ -1,0 +1,94 @@
+[
+    {
+        "projectName": "NewProject",
+        "projectDescription": "My new project description",
+        "users":
+        [
+            {
+                "id":"kdsbflskdbflkhqbsfldshbd",
+                "role":"administrator"
+            },
+            {
+                "id":"kjfbdflksbdflksbdlk",
+                "role":"administrator"
+            }
+        ],
+        "models":
+        [
+            {
+                "name":"model1"
+            },
+            {
+                "name":"model2"
+            }         
+        ],
+        "boards":
+        [
+            {
+                "name":"My new issue board",
+                "statuses":
+                [
+                    {
+                        "name":"Current",
+                        "color":"#E69138",
+                        "type":"candidate"
+                    },
+                    {
+                        "name":"Also",
+                        "color":"#E69138",
+                        "type":"candidate"
+                    }
+                ],
+                "types":
+                [
+                    {
+                        "name": "Info",
+                        "color": "#0000FF"
+                    },
+                    {
+                        "name": "Test",
+                        "color": "#0000FF"
+                    }
+                ]
+            },
+            {
+                "name":"BCF 2.0",
+                "statuses":
+                [
+                    {
+                        "name":"Current",
+                        "color":"#E69138",
+                        "type":"candidate"
+                    },
+                    {
+                        "name":"Current",
+                        "color":"#E69138",
+                        "type":"candidate"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "ProjectName": "NewProject2",
+        "ProjectDescription": "My new project description 2",
+        "Users":
+        [
+            {
+                "Id":"kdsbflskdbflkhqbsfldshbd"
+            },
+            {
+                "Id":"kjfbdflksbdflksbdlk"
+            }
+        ],
+        "Boards":
+        [
+            {
+
+            },
+            {
+
+            }
+        ]
+    }
+]

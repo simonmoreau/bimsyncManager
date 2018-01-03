@@ -1,18 +1,22 @@
 // Imports
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IProject } from './project';
+import { IProject, IMember } from './bimsync-project.models';
+import { ICreator, IModel} from './creator.models';
 import { AppComponent} from 'app/app.component';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
+import { importExpr } from '@angular/compiler/src/output/output_ast';
 
 @Injectable()
 export class bimsyncProjectService {
 
     // private instance variable to hold base url
-    private _projectsUrl = 'https://api.bimsync.com/v2/';
+    private _apiUrl = 'https://api.bimsync.com/v2/';
+    private _bcfUrl = 'https://bcf.bimsync.com/bcf/beta/projects';
+
     private _appComponent: AppComponent;
 
     // Resolve HTTP using the constructor
@@ -22,7 +26,7 @@ export class bimsyncProjectService {
 
     getProjects(): Observable<IProject[]> {
         return this._http.get<IProject[]>(
-            this._projectsUrl + 'projects',
+            this._apiUrl + 'projects',
             {
                 headers: new HttpHeaders()
                     .set('Authorization', 'Bearer ' + this._appComponent.User.accessToken)
@@ -34,10 +38,60 @@ export class bimsyncProjectService {
 
     createNewProject(Name: string, Description: string): Observable<IProject> {
         return this._http.post<IProject[]>(
-            this._projectsUrl + 'projects',
+            this._apiUrl + 'projects',
             {
                 name: Name,
                 description: Description
+            },
+            {
+                //params: new HttpParams().set('id', '56784'),
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appComponent.User.accessToken)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    AddUser(ProjectId:string, UserId:string, Role:string):Observable<IMember>{
+        return this._http.post<IMember>(
+            this._apiUrl + 'projects/' + ProjectId +'/members',
+            {
+                user: UserId,
+                role: Role
+            },
+            {
+                //params: new HttpParams().set('id', '56784'),
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appComponent.User.accessToken)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    AddModel(ProjectId:string, ModelName:string):Observable<any>{
+        return this._http.post<IMember>(
+            this._apiUrl + 'projects/' + ProjectId +'/models',
+            {
+                name: ModelName
+            },
+            {
+                //params: new HttpParams().set('id', '56784'),
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appComponent.User.accessToken)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    AddBoard(ProjectId:string, BoardName:string):Observable<any>{
+        return this._http.post<IMember>(
+            this._bcfUrl,
+            {
+                name: BoardName,
+                bimsync_project_id: ProjectId
             },
             {
                 //params: new HttpParams().set('id', '56784'),
