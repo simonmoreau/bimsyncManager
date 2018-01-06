@@ -4,8 +4,10 @@ import { Observable } from 'rxjs/Observable';
 
 
 import { IProject } from './bimsync-project.models';
+import { IUser } from '../bimsync-oauth/bimsync-oauth.models';
 import { bimsyncProjectService } from './bimsync-project.services';
 import { ICreator, IMember, IModel, IBoard } from 'app/bimsync-project/creator.models';
+import { AppService } from 'app/app.service';
 import * as data from './bimsyncProject.json';
 
 @Component({
@@ -15,17 +17,19 @@ import * as data from './bimsyncProject.json';
   providers: [bimsyncProjectService]
 })
 export class BimsyncProjectComponent implements OnInit {
-  projectName: string = '';
-  projectDescription: string = '';
   errorMessage: string;
-
+  User: IUser;
+  IsBCF: boolean;
   projects: IProject[] = [];
   createdProject: IProject;
 
-  constructor(private _bimsyncProjectService: bimsyncProjectService) { }
+  constructor(private _bimsyncProjectService: bimsyncProjectService, private appService: AppService) {
+   }
 
   ngOnInit() {
     this.GetProjects();
+    this.User = this.appService.GetUser();
+    this.IsBCF = (this.User.bcfToken == "");
   }
 
   GetProjects() {
@@ -39,8 +43,6 @@ export class BimsyncProjectComponent implements OnInit {
   }
 
   onSubmit() {
-
-    console.log('Launch OnSubmit');
 
     const temp = (<any>data);
     let creators = <ICreator[]>temp;
@@ -99,16 +101,6 @@ export class BimsyncProjectComponent implements OnInit {
         },
         error => this.errorMessage = <any>error);
     }
-  }
-
-  CreateProject() {
-    console.log('Create bimsync project');
-
-    this._bimsyncProjectService.createNewProject(this.projectName, this.projectDescription)
-      .subscribe(project => {
-        this.createdProject = project;
-      },
-      error => this.errorMessage = <any>error);
   }
 
 }

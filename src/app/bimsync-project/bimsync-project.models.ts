@@ -8,11 +8,11 @@ export interface IProject {
 
 export interface IMember {
   role: string;
-  user: IUser;
+  user: IbimsyncUser;
   visibility: string;
 }
 
-export interface IUser {
+export interface IbimsyncUser {
   createdAt: string;
   id: string;
   name: string;

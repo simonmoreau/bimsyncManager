@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IProject, IMember } from './bimsync-project.models';
 import { ICreator, IModel} from './creator.models';
-import { AppComponent} from 'app/app.component';
+import { AppService } from 'app/app.service';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -17,11 +17,11 @@ export class bimsyncProjectService {
     private _apiUrl = 'https://api.bimsync.com/v2/';
     private _bcfUrl = 'https://bcf.bimsync.com/bcf/beta/projects';
 
-    private _appComponent: AppComponent;
+    private _appService: AppService;
 
     // Resolve HTTP using the constructor
-    constructor(private _http: HttpClient,private appComponent: AppComponent) { 
-        this._appComponent = appComponent;
+    constructor(private _http: HttpClient,private appService: AppService) { 
+        this._appService = appService;
     }
 
     getProjects(): Observable<IProject[]> {
@@ -29,7 +29,7 @@ export class bimsyncProjectService {
             this._apiUrl + 'projects',
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appComponent.User.accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -46,7 +46,7 @@ export class bimsyncProjectService {
             {
                 //params: new HttpParams().set('id', '56784'),
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appComponent.User.accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -63,7 +63,7 @@ export class bimsyncProjectService {
             {
                 //params: new HttpParams().set('id', '56784'),
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appComponent.User.accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -79,7 +79,7 @@ export class bimsyncProjectService {
             {
                 //params: new HttpParams().set('id', '56784'),
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appComponent.User.accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -96,7 +96,7 @@ export class bimsyncProjectService {
             {
                 //params: new HttpParams().set('id', '56784'),
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appComponent.User.accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))

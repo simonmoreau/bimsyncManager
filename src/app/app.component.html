@@ -10,15 +10,18 @@
       <a class="nav-link" href="#" [routerLink]="['/home']" routerLinkActive="active">
         <span class="nav-text">Home</span>
       </a>
-      <a class="nav-link" href="#" [routerLink]="['/projects']" routerLinkActive="active" *ngIf="User">
+      <a class="nav-link" href="#" [routerLink]="['/projects']" routerLinkActive="active" *ngIf="appService._user">
         <span class="nav-text">Projects</span>
       </a>
       <a class="nav-link" href="#" [routerLink]="['/about']" routerLinkActive="active">
         <span class="nav-text">About</span>
       </a>
     </div>
-    <div class="header-actions" *ngIf="User; else loginTemplate">
-      <span class="nav-link nav-text">Hello {{User.name}}</span>
+    <div class="header-actions" *ngIf="appService._user; else loginTemplate">
+      <span class="nav-link nav-text">Hello {{appService._user.name}}</span>
+      <a class="nav-link" (click)="LogOut()">
+        <span class="nav-text">Log Out</span>
+      </a>
     </div>
     <ng-template #loginTemplate>
       <div class="header-actions">
@@ -30,7 +33,7 @@
 
   </clr-header>
   <div class="content-container">
-    <div class="content-area" style="overflow-y: hidden">
+    <div class="content-area">
       <router-outlet></router-outlet>
     </div>
   </div>

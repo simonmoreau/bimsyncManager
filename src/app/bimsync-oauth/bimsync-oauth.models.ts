@@ -7,7 +7,8 @@ export interface IUser {
     tokenType: string;
     tokenExpireIn: number;
     refreshToken: string;
-    refreshDate?: any;
+    refreshDate?: Date;
+    bcfToken: string;
 }
 
 export interface IbimsyncUser {
