@@ -19,7 +19,7 @@
     </div>
     <div class="header-actions" *ngIf="appService._user; else loginTemplate">
       <span class="nav-link nav-text">Hello {{appService._user.name}}</span>
-      <a class="nav-link" (click)="LogOut()">
+      <a class="nav-link" href="#" (click)="LogOut()">
         <span class="nav-text">Log Out</span>
       </a>
     </div>
