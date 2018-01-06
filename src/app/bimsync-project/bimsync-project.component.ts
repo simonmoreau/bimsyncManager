@@ -24,7 +24,7 @@ export class BimsyncProjectComponent implements OnInit {
   createdProject: IProject;
 
   constructor(private _bimsyncProjectService: bimsyncProjectService, private appService: AppService) {
-   }
+  }
 
   ngOnInit() {
     this.GetProjects();
@@ -49,31 +49,46 @@ export class BimsyncProjectComponent implements OnInit {
     console.log(creators);
 
     this.ParseCreator(creators);
-
   }
 
   ParseCreator(creators: ICreator[]) {
 
-    for (let creator of creators) {
-      //Create the project
-      this._bimsyncProjectService.createNewProject(creator.projectName, creator.projectDescription)
-        .subscribe(project => {
-          //Assign users
-          this.AssingUsers(creator.users,project.id);
-          //Create models
-          this.CreateModels(creator.models,project.id);
-          //Create boards
-          this.CreateBoards(creator.boards, project.id);
+    let creatorArray: ICreator[] = creators;
 
-        },
-        error => this.errorMessage = <any>error);
+    for (let i = 0; i < creatorArray.length; i++) {
+      this.CreateProject(creatorArray[i]);
     }
   }
 
-  AssingUsers(users: IMember[],projectId:string){
+  CreateProject(creator: ICreator) {
+
+    console.log(creator);
+    //Create the project
+    this._bimsyncProjectService.createNewProject(creator.projectName, creator.projectDescription)
+      .subscribe(project => {
+        console.log(project.name);
+
+        if (creator.users) {
+          //Assign users
+          this.AssingUsers(creator.users, project.id);
+        }
+        if (creator.models) {
+          //Create models
+          this.CreateModels(creator.models, project.id);
+        }
+
+        if (creator.boards) {
+          //Create boards
+          this.CreateBoards(creator.boards, project.id);
+        }
+      },
+      error => this.errorMessage = <any>error);
+  }
+
+  AssingUsers(users: IMember[], projectId: string) {
     for (let user of users) {
       //Assign a new user
-      this._bimsyncProjectService.AddUser(projectId,user.id,user.role)
+      this._bimsyncProjectService.AddUser(projectId, user.id, user.role)
         .subscribe(member => {
           console.log(member.role);
         },
@@ -81,10 +96,10 @@ export class BimsyncProjectComponent implements OnInit {
     }
   }
 
-  CreateModels(models: IModel[],projectId:string){
+  CreateModels(models: IModel[], projectId: string) {
     for (let model of models) {
       //Create a new model
-      this._bimsyncProjectService.AddModel(projectId,model.name)
+      this._bimsyncProjectService.AddModel(projectId, model.name)
         .subscribe(model => {
           console.log(model.name);
         },
@@ -92,15 +107,14 @@ export class BimsyncProjectComponent implements OnInit {
     }
   }
 
-  CreateBoards(boards: IBoard[],projectId:string){
+  CreateBoards(boards: IBoard[], projectId: string) {
     for (let board of boards) {
-      //Create a new model
-      this._bimsyncProjectService.AddBoard(projectId,board.name)
-        .subscribe(model => {
-          console.log(model.name);
+      //Create a new board
+      this._bimsyncProjectService.AddBoard(projectId, board.name)
+        .subscribe(board => {
+          console.log(board.name);
         },
         error => this.errorMessage = <any>error);
     }
   }
-
 }

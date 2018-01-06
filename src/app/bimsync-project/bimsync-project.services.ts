@@ -96,7 +96,7 @@ export class bimsyncProjectService {
             {
                 //params: new HttpParams().set('id', '56784'),
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))

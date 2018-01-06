@@ -1,15 +1,15 @@
 [
     {
-        "projectName": "NewProject",
+        "projectName": "00000 - NewProject",
         "projectDescription": "My new project description",
         "users":
         [
             {
-                "id":"kdsbflskdbflkhqbsfldshbd",
+                "id":"240bdd822ccc4abc84ee25f80c8242e7",
                 "role":"administrator"
             },
             {
-                "id":"kjfbdflksbdflksbdlk",
+                "id":"8c906a2df5fe4a32849b1fe2073f700c",
                 "role":"administrator"
             }
         ],
@@ -52,7 +52,7 @@
                 ]
             },
             {
-                "name":"BCF 2.0",
+                "name":"Second Board",
                 "statuses":
                 [
                     {
@@ -70,25 +70,7 @@
         ]
     },
     {
-        "ProjectName": "NewProject2",
-        "ProjectDescription": "My new project description 2",
-        "Users":
-        [
-            {
-                "Id":"kdsbflskdbflkhqbsfldshbd"
-            },
-            {
-                "Id":"kjfbdflksbdflksbdlk"
-            }
-        ],
-        "Boards":
-        [
-            {
-
-            },
-            {
-
-            }
-        ]
+        "projectName": "00000 - NewProject2",
+        "projectDescription": "My new project description 2"
     }
 ]
