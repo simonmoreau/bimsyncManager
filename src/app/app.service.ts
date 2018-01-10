@@ -2,20 +2,20 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { ISubscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
-//import { Body } from '@angular/http/src/body';
 
 import { IAccessToken, IbimsyncUser, IUser } from 'app/bimsync-oauth/bimsync-oauth.models';
 
 import Json from '*.json';
-import { ISubscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class AppService {
 
   errorMessage: string;
-  private _projectsUrl = 'https://bimsyncmanagerapi.azurewebsites.net/api/';
+  private _projectsUrl = 'http://localhost:5000/api/';
+  private callbackUrl:string = 'http://localhost:4200/callback';
   _user: IUser;
 
   constructor(
@@ -82,11 +82,11 @@ export class AppService {
 
   private getUserRequest(authorization_code: string): Observable<IUser> {
     return this._http.post<IUser>(
-      this._projectsUrl + 'users', '',
+      this._projectsUrl + 'users', JSON.stringify(this.callbackUrl) ,
       {
         params: new HttpParams().set('code', authorization_code),
         headers: new HttpHeaders()
-          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('Content-Type', 'application/json')
       })
       .do(data => console.log('All: ' + JSON.stringify(data)))
       .catch(this.handleError);
