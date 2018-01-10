@@ -22,6 +22,9 @@ export class BimsyncProjectComponent implements OnInit {
   IsBCF: boolean;
   projects: IProject[] = [];
   createdProject: IProject;
+  open:boolean;
+  jsonConfig:any;
+  submitted:boolean;
 
   constructor(private _bimsyncProjectService: bimsyncProjectService, private appService: AppService) {
   }

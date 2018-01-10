@@ -11,6 +11,10 @@ import {AppService} from 'app/app.service';
     templateUrl: './home.component.html',
 })
 export class HomeComponent {
-    constructor(private appService : AppService) {
+
+    appService:AppService;
+
+    constructor(private _appService : AppService) {
+        this.appService = _appService;
     }
 }

@@ -36,5 +36,4 @@ export class BimsyncOauthComponent implements OnInit {
             this.appService.GetBCFToken(authorization_code);
         }
     }
-
 }

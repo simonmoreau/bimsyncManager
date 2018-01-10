@@ -14,8 +14,8 @@ import Json from '*.json';
 export class AppService {
 
   errorMessage: string;
-  private _projectsUrl = 'http://localhost:5000/api/';
-  private callbackUrl:string = 'http://localhost:4200/callback';
+  private _projectsUrl = 'https://bimsyncmanagerapi.azurewebsites.net/api/';
+  _callbackUrl:string = 'https://bimsyncmanager.firebaseapp.com/callback';
   _user: IUser;
 
   constructor(
@@ -82,7 +82,7 @@ export class AppService {
 
   private getUserRequest(authorization_code: string): Observable<IUser> {
     return this._http.post<IUser>(
-      this._projectsUrl + 'users', JSON.stringify(this.callbackUrl) ,
+      this._projectsUrl + 'users', JSON.stringify(this._callbackUrl) ,
       {
         params: new HttpParams().set('code', authorization_code),
         headers: new HttpHeaders()

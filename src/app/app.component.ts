@@ -12,7 +12,10 @@ import { appendFile } from 'fs';
 })
 export class AppComponent implements OnInit {
 
-    constructor(private router: Router, private appService : AppService) {
+    appService:AppService;
+
+    constructor(private router: Router, private _appService : AppService) {
+        this.appService = _appService;
     }
 
     ngOnInit() {
