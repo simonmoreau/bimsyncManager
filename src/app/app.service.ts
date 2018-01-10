@@ -15,7 +15,7 @@ import { ISubscription } from 'rxjs/Subscription';
 export class AppService {
 
   errorMessage: string;
-  private _projectsUrl = 'http://localhost:5000/api/';
+  private _projectsUrl = 'https://bimsyncmanagerapi.azurewebsites.net/api/';
   _user: IUser;
 
   constructor(
