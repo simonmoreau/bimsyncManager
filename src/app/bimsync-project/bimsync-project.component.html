@@ -1,7 +1,7 @@
 
 <div *ngIf='IsBCF'>
     <p>To create issue boards on your project, you must authorized it first</p>
-    <a class="btn btn-primary" href="https://api.bimsync.com/1.0/oauth/authorize?client_id=6E63g0C2zVOwlNm&response_type=code&state=bcf&redirect_uri=http://localhost:4200/callback">Authorize</a>    
+    <a class="btn btn-primary" href="https://api.bimsync.com/1.0/oauth/authorize?client_id=6E63g0C2zVOwlNm&response_type=code&state=bcf&redirect_uri={{_appService._callbackUrl}}">Authorize</a>    
 </div>
 
 <button class="btn btn-primary" (click)="open = true">Create Project</button>

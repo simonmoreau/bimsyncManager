@@ -22,6 +22,8 @@ export class AppService {
     private _http: HttpClient,
     private router: Router
   ) {
+    //Encore the callbackURI
+    this._callbackUrl = encodeURIComponent(this._callbackUrl);
     //Check if there is a user in local storage
     let currentUser: IUser = JSON.parse(localStorage.getItem('user'));
     if (currentUser != null) {

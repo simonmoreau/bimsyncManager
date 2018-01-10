@@ -25,13 +25,15 @@ export class BimsyncProjectComponent implements OnInit {
   open:boolean;
   jsonConfig:any;
   submitted:boolean;
+  _appService: AppService;
 
   constructor(private _bimsyncProjectService: bimsyncProjectService, private appService: AppService) {
+    this._appService = appService;
   }
 
   ngOnInit() {
     this.GetProjects();
-    this.User = this.appService.GetUser();
+    this.User = this._appService.GetUser();
     this.IsBCF = (this.User.bcfToken == "");
   }
 
