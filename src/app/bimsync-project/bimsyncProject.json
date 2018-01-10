@@ -31,7 +31,7 @@
                     {
                         "name":"Current",
                         "color":"#E69138",
-                        "type":"candidate"
+                        "type":"open"
                     },
                     {
                         "name":"Also",
@@ -42,11 +42,11 @@
                 "types":
                 [
                     {
-                        "name": "Info",
+                        "name": "Test1",
                         "color": "#0000FF"
                     },
                     {
-                        "name": "Test",
+                        "name": "Test2",
                         "color": "#0000FF"
                     }
                 ]
@@ -58,10 +58,10 @@
                     {
                         "name":"Current",
                         "color":"#E69138",
-                        "type":"candidate"
+                        "type":"open"
                     },
                     {
-                        "name":"Current",
+                        "name":"AlsoCurrent",
                         "color":"#E69138",
                         "type":"candidate"
                     }

@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 
-import { IProject,IBimsyncBoard } from './bimsync-project.models';
+import { IProject, IBimsyncBoard } from './bimsync-project.models';
 import { IUser } from '../bimsync-oauth/bimsync-oauth.models';
 import { bimsyncProjectService } from './bimsync-project.services';
-import { ICreator, IMember, IModel, IBoard, IStatus } from 'app/bimsync-project/creator.models';
+import { ICreator, IMember, IModel, IBoard, IStatus, IType } from 'app/bimsync-project/creator.models';
 import { AppService } from 'app/app.service';
 import * as data from './bimsyncProject.json';
 
@@ -22,9 +22,9 @@ export class BimsyncProjectComponent implements OnInit {
   IsBCF: boolean;
   projects: IProject[] = [];
   createdProject: IProject;
-  open:boolean;
-  jsonConfig:any;
-  submitted:boolean;
+  open: boolean;
+  jsonConfig: any;
+  submitted: boolean;
   _appService: AppService;
 
   constructor(private _bimsyncProjectService: bimsyncProjectService, private appService: AppService) {
@@ -126,34 +126,68 @@ export class BimsyncProjectComponent implements OnInit {
           if (board.statuses) {
             this.CreateExtensionStatuses(bimsyncBoard, board);
           }
+
+          //Create extension types
+          if (board.types) {
+            this.CreateExtensionTypes(bimsyncBoard, board);
+          }
+
         },
         error => this.errorMessage = <any>error);
     }
   }
 
-  CreateExtensionStatuses(bimsyncBoard: IBimsyncBoard, board:IBoard){
+  CreateExtensionStatuses(bimsyncBoard: IBimsyncBoard, board: IBoard) {
     let statuses: IStatus[] = board.statuses;
 
     for (let status of statuses) {
       //Create a status
-      this._bimsyncProjectService.AddExtensionStatus(bimsyncBoard.project_id,status.name,status.color,status.type)
+      this._bimsyncProjectService.AddExtensionStatus(bimsyncBoard.project_id, status.name, status.color, status.type)
         .subscribe(bimsyncStatus => {
           console.log(bimsyncStatus);
         },
         error => this.errorMessage = <any>error);
     }
 
+    setTimeout(console.log('wait'),500);
+
     //Detele existing statuses
-    let existingStatusesNames: string[] = ["Open","Closed"];
+    let existingStatusesNames: string[] = ["Closed","Open"];
 
     for (let name of existingStatusesNames) {
       //Delete a status
-      this._bimsyncProjectService.DeleteExtensionStatus(bimsyncBoard.project_id,name)
+      this._bimsyncProjectService.DeleteExtensionStatus(bimsyncBoard.project_id, name)
         .subscribe(bimsyncStatus => {
           console.log(bimsyncStatus);
         },
         error => this.errorMessage = <any>error);
     }
+  }
 
+  CreateExtensionTypes(bimsyncBoard: IBimsyncBoard, board: IBoard) {
+    let types: IType[] = board.types;
+
+    for (let type of types) {
+      //Create a type
+      this._bimsyncProjectService.AddExtensionType(bimsyncBoard.project_id, type.name, type.color)
+        .subscribe(bimsyncType => {
+          console.log(bimsyncType);
+        },
+        error => this.errorMessage = <any>error);
+    }
+
+    setTimeout(console.log('wait'),500);
+
+    //Detele existing types
+    let existingTypesNames: string[] = ["Error", "Warning", "Info", "Unknown"];
+
+    for (let name of existingTypesNames) {
+      //Delete a status
+      this._bimsyncProjectService.DeleteExtensionType(bimsyncBoard.project_id, name)
+        .subscribe(bimsyncType => {
+          console.log(bimsyncType);
+        },
+        error => this.errorMessage = <any>error);
+    }
   }
 }

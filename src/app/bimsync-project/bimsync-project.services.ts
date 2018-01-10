@@ -142,11 +142,63 @@ export class bimsyncProjectService {
     }
 
     DeleteExtensionStatus(BoardId:string,existingExtensionName:string):Observable<any>{
+        let deleteBody:any = {name: existingExtensionName};
+
         return this._http.request('delete', 
             this._bcfUrl + '/'+BoardId +'/extensions/statuses',
             {
                 //params: new HttpParams().set('id', '56784'),
-                body:{existingName: existingExtensionName},
+                body:deleteBody,
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    AddExtensionType(BoardId:string,extensionName:string,extensionColor:string):Observable<any>{
+        return this._http.post<any>(
+            this._bcfUrl + '/'+BoardId +'/extensions/types',
+            {
+                name: extensionName,
+                color: extensionColor
+            },
+            {
+                //params: new HttpParams().set('id', '56784'),
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    UpdateExtensionType(BoardId:string,existingExtensionName:string,extensionName:string,extensionColor:string):Observable<any>{
+        return this._http.put<any>(
+            this._bcfUrl + '/'+BoardId +'/extensions/types',
+            {
+                existingName: existingExtensionName,
+                name: extensionName,
+                color: extensionColor
+            },
+            {
+                //params: new HttpParams().set('id', '56784'),
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    DeleteExtensionType(BoardId:string,existingExtensionName:string):Observable<any>{
+        let deleteBody:any = {name: existingExtensionName};
+
+        return this._http.request('delete', 
+            this._bcfUrl + '/'+BoardId +'/extensions/types',
+            {
+                body:deleteBody,
                 headers: new HttpHeaders()
                     .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
                     .set('Content-Type', 'application/json')
