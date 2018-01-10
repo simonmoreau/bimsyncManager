@@ -12,6 +12,15 @@ export interface IMember {
   visibility: string;
 }
 
+export interface IBimsyncBoard {
+  project_id: string;
+  name: string;
+  bimsync_project_name: string;
+  bimsync_project_id: string;
+}
+
+
+
 export interface IbimsyncUser {
   createdAt: string;
   id: string;

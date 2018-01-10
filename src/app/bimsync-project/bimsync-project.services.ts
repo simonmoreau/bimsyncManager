@@ -1,14 +1,15 @@
 // Imports
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IProject, IMember } from './bimsync-project.models';
-import { ICreator, IModel} from './creator.models';
+import { IProject, IMember,IBimsyncBoard } from './bimsync-project.models';
+import { ICreator, IModel, IBoard} from './creator.models';
 import { AppService } from 'app/app.service';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import { importExpr } from '@angular/compiler/src/output/output_ast';
+import { Body } from '@angular/http/src/body';
 
 @Injectable()
 export class bimsyncProjectService {
@@ -71,7 +72,7 @@ export class bimsyncProjectService {
     }
 
     AddModel(ProjectId:string, ModelName:string):Observable<any>{
-        return this._http.post<IMember>(
+        return this._http.post<any>(
             this._apiUrl + 'projects/' + ProjectId +'/models',
             {
                 name: ModelName
@@ -86,8 +87,8 @@ export class bimsyncProjectService {
             .catch(this.handleError);
     }
 
-    AddBoard(ProjectId:string, BoardName:string):Observable<any>{
-        return this._http.post<IMember>(
+    AddBoard(ProjectId:string, BoardName:string):Observable<IBimsyncBoard>{
+        return this._http.post<IBimsyncBoard>(
             this._bcfUrl,
             {
                 name: BoardName,
@@ -102,6 +103,58 @@ export class bimsyncProjectService {
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);
     }
+
+    AddExtensionStatus(BoardId:string,extensionName:string,extensionColor:string,extensionType:string):Observable<any>{
+        return this._http.post<any>(
+            this._bcfUrl + '/'+BoardId +'/extensions/statuses',
+            {
+                name: extensionName,
+                color: extensionColor,
+                type: extensionType
+            },
+            {
+                //params: new HttpParams().set('id', '56784'),
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    UpdateExtensionStatus(BoardId:string,existingExtensionName:string,extensionName:string,extensionColor:string,extensionType:string):Observable<any>{
+        return this._http.put<any>(
+            this._bcfUrl + '/'+BoardId +'/extensions/statuses',
+            {
+                existingName: existingExtensionName,
+                name: extensionName,
+                color: extensionColor,
+                type: extensionType
+            },
+            {
+                //params: new HttpParams().set('id', '56784'),
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    DeleteExtensionStatus(BoardId:string,existingExtensionName:string):Observable<any>{
+        return this._http.request('delete', 
+            this._bcfUrl + '/'+BoardId +'/extensions/statuses',
+            {
+                //params: new HttpParams().set('id', '56784'),
+                body:{existingName: existingExtensionName},
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
 
     private handleError(err: HttpErrorResponse) {
         // in a real world app, we may send the server to some remote logging infrastructure
