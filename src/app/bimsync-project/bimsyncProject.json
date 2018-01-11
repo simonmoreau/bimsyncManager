@@ -1,6 +1,6 @@
 [
     {
-        "projectName": "00000 - NewProject",
+        "projectName": "00000 - My New Project",
         "projectDescription": "My new project description",
         "users":
         [
@@ -11,66 +11,83 @@
             {
                 "id":"8c906a2df5fe4a32849b1fe2073f700c",
                 "role":"administrator"
+            },
+            {
+                "id":"e647607b020d4cb8950c1dfaf544ae1a",
+                "role":"administrator"
             }
         ],
         "models":
         [
             {
-                "name":"model1"
+                "name":"Architect"
             },
             {
-                "name":"model2"
-            }         
+                "name":"Structure"
+            },
+            {
+                "name":"HVAC"
+            }           
         ],
         "boards":
         [
             {
-                "name":"My new issue board",
+                "name":"My New Issue Board",
                 "statuses":
                 [
                     {
-                        "name":"Current",
-                        "color":"#E69138",
+                        "name":"New",
+                        "color":"#dd7e6b",
                         "type":"open"
                     },
                     {
-                        "name":"Also",
-                        "color":"#E69138",
+                        "name":"Current",
+                        "color":"#e69138",
                         "type":"candidate"
+                    },
+                    {
+                        "name":"Closed",
+                        "color":"#6aa84f",
+                        "type":"closed"
                     }
                 ],
                 "types":
                 [
                     {
-                        "name": "Test1",
-                        "color": "#0000FF"
+                        "name": "Error",
+                        "color": "#cc0000"
                     },
                     {
-                        "name": "Test2",
-                        "color": "#0000FF"
+                        "name": "Warning",
+                        "color": "#e69138"
                     }
                 ]
             },
             {
-                "name":"Second Board",
+                "name":"My Second Issue Board",
                 "statuses":
                 [
                     {
-                        "name":"Current",
-                        "color":"#E69138",
+                        "name":"New",
+                        "color":"#dd7e6b",
                         "type":"open"
                     },
                     {
-                        "name":"AlsoCurrent",
-                        "color":"#E69138",
+                        "name":"Current",
+                        "color":"#e69138",
                         "type":"candidate"
+                    },
+                    {
+                        "name":"Closed",
+                        "color":"#6aa84f",
+                        "type":"closed"
                     }
                 ]
             }
         ]
     },
     {
-        "projectName": "00000 - NewProject2",
-        "projectDescription": "My new project description 2"
+        "projectName": "00000 - My Other New Project",
+        "projectDescription": "My new project description"
     }
 ]

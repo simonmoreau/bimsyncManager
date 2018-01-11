@@ -9,6 +9,7 @@ import { bimsyncProjectService } from './bimsync-project.services';
 import { ICreator, IMember, IModel, IBoard, IStatus, IType } from 'app/bimsync-project/creator.models';
 import { AppService } from 'app/app.service';
 import * as data from './bimsyncProject.json';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-bimsync-project',
@@ -49,14 +50,11 @@ export class BimsyncProjectComponent implements OnInit {
 
   onSubmit() {
 
-    const temp = (<any>data);
-    let creators = <ICreator[]>temp;
+    //let temp = (<any>this.jsonConfig);
+    //let creators = <ICreator[]>temp;
+
+    let creators = JSON.parse(this.jsonConfig);
     console.log(creators);
-
-    this.ParseCreator(creators);
-  }
-
-  ParseCreator(creators: ICreator[]) {
 
     let creatorArray: ICreator[] = creators;
 
@@ -139,21 +137,35 @@ export class BimsyncProjectComponent implements OnInit {
 
   CreateExtensionStatuses(bimsyncBoard: IBimsyncBoard, board: IBoard) {
     let statuses: IStatus[] = board.statuses;
+    let existingStatusesNames: string[] = ["Closed", "Open"];
 
     for (let status of statuses) {
-      //Create a status
-      this._bimsyncProjectService.AddExtensionStatus(bimsyncBoard.project_id, status.name, status.color, status.type)
-        .subscribe(bimsyncStatus => {
-          console.log(bimsyncStatus);
-        },
-        error => this.errorMessage = <any>error);
+
+        let index = existingStatusesNames.indexOf(status.name);
+
+        if (index > -1) {
+          //If the status exist, update it
+          this._bimsyncProjectService.UpdateExtensionStatus(bimsyncBoard.project_id, status.name,status.name, status.color, status.type)
+          .subscribe(bimsyncStatus => {
+            console.log(bimsyncStatus);
+          },
+          error => this.errorMessage = <any>error);
+          //Remove it from the existingTypesNames
+          existingStatusesNames.splice(index, 1);
+        }
+        else {
+          //If not, Create it
+          this._bimsyncProjectService.AddExtensionStatus(bimsyncBoard.project_id, status.name, status.color,status.type)
+            .subscribe(bimsyncStatus => {
+              console.log(bimsyncStatus);
+            },
+            error => this.errorMessage = <any>error);
+        }
     }
 
-    setTimeout(console.log('wait'),500);
+    setTimeout(console.log('wait'), 500);
 
-    //Detele existing statuses
-    let existingStatusesNames: string[] = ["Closed","Open"];
-
+    //Detele remaining existing statuses
     for (let name of existingStatusesNames) {
       //Delete a status
       this._bimsyncProjectService.DeleteExtensionStatus(bimsyncBoard.project_id, name)
@@ -166,21 +178,35 @@ export class BimsyncProjectComponent implements OnInit {
 
   CreateExtensionTypes(bimsyncBoard: IBimsyncBoard, board: IBoard) {
     let types: IType[] = board.types;
+    let existingTypesNames: string[] = ["Error", "Warning", "Info", "Unknown"];
 
     for (let type of types) {
-      //Create a type
-      this._bimsyncProjectService.AddExtensionType(bimsyncBoard.project_id, type.name, type.color)
+
+      let index = existingTypesNames.indexOf(type.name);
+
+      if (index > -1) {
+        //If the type exist, update it
+        this._bimsyncProjectService.UpdateExtensionType(bimsyncBoard.project_id, type.name,type.name, type.color)
         .subscribe(bimsyncType => {
           console.log(bimsyncType);
         },
         error => this.errorMessage = <any>error);
+        //Remove it from the existingTypesNames
+        existingTypesNames.splice(index, 1);
+      }
+      else {
+        //If not, Create it
+        this._bimsyncProjectService.AddExtensionType(bimsyncBoard.project_id, type.name, type.color)
+          .subscribe(bimsyncType => {
+            console.log(bimsyncType);
+          },
+          error => this.errorMessage = <any>error);
+      }
     }
 
-    setTimeout(console.log('wait'),500);
+    setTimeout(console.log('wait'), 500);
 
-    //Detele existing types
-    let existingTypesNames: string[] = ["Error", "Warning", "Info", "Unknown"];
-
+    //Detele remaining existing types
     for (let name of existingTypesNames) {
       //Delete a status
       this._bimsyncProjectService.DeleteExtensionType(bimsyncBoard.project_id, name)
@@ -190,4 +216,5 @@ export class BimsyncProjectComponent implements OnInit {
         error => this.errorMessage = <any>error);
     }
   }
+
 }
