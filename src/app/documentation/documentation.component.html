@@ -1,3 +1,7 @@
 <p>
   documentation works!
 </p>
+
+<div class="header-actions" *ngIf="appService._user">
+    <p>Use this code to connect Power BI to your bimsync Account : <b>{{appService._user.powerBiSecret}}</b></p>
+</div>
