@@ -8,18 +8,18 @@ import { ClarityModule } from 'clarity-angular';
 import { AppComponent } from './app.component';
 import { ROUTING } from "./app.routing";
 import { HomeComponent } from "./home/home.component";
-import { AboutComponent } from "./about/about.component";
 import { BimsyncProjectComponent } from './bimsync-project/bimsync-project.component';
 import { HttpClient } from "@angular/common/http/src/client";
 import { BimsyncOauthComponent } from './bimsync-oauth/bimsync-oauth.component';
+import { DocumentationComponent } from './documentation/documentation.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        AboutComponent,
         HomeComponent,
         BimsyncProjectComponent,
-        BimsyncOauthComponent
+        BimsyncOauthComponent,
+        DocumentationComponent
     ],
     imports: [
         BrowserAnimationsModule,

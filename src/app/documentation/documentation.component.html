@@ -1,0 +1,98 @@
+<div class="content-container">
+  <div class="content-area">
+    <p>Test ...</p>
+    <div class="header-actions" *ngIf="appService._user">
+      <p>Use this code to connect Power BI to your bimsync Account :
+        <b>{{appService._user.powerBiSecret}}</b>
+      </p>
+    </div>
+    <pre>
+      <code ng-non-bindable clr-code-highlight="language-json">{{code}}</code>
+    </pre>
+    <div>
+        <div>
+            <h2 id="started">Getting started</h2>
+            <p>
+              To use bimsync Manager, you must be connected to bimsync using your usual credentials. Click on Connect to grant the application
+              access to your bimsync account. Furthermore, to allow bimsync Manager to create issue boards on your project, you
+              must authorized it first. Just click on authorise.
+            </p>
+          </div>
+          <div>
+            <h2 id="project">Create a new bimsync project</h2>
+            <p>
+              bimsync Manager allows to to create a new bimsnc project based on a template. This template is a .json configuration text,
+              where you describe how you want to create your project.
+            </p>
+            <p>
+              To create a new bimsync project :
+            </p>
+            <ul class="list">
+              <li>Click on "Create Project”</li>
+              <li>Type in your configuration text</li>
+            </ul>
+          </div>
+          <div>
+      
+            This configuration text contain a series of projects to be created, enclosed between and separated by comma. Each project
+            contain a series of properties : //Code1 projectName : the name of your project projectEescription : the description
+            of your project. This property is optional. Users: //An list of member to be added to the new projet. This list is
+            optionnal. The user must already a registeted bimsync user, you can’t invite new users. Each user must have the following
+            format : //Code2 User ID The ID of a given user can be found in the URL of his profile. Just look for the last part
+            of the URL, after “/members/“. Role : The role of the user added to the project, it can be “administrator” or “member”
+            Models : /A list of model to be created in the new projet. This list is optionnal. Each user must have the following
+            format : //Code3 Board : //A list of new issue boards to be created in your new project. This list is optionnal. Each
+            new issue board will be created as a BCF 2.0 board. You can’t delete the "BCF" default issue board, it must be manually
+            archived. Boards follows this schema : //Code4 Name : the name of your new board Statuses : A list of status to be
+            added to your board. This list is optionnal. If you add any new status, bimsync Manager will delete all existing ones
+            and create yours. If you don’t add any status, bimsync Manager will keep the existing ones (“Open” and “Closed”). Furthermore,
+            you must always have a status with the “open” type. If you don’t add any, bimsync Manager will keep the existing one.
+            Statuses follow this schema : //Code5 Name : The name of the status Color : The Hex colour for the status (http://www.color-hex.com/).
+            The following color code are used by bimsync : Type : the type of the status. It can be “open”, “candidate” or “closed”.
+            Types : A list of types to be added to your board. This list is optionnal. If you add any new type, bimsync Manager
+            will delete all existing ones and create yours. If you don’t add any type, bimsync Manager will keep the existing ones
+            (“Error”, “Warning”, “Info” and “Unknown”) Types follow this schema //Code6 Name : The name of the type Color : The
+            Hex colour for the type (http://www.color-hex.com/). The following color code are used by bimsync : Power BI dashboard
+            Bimsync Manager allows you to connect your bimsync account to Power BI to create dashboard Set Up Download one of the
+            Power BI template below Add your Power BI secret in the parameter Click on refresh It can take some time to be refrech
+            Project Dashboard The Project Dashboard template allows you to extract data from a specific project. This enable data
+            extraction from any models. To be able to extract data from your model, the following tables are availlable Revisions
+            : List all revisions of your project, across all models. Models : list all models of the current project Relations
+            : This is an extraction of the For performance reason, data is only extracted for the 3 last revisons of every mmodel.
+            If you want more Global dashboard The Global Dashboard templatate guve you an overview of all your binsync projects,
+            along with there users, issue boards, ... It can be used for cross-project analysis and management. However, for performance
+            reason, you can’t extract data from all models of all project. To do so, use the Project Dashboard on a specific project.
+            The Global Dashboard template come with two sample pages, displaying generic information about your projects. To find
+            more, and extract meanifull relationship from your projects, the template contain the following tables : Projects Users
+            ....
+          </div>
+    </div>
+
+  </div>
+  <nav class="sidenav clr-nav-level-2" >
+    <section class="sidenav-content" style="position: fixed;">
+      <a class="nav-link" routerlinkactive="active" href="/documentation#started">Get Started</a>
+      <section class="nav-group collapsible">
+        <input id="tab" type="checkbox">
+        <label for="tab">Patterns</label>
+        <ul class="nav-list">
+          <li>
+            <a class="nav-link" routerlinkactive="active" href="/clarity/documentation/v0.11/app-layout">Application Layout</a>
+          </li>
+          <li>
+            <a class="nav-link" routerlinkactive="active" href="/clarity/documentation/v0.11/color">Color Palette</a>
+          </li>
+          <li>
+            <a class="nav-link" routerlinkactive="active" href="/clarity/documentation/v0.11/navigation">Navigation</a>
+          </li>
+          <li>
+            <a class="nav-link" routerlinkactive="active" href="/clarity/documentation/v0.11/themes">Themes</a>
+          </li>
+          <li>
+            <a class="nav-link" routerlinkactive="active" href="/clarity/documentation/v0.11/typography">Typography</a>
+          </li>
+        </ul>
+      </section>
+    </section>
+  </nav>
+</div>
