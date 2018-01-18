@@ -1,169 +1,191 @@
 <div class="content-container">
   <div class="content-area">
-    <p>Test ...</p>
-    <div class="header-actions" *ngIf="appService._user">
-      <p>Use this code to connect Power BI to your bimsync Account :
-        <b>{{appService._user.powerBiSecret}}</b>
-      </p>
+    <div class="row" *ngIf="appService._user">
+        <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    Power BI Secret
+                </div>
+                <div class="card-block">
+                    <div class="card-text">
+                        <p>Use this code to connect Power BI to your bimsync Account:
+                            <b>{{appService._user.powerBiSecret}}</b>
+                          </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <pre>
-      <code ng-non-bindable clr-code-highlight="language-json">{{code}}</code>
-    </pre>
-    <div>
-      <h1>Getting started</h1>
+
+    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+      <h1 id ="started">Getting started</h1>
       <p>To use bimsync Manager, you must be connected to bimsync using your usual credentials.</p>
       <p>Click on "Connect" or "Getting Started"</p>
 
-      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
+      <div class="card">
           <div class="card-img">
             <img alt="Connect" src="../images/project/01_Connect.png">
           </div>
         </div>
-      </div>
 
       <p>Then grant the application the permission to access to your bimsync account.</p>
-      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
+
+      <div class="card">
           <div class="card-img">
             <img alt="grant" src="../images/project/02_Grant.png">
           </div>
         </div>
-      </div>
+
       <p>You can now see the list of your bimsync projects.</p>
       <p>Furthermore, to allow bimsync Manager to create issue boards on your project, you must authorized it first. Just click
         on authorise.</p>
-      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+
         <div class="card">
-          <div class="card-img">
-            <img alt="Authorize" src="../images/project/03_Authorize.png">
+            <div class="card-img">
+              <img alt="Authorize" src="../images/project/03_Authorize.png">
+            </div>
           </div>
-        </div>
-      </div>
+
       <p>Then grant again the application the permission to access to your bimsync account.</p>
 
-      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
+      <div class="card">
           <div class="card-img">
             <img alt="grant" src="../images/project/04_Grant.png">
           </div>
         </div>
-      </div>
-      <h1>Create a new bimsync project</h1>
+
+      <h1 id="createNewProject">Create a new bimsync project</h1>
+      <h2>Template</h2>
       <p>bimsync Manager allows you to to create a new bimsnc project based on a template. This template is a .json configuration
         text, where you describe how you want to create your project.</p>
-      <p>To create a new bimsync project with bimsync Manager :</p>
+      <p>To create a new bimsync project with bimsync Manager:</p>
       <ul>
         <li>Click on "Create Project</li>
       </ul>
 
-      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
+      <div class="card">
           <div class="card-img">
             <img alt="grant" src="../images/project/05_CreateProject.png">
           </div>
         </div>
-      </div>
+
       <ul>
         <li>Type in your configuration text</li>
       </ul>
 
-      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
+      <div class="card">
           <div class="card-img">
             <img alt="grant" src="../images/project/06_ConfigurationFile.png">
           </div>
         </div>
-      </div>
-      <p>This configuration text contain a series of projects to be created, enclosed between "{{ '{' }}""{{ '}' }}" and separated
-        by comma. Each project contain a series of properties :</p>
-      <h2>projectName</h2>
+
+      <p>This configuration text contain a series of projects to be created, enclosed between {{ '{' }}{{ '}' }} and separated
+        by a comma. Each project contain a series of properties:</p>
+        <pre>
+            <code ng-non-bindable clr-code-highlight="language-json">{{code1}}</code>
+          </pre>
+      <h2 id ="projectName">projectName</h2>
       <p>This is the name of your new project.</p>
-      <h2>projectDescription</h2>
+      <h2 id="projectDescription">projectDescription</h2>
       <p>This is the description of your project. This property is optional.</p>
-      <h2>Users</h2>
-      <p>A list of members to be added to the new projet. This list is optionnal. The user must already a registered bimsync
-        user, you can&rsquo;t invite new users.</p>
-      <p>Each user must have the following format :</p>
+      <h2 id="Users">Users</h2>
+      <p>A list of members to be added to the new projet. This list is optionnal. The user must already be a registered bimsync
+        user, you can't invite new users.</p>
+      <p>Each user must have the following format:</p>
+      <pre>
+          <code ng-non-bindable clr-code-highlight="language-json">{{code2}}</code>
+        </pre>
       <ul>
         <li>id: The ID of the user. This ID can be found in the URL of his profile. Just look for the last part of the URL, after
-          &ldquo;/members/&ldquo;.
+          /members/.
         </li>
-        <li>role: The role of the user added to the project, it can be &ldquo;administrator&rdquo; or &ldquo;member&rdquo;</li>
+        <li>role: The role of the user added to the project, it can be administrator or member</li>
       </ul>
-      <h2>Models</h2>
+      <h2 id ="Models">Models</h2>
       <p>A list of model to be created in the new projet. This list is optionnal.</p>
-      <p>Each model must have the following format :</p>
+      <p>Each model must have the following format:</p>
+      <pre>
+          <code ng-non-bindable clr-code-highlight="language-json">{{code3}}</code>
+        </pre>
       <ul>
         <li>name: The name of the model to be added to your project</li>
       </ul>
-      <h2>Board</h2>
+      <h2 id="Boards">Boards</h2>
       <p>A list of new issue boards to be created in your new project. This list is optionnal. Each new issue board will be
-        created as a BCF 2.0 board. You can&rsquo;t delete the "BCF" default issue board, it must be manually archived.
-        <br />Boards follows this schema :</p>
+        created as a BCF 2.0 board. You can't delete the "BCF" default issue board, it must be manually archived.
+        <br />Boards follows this schema:</p>
+        <pre>
+            <code ng-non-bindable clr-code-highlight="language-json">{{code4}}</code>
+          </pre>
       <h3>Name</h3>
       <p>This is the name of your new board</p>
       <h3>Statuses</h3>
-      <p>A list of status to be added to your board.&nbsp; This list is optionnal. If you add any new status, bimsync Manager
-        will delete all existing ones and create yours. If you don&rsquo;t add any status, bimsync Manager will keep the
-        existing ones (&ldquo;Open&rdquo; and &ldquo;Closed&rdquo;). Furthermore, you must always have a status with the
-        &ldquo;open&rdquo; type. If you don&rsquo;t add any, bimsync Manager will keep the existing one.</p>
-      <p>Statuses follow this schema :</p>
+      <p>A list of statuses to be added to your board. This list is optionnal. If you add any new status, bimsync Manager
+        will delete all existing ones and create yours. If you don't add any status, bimsync Manager will keep the
+        existing ones (Open and Closed). Furthermore, you must always have a status with the
+        open type. If you don't add any, bimsync Manager will keep the existing one.</p>
+      <p>Statuses follow this schema:</p>
+      <pre>
+          <code ng-non-bindable clr-code-highlight="language-json">{{code5}}</code>
+        </pre>
       <ul>
-        <li>Name : The name of the status</li>
-        <li>Color : The Hex colour for the status (http://www.color-hex.com/). The following color code are used by bimsync :</li>
-        <li>Type : the type of the status. It can be &ldquo;open&rdquo;, &ldquo;candidate&rdquo; or &ldquo;closed&rdquo;.</li>
+        <li>Name: The name of the status</li>
+        <li>Color: The <a href="http://www.color-hex.com/">Hex colour</a> for the status. The following color code are used by bimsync:</li>
+        <li>Type: the type of the status. It can be "open", "candidate" or "closed".</li>
       </ul>
       <h3>Types</h3>
-      <p>A list of types to be added to your board.&nbsp; This list is optionnal. If you add any new type, bimsync Manager will
-        delete all existing ones and create yours. If you don&rsquo;t add any type, bimsync Manager will keep the existing
-        ones (&ldquo;Error&rdquo;, &ldquo;Warning&rdquo;, &ldquo;Info&rdquo; and &ldquo;Unknown&rdquo;).</p>
+      <p>A list of types to be added to your board. This list is optionnal. If you add any new type, bimsync Manager will
+        delete all existing ones and create yours. If you don't add any type, bimsync Manager will keep the existing
+        ones (Error, Warning, Info and Unknown).</p>
       <p>Types follow this schema:</p>
+      <pre>
+          <code ng-non-bindable clr-code-highlight="language-json">{{code6}}</code>
+        </pre>
       <ul>
-        <li>Name : The name of the type</li>
-        <li>Color : The Hex colour for the type (http://www.color-hex.com/).</li>
+        <li>Name: The name of the type</li>
+        <li>Color: The <a href="http://www.color-hex.com/">Hex colour</a> for the type.</li>
       </ul>
-      <h2>Color</h2>
-      <p>The following color codes are used by bimsync :</p>
+<!--       <h2>Color</h2>
+      <p>The following color codes are used by bimsync:</p> -->
 
+      <h2 id="Example">Example</h2>
+      <p>Here is an example of a complete configuration file:</p>
+      <pre>
+          <code ng-non-bindable clr-code-highlight="language-json">{{example}}</code>
+        </pre>
       <h1>Power BI dashboard</h1>
       <p>Bimsync Manager allows you to connect your bimsync account to Power BI.</p>
-      <h2>Set Up</h2>
+      <h2 id = "SetUp">Set Up</h2>
       <p>Download one of the Power BI template below and open it.</p>
-      <p>To connect the Power BI template to you bimsync account, click on "Edit Parameter" and add your Power BI secret code.</p>
-      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
+      <p>To connect the Power BI template to you bimsync account, click on "Edit Parameter" and add your Power BI secret code. This code is available at the top of this page when your are connected.</p>
+      <div class="card">
           <div class="card-img">
             <img alt="grant" src="../images/bimsync/01_AddPBSecret.png">
           </div>
         </div>
-      </div>
+
       <p>Then click on "Apply Changes" to load your data into Power BI.</p>
-      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
+      <div class="card">
           <div class="card-img">
             <img alt="grant" src="../images/bimsync/02_ApplyChange.png">
           </div>
         </div>
-      </div>
       <p>Power BI can take some time to be retrieve all the data, especially if you have access to a lot of projects.</p>
-      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
+      <div class="card">
           <div class="card-img">
             <img alt="grant" src="../images/bimsync/03_Refresh.png">
           </div>
         </div>
-      </div>
       <p>If asked, all permissions must be set to Anonymous. Privacy levels must be set to "Public".</p>
       <div class="row">
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
           <div class="card">
             <div class="card-img">
               <img alt="grant" src="../images/bimsync/04_Anonymous.png">
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
           <div class="card">
             <div class="card-img">
               <img alt="grant" src="../images/bimsync/05_Public.png">
@@ -173,53 +195,48 @@
       </div>
 
     <p>If you get stuck with permission issues, clear all permissions in "Data sources settings" and hit "Refresh".</p>
-    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-      <div class="card">
+    <div class="card">
         <div class="card-img">
           <img alt="grant" src="../images/bimsync/06_ClearPermissions.png">
         </div>
       </div>
-    </div>
-    <h2>Project Dashboard</h2>
+    <h2 id="ProjectDashboard">Project Dashboard</h2>
     <p>The Project Dashboard template allows you to extract data from a specific project. This enable data extraction from any
       models. To use this dashboard, you must add your bimsync project Id to the Power BI parameters. This Id is available
       in the project list of bimsync Manager.</p>
-    <p>To be able to extract data from your model, the following tables are&nbsp;available:</p>
+    <p>To be able to extract data from your model, the following tables areavailable:</p>
     <ul>
-      <li>AllRevisions : A list of the revisions in the project</li>
-      <li>Groups : A list of IfcGroups, by revision. This include objects likes IfcZones, IfcBuildingSystem, ...&nbsp;
-        <a href="http://www.buildingsmart-tech.org/ifc/IFC4/final/html/schema/ifckernel/lexical/ifcgroup.htm">http://www.buildingsmart-tech.org/ifc/IFC4/final/html/schema/ifckernel/lexical/ifcgroup.htm</a>
-      </li>
-      <li>IfcBuildingStorey : A list of storey, by revisions</li>
-      <li>IfcDoor : A list of doors, by revision</li>
-      <li>IfcFurnishingElement : A list of furniture, by revision</li>
-      <li>IfcSpace : A list of spaces, by revision</li>
-      <li>IfcWindow : A list of windows, by revision</li>
-      <li>LoadedRevision : A list of loaded revisions.&nbsp;For performance reason, data is only extracted for the 3 last revisons
+      <li>AllRevisions: A list of the revisions in the project</li>
+      <li>Groups: A list of <a href="http://www.buildingsmart-tech.org/ifc/IFC4/final/html/schema/ifckernel/lexical/ifcgroup.htm">IfcGroups</a>, by revision. This include objects likes IfcZones, IfcBuildingSystem, ...</li>
+      <li>IfcBuildingStorey: A list of <a href="http://www.buildingsmart-tech.org/ifc/IFC4/final/html/schema/ifcproductextension/lexical/ifcbuildingstorey.htm">IfcBuildingStorey</a>, by revisions</li>
+      <li>IfcDoor: A list of doors, by revision</li>
+      <li>IfcFurnishingElement: A list of furniture, by revision</li>
+      <li>IfcSpace: A list of spaces, by revision</li>
+      <li>IfcWindow: A list of windows, by revision</li>
+      <li>LoadedRevision: A list of loaded revisions.For performance reason, data is only extracted for the 3 last revisons
         of every model. If you need more revisions, you need to edit manually the Power BI queries.</li>
-      <li>Models : A&nbsp;list of all models for the current project</li>
-      <li>Project : Informations about the loaded project</li>
-      <li>Relation : A list of all&nbsp;IfcRelationship, by revisions. You can use this table to link objects between tables.</li>
+      <li>Models: Alist of all models for the current project</li>
+      <li>Project: Informations about the loaded project</li>
+      <li>Relation: A list of all <a href="http://www.buildingsmart-tech.org/ifc/IFC4/final/html/schema/ifckernel/lexical/ifcrelationship.htm">IfcRelationship</a>, by revisions. You can use this table to link objects between tables.</li>
     </ul>
-    <h2>Global dashboard</h2>
-    <p>The &nbsp;Global Dashboard&nbsp;template&nbsp;give you an overview of all your binsync projects, along with their members,
+    <h2 id="GlobalDashboard">Global Dashboard</h2>
+    <p>The Global Dashboardtemplategive you an overview of all your binsync projects, along with their members,
       models, revisions, ...</p>
-    <p>It can be used for cross-project analysis and management. However, for performance reason, you can&rsquo;t use it extract
+    <p>It can be used for cross-project analysis and management. However, for performance reason, you can't use it extract
       data from all models of all your projects. To do so, use the Project Dashboard on a specific project.</p>
     <p>The Global Dashboard template come with four sample pages, displaying generic information about your projects.
-      <br />To find more, and extract meanifull relationship from your projects, the template contain the following tables :</p>
+      <br />To find more, and extract meanifull relationship from your projects, the template contain the following tables:</p>
     <ul>
-      <li>Members : A list of relation between a project and a bimsync user</li>
-      <li>Models : All models, by project</li>
-      <li>OwnerHistory : The owner history of all the IFC models uploaded on bimsync</li>
-      <li>Projects : A list of all your bimsync projects</li>
-      <li>RefreshDate : A simple table to get the date of the last refresh</li>
-      <li>Revision : All revisions, by model and project</li>
-      <li>Users : A list of all bimsync users you are aware of</li>
+      <li>Members: A list of relation between a project and a bimsync user</li>
+      <li>Models: All models, by project</li>
+      <li>OwnerHistory: The owner history of all the IFC models uploaded on bimsync</li>
+      <li>Projects: A list of all your bimsync projects</li>
+      <li>RefreshDate: A simple table to get the date of the last refresh</li>
+      <li>Revision: All revisions, by model and project</li>
+      <li>Users: A list of all bimsync users you are aware of</li>
     </ul>
     <p>These tables are linked together with Power BI relations.</p>
-    <p>These templates are also set up to be&nbsp;uploaded&nbsp;on Power BI Online, where you can refresh them&nbsp;periodically&nbsp;without
-      any intervention.</p>
+    <p>These templates are also set up to be uploaded on Power BI Online, where you can refresh them periodically without any intervention.</p>
   </div>
 
 </div>
@@ -227,23 +244,44 @@
   <section class="sidenav-content" style="position: fixed;">
     <a class="nav-link" routerlinkactive="active" href="/documentation#started">Get Started</a>
     <section class="nav-group collapsible">
+        <input id="tab" type="checkbox">
+        <label for="tab">Create a new bimsync project</label>
+        <ul class="nav-list">
+          <li>
+            <a class="nav-link" routerlinkactive="active" href="/documentation#createNewProject">Template</a>
+          </li>
+          <li>
+            <a class="nav-link" routerlinkactive="active" href="/documentation#projectName">projectName</a>
+          </li>
+          <li>
+            <a class="nav-link" routerlinkactive="active" href="/documentation#projectDescription">projectDescription</a>
+          </li>
+          <li>
+            <a class="nav-link" routerlinkactive="active" href="/documentation#Users">Users</a>
+          </li>
+          <li>
+            <a class="nav-link" routerlinkactive="active" href="/documentation#Models">Models</a>
+          </li>
+          <li>
+              <a class="nav-link" routerlinkactive="active" href="/documentation#Boards">Boards</a>
+            </li>
+            <li>
+                <a class="nav-link" routerlinkactive="active" href="/documentation#Example">Example</a>
+              </li>
+        </ul>
+      </section>
+    <section class="nav-group collapsible">
       <input id="tab" type="checkbox">
-      <label for="tab">Patterns</label>
+      <label for="tab">Power BI dashboard</label>
       <ul class="nav-list">
         <li>
-          <a class="nav-link" routerlinkactive="active" href="/clarity/documentation/v0.11/app-layout">Application Layout</a>
+          <a class="nav-link" routerlinkactive="active" href="/documentation#SetUp">Set Up</a>
         </li>
         <li>
-          <a class="nav-link" routerlinkactive="active" href="/clarity/documentation/v0.11/color">Color Palette</a>
+          <a class="nav-link" routerlinkactive="active" href="/documentation#ProjectDashboard">Project Dashboard</a>
         </li>
         <li>
-          <a class="nav-link" routerlinkactive="active" href="/clarity/documentation/v0.11/navigation">Navigation</a>
-        </li>
-        <li>
-          <a class="nav-link" routerlinkactive="active" href="/clarity/documentation/v0.11/themes">Themes</a>
-        </li>
-        <li>
-          <a class="nav-link" routerlinkactive="active" href="/clarity/documentation/v0.11/typography">Typography</a>
+          <a class="nav-link" routerlinkactive="active" href="/documentation#GlobalDashboard">Global Dashboard</a>
         </li>
       </ul>
     </section>
