@@ -6,6 +6,11 @@ export interface IProject {
   updatedAt: Date;
 }
 
+export interface IModel {
+  id: string;
+  name: string;
+}
+
 export interface IMember {
   role: string;
   user: IbimsyncUser;

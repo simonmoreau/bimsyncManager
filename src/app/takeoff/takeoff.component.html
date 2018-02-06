@@ -1,0 +1,19 @@
+
+<div *ngIf='projects && projects.length'>
+  <label for="selects_1">Projects</label>
+  <div class="select">
+      <select id="selects_1" (change)="GetModels()" [(ngModel)]="selectedProject">
+          <option *ngFor='let project of projects' [ngValue]="project">{{project.name}}</option>
+      </select>
+  </div>
+</div>
+
+<div *ngIf='models && models.length'>
+    <label for="selects_2">Models</label>
+    <div class="select">
+        <select id="selects_2" [(ngModel)]="selectedModel">
+            <option *ngFor='let model of models; let i = index; trackBy: trackByFn' [ngValue]="model">{{model.name}}</option>
+        </select>
+    </div>
+  </div>
+<p *ngIf='selectedModel'>{{selectedModel.name}}</p>

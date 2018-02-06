@@ -12,6 +12,7 @@ import { BimsyncProjectComponent } from './bimsync-project/bimsync-project.compo
 import { HttpClient } from "@angular/common/http/src/client";
 import { BimsyncOauthComponent } from './bimsync-oauth/bimsync-oauth.component';
 import { DocumentationComponent } from './documentation/documentation.component';
+import { TakeoffComponent } from './takeoff/takeoff.component';
 
 @NgModule({
     declarations: [
@@ -19,7 +20,8 @@ import { DocumentationComponent } from './documentation/documentation.component'
         HomeComponent,
         BimsyncProjectComponent,
         BimsyncOauthComponent,
-        DocumentationComponent
+        DocumentationComponent,
+        TakeoffComponent
     ],
     imports: [
         BrowserAnimationsModule,
