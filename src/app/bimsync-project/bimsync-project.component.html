@@ -62,6 +62,7 @@
             <th>Name</th>
             <th>Description</th>
             <th>Id</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -71,6 +72,12 @@
             </td>
             <td>{{project.description}}</td>
             <td>{{project.id}}</td>
+            <td><button class="btn btn-icon" (click)="Share()">
+                <clr-icon shape="home"></clr-icon>
+            </button></td>
         </tr>
     </tbody>
 </table>
+
+<!-- add the #shareModal -->
+<app-share-modal #shareModal></app-share-modal>

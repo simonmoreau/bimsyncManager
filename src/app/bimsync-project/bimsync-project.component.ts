@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , ViewChild} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
@@ -10,6 +10,7 @@ import { ICreator, IMember, IModel, IBoard, IStatus, IType } from 'app/bimsync-p
 import { AppService } from 'app/app.service';
 import * as data from './bimsyncProject.json';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { ShareModalComponent } from '../share-modal/share-modal.component';
 
 @Component({
   selector: 'app-bimsync-project',
@@ -24,9 +25,12 @@ export class BimsyncProjectComponent implements OnInit {
   projects: IProject[] = [];
   createdProject: IProject;
   open: boolean;
+  share: boolean;
   jsonConfig: any;
   submitted: boolean;
   _appService: AppService;
+
+  @ViewChild('shareModal') modal: ShareModalComponent;
 
   constructor(private _bimsyncProjectService: bimsyncProjectService, private appService: AppService) {
     this._appService = appService;
@@ -35,7 +39,7 @@ export class BimsyncProjectComponent implements OnInit {
   ngOnInit() {
     this.GetProjects();
     this.User = this._appService.GetUser();
-    this.IsBCF = (this.User.bcfToken == "");
+    this.IsBCF = (this.User.bcfToken === "");
   }
 
   GetProjects() {
@@ -50,8 +54,8 @@ export class BimsyncProjectComponent implements OnInit {
 
   onSubmit() {
 
-    //let temp = (<any>this.jsonConfig);
-    //let creators = <ICreator[]>temp;
+    // let temp = (<any>this.jsonConfig);
+    // let creators = <ICreator[]>temp;
 
     let creators = JSON.parse(this.jsonConfig);
     console.log(creators);
@@ -66,22 +70,22 @@ export class BimsyncProjectComponent implements OnInit {
   CreateProject(creator: ICreator) {
 
     console.log(creator);
-    //Create the project
+    // Create the project
     this._bimsyncProjectService.createNewProject(creator.projectName, creator.projectDescription)
       .subscribe(project => {
         console.log(project.name);
 
         if (creator.users) {
-          //Assign users
+          // Assign users
           this.AssingUsers(creator.users, project.id);
         }
         if (creator.models) {
-          //Create models
+          // Create models
           this.CreateModels(creator.models, project.id);
         }
 
         if (creator.boards) {
-          //Create boards
+          // Create boards
           this.CreateBoards(creator, project.id);
         }
       },
@@ -90,7 +94,7 @@ export class BimsyncProjectComponent implements OnInit {
 
   AssingUsers(users: IMember[], projectId: string) {
     for (let user of users) {
-      //Assign a new user
+      // Assign a new user
       this._bimsyncProjectService.AddUser(projectId, user.id, user.role)
         .subscribe(member => {
           console.log(member.role);
@@ -101,10 +105,10 @@ export class BimsyncProjectComponent implements OnInit {
 
   CreateModels(models: IModel[], projectId: string) {
     for (let model of models) {
-      //Create a new model
+      // Create a new model
       this._bimsyncProjectService.AddModel(projectId, model.name)
-        .subscribe(model => {
-          console.log(model.name);
+        .subscribe(m => {
+          console.log(m.name);
         },
         error => this.errorMessage = <any>error);
     }
@@ -115,17 +119,17 @@ export class BimsyncProjectComponent implements OnInit {
     let boards: IBoard[] = creator.boards;
 
     for (let board of boards) {
-      //Create a new board
+      // Create a new board
       this._bimsyncProjectService.AddBoard(projectId, board.name)
         .subscribe(bimsyncBoard => {
           console.log(bimsyncBoard.name);
 
-          //Create extention statuses
+          // Create extention statuses
           if (board.statuses) {
             this.CreateExtensionStatuses(bimsyncBoard, board);
           }
 
-          //Create extension types
+          // Create extension types
           if (board.types) {
             this.CreateExtensionTypes(bimsyncBoard, board);
           }
@@ -144,18 +148,17 @@ export class BimsyncProjectComponent implements OnInit {
         let index = existingStatusesNames.indexOf(status.name);
 
         if (index > -1) {
-          //If the status exist, update it
-          this._bimsyncProjectService.UpdateExtensionStatus(bimsyncBoard.project_id, status.name,status.name, status.color, status.type)
+          // If the status exist, update it
+          this._bimsyncProjectService.UpdateExtensionStatus(bimsyncBoard.project_id, status.name, status.name, status.color, status.type)
           .subscribe(bimsyncStatus => {
             console.log(bimsyncStatus);
           },
           error => this.errorMessage = <any>error);
-          //Remove it from the existingTypesNames
+          // Remove it from the existingTypesNames
           existingStatusesNames.splice(index, 1);
-        }
-        else {
-          //If not, Create it
-          this._bimsyncProjectService.AddExtensionStatus(bimsyncBoard.project_id, status.name, status.color,status.type)
+        } else {
+          // If not, Create it
+          this._bimsyncProjectService.AddExtensionStatus(bimsyncBoard.project_id, status.name, status.color, status.type)
             .subscribe(bimsyncStatus => {
               console.log(bimsyncStatus);
             },
@@ -165,9 +168,9 @@ export class BimsyncProjectComponent implements OnInit {
 
     setTimeout(console.log('wait'), 500);
 
-    //Detele remaining existing statuses
+    // Detele remaining existing statuses
     for (let name of existingStatusesNames) {
-      //Delete a status
+      // Delete a status
       this._bimsyncProjectService.DeleteExtensionStatus(bimsyncBoard.project_id, name)
         .subscribe(bimsyncStatus => {
           console.log(bimsyncStatus);
@@ -185,17 +188,16 @@ export class BimsyncProjectComponent implements OnInit {
       let index = existingTypesNames.indexOf(type.name);
 
       if (index > -1) {
-        //If the type exist, update it
-        this._bimsyncProjectService.UpdateExtensionType(bimsyncBoard.project_id, type.name,type.name, type.color)
+        // If the type exist, update it
+        this._bimsyncProjectService.UpdateExtensionType(bimsyncBoard.project_id, type.name, type.name, type.color)
         .subscribe(bimsyncType => {
           console.log(bimsyncType);
         },
         error => this.errorMessage = <any>error);
-        //Remove it from the existingTypesNames
+        // Remove it from the existingTypesNames
         existingTypesNames.splice(index, 1);
-      }
-      else {
-        //If not, Create it
+      } else {
+        // If not, Create it
         this._bimsyncProjectService.AddExtensionType(bimsyncBoard.project_id, type.name, type.color)
           .subscribe(bimsyncType => {
             console.log(bimsyncType);
@@ -206,9 +208,9 @@ export class BimsyncProjectComponent implements OnInit {
 
     setTimeout(console.log('wait'), 500);
 
-    //Detele remaining existing types
+    // Detele remaining existing types
     for (let name of existingTypesNames) {
-      //Delete a status
+      // Delete a status
       this._bimsyncProjectService.DeleteExtensionType(bimsyncBoard.project_id, name)
         .subscribe(bimsyncType => {
           console.log(bimsyncType);
@@ -217,4 +219,7 @@ export class BimsyncProjectComponent implements OnInit {
     }
   }
 
+  Share() {
+    this.modal.open();
+  }
 }

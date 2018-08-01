@@ -13,6 +13,7 @@ import { HttpClient } from "@angular/common/http/src/client";
 import { BimsyncOauthComponent } from './bimsync-oauth/bimsync-oauth.component';
 import { DocumentationComponent } from './documentation/documentation.component';
 import { TakeoffComponent } from './takeoff/takeoff.component';
+import { ShareModalComponent } from './share-modal/share-modal.component';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { TakeoffComponent } from './takeoff/takeoff.component';
         BimsyncProjectComponent,
         BimsyncOauthComponent,
         DocumentationComponent,
-        TakeoffComponent
+        TakeoffComponent,
+        ShareModalComponent
     ],
     imports: [
         BrowserAnimationsModule,
