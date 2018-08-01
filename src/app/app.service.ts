@@ -15,17 +15,17 @@ export class AppService {
 
   errorMessage: string;
   private _projectsUrl = 'https://bimsyncmanagerapi.azurewebsites.net/api/';
-  //_callbackUrl:string = 'https://bimsyncmanager.firebaseapp.com/callback';
-  _callbackUrl:string = 'http://localhost:4200/callback';
+  // _callbackUrl:string = 'https://bimsyncmanager.firebaseapp.com/callback';
+  _callbackUrl: string = 'http://localhost:4200/callback';
   _user: IUser;
 
   constructor(
     private _http: HttpClient,
     private router: Router
   ) {
-    //Encore the callbackURI
+    // Encore the callbackURI
     this._callbackUrl = encodeURIComponent(this._callbackUrl);
-    //Check if there is a user in local storage
+    // Check if there is a user in local storage
     let currentUser: IUser = JSON.parse(localStorage.getItem('user'));
     if (currentUser != null) {
       this._user = currentUser;
@@ -53,9 +53,9 @@ export class AppService {
     this.getUserRequest(authorization_code)
       .subscribe(user => {
         this._user = user;
-        //Save to local storage
+        // Save to local storage
         localStorage.setItem('user', JSON.stringify(user));
-        //Redirect to the home page
+        // Redirect to the home page
         this.router.navigate(['/projects']);
       },
       error => this.errorMessage = <any>error);
@@ -65,7 +65,7 @@ export class AppService {
     this.RefreshTokenRequest()
       .subscribe(user => {
         this._user = user;
-        //Save to local storage
+        // Save to local storage
         localStorage.setItem('user', JSON.stringify(user));
       },
       error => this.errorMessage = <any>error);
@@ -75,9 +75,9 @@ export class AppService {
     this.GetBCFTokenRequest(authorization_code)
       .subscribe(user => {
         this._user = user;
-        //Save to local storage
+        // Save to local storage
         localStorage.setItem('user', JSON.stringify(user));
-        //Redirect to the home page
+        // Redirect to the home page
         this.router.navigate(['/projects']);
       },
       error => this.errorMessage = <any>error);
