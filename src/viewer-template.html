@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>bimsync Manager</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        body {
+            font-family: Arial;
+            font-size: 14px;
+        }
+
+        #viewer-2d-container {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 400px;
+            height: 250px;
+            background-color: transparent;
+        }
+
+        #viewer-2d {
+            height: 100%;
+            background-color: rgba(252,252,252,0.9);
+            border:1px solid #eef0f1;
+        }
+
+        #viewer-container {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow-y: hidden;
+        }
+
+        #viewer {
+            height: 100%;
+        }
+
+        #documentation {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        #navigation {
+            position: absolute;
+            right: 0;
+            width: 20%;
+            bottom: 0;
+            top: 0;
+            overflow: auto;
+        }
+
+        .help-item {
+            white-space: nowrap;
+            font-size: 16px;
+            padding: 2px;
+        }
+
+        .help-item .command {
+            white-space: nowrap;
+            margin-right: -1px;
+            margin-left: 10px;
+            padding: 1px 10px;
+            border: 1px solid #4E98F7;
+            border-radius: 10px;
+            color: #4E98F7;
+        }
+
+        #get-focus {
+            display: none;
+            position: absolute;
+            cursor: pointer;
+            z-index: 1000;
+            top: 25px;
+            left: calc(50% - 300px);
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px 10px
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://api.bimsync.com/1.0/js/viewer.js"></script>
+    <script src="https://api.bimsync.com/1.0/js/viewer2d.js"></script>
+
+    <div id="viewer-container" tabindex="-1">
+        <div id="viewer" data-viewer="webgl" data-url="https://api.bimsync.com/1.0/viewer/access?token=9f82b1414a6f47d8977e7408095696d9"
+            data-enable-touch="true" 
+            data-ui 
+            data-enable-keyboard="true" 
+            data-selected-color="#6b84bc" 
+            data-translucent-opacity="0.5"
+            data-joystick-color="darkgreen" 
+            data-joystick-position="bottom-center" 
+            data-joystick-size="70" 
+            data-joystick-hidden="false"
+            data-enable-context-menu="true" 
+            data-viewer2d-id="viewer-2d" 
+            data-enable-viewer2d-integration="true" 
+            data-show-viewer2d-storey-select="true"
+            data-show-viewer2d-locked-navigation-toggle="true" 
+            enableClippingPlaneWidget="true">
+        </div>
+    </div>
+
+    <div id="viewer-2d-container">
+        <div id="viewer-2d" data-viewer2d="svg" data-url="https://api.bimsync.com/beta/viewer2d/svg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0eXBlIjoidmlld2VyLTJkIiwiZXhwIjoxNTMzMTY3Njg5LCJyZXZpc2lvbi1pZCI6IjQyNTdjODY0Mjk4NzRiNDQ4OGNjMzRkMWQ0MzFjNjk0Iiwidmlld2VyMmQtaWQiOiJlN2E0NjE2Yi0xYjA3LTQ5ZjEtODBhYS0yMDYzMjFiN2RmOTQifQ.FduWDyAiQBqcfaIU3l_Eo6bAimhhjiXmzDp8Nwt_mCU">
+        </div>
+    </div>
+
+    <script>
+        $('#viewer').viewer('set2dLockStoreyMode',false);
+        $('.viewer').viewer('clippingPlaneWidgetViewport', {x: 0, y: 300, width: 150, height: 150});
+    </script>
+
+</body>
+
+</html>
