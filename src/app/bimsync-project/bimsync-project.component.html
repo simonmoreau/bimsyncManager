@@ -72,8 +72,8 @@
             <td>{{project.description}}</td>
             <td>{{project.id}}</td>
             <td>
-                <button class="btn btn-icon" (click)="Share(project)">
-                    <clr-icon shape="home"></clr-icon>
+                <button class="btn btn-link btn-icon btn-inline" (click)="Share(project)">
+                    <clr-icon shape="share" class="is-solid"></clr-icon>
                 </button>
                 <!-- add the #shareModal -->
                 <app-share-modal #shareModal></app-share-modal>

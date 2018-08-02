@@ -10,6 +10,8 @@ export interface IModel {
   id: string;
   name: string;
   revisions: IRevision[];
+  selectedRevision: IRevision;
+  isSelected: boolean;
 }
 
 export interface IRevision {

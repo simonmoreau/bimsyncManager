@@ -7,13 +7,13 @@
                     <td>{{model.name}}</td>
                     <td>
                         <div class="toggle-switch" *ngIf="model.revisions?.length > 0">
-                            <input type="checkbox" id="toggle-{{model.id}}">
+                            <input type="checkbox" id="toggle-{{model.id}}" [(ngModel)]="model.isSelected">
                             <label for="toggle-{{model.id}}"></label>
                         </div>
                     </td>
                     <td>
-                        <div class="select" *ngIf="model.revisions?.length > 0">
-                            <select id="selects-{{model.id}}">
+                        <div class="select" *ngIf="model.revisions?.length > 0" >
+                            <select id="selects-{{model.id}}" [(ngModel)]="model.selectedRevision" (change)="change()">
                                 <option *ngFor='let revision of model.revisions; let i = index; trackBy: trackByFn' [ngValue]="model">Revision #{{revision.version}}</option>
                             </select>
                         </div>
@@ -24,6 +24,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline" (click)="share = false">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="share = false">Ok</button>
+        <button type="button" class="btn btn-primary" (click)="test()">Ok</button>
     </div>
 </clr-modal>

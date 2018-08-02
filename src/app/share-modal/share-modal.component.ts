@@ -31,12 +31,21 @@ export class ShareModalComponent implements OnInit {
     this.share = true;
   }
 
+  test() {
+    console.log(JSON.stringify(this.models));
+  }
+
+  change() {
+    console.log(JSON.stringify(this.models));
+  }
+
   GetModels() {
     this._takeoffService.getModels(this.selectedProject.id)
       .subscribe(models => {
         this.models = models;
         models.forEach(model => {
           this.GetRevisions(model);
+
         });
       },
       error => this.errorMessage = <any>error);
@@ -47,6 +56,8 @@ export class ShareModalComponent implements OnInit {
     this._takeoffService.getRevisions(this.selectedProject.id,model.id)
       .subscribe(revisions => {
         model.revisions = revisions;
+        model.selectedRevision = model.revisions[model.revisions.length-1];
+        model.isSelected = true;
       },
       error => this.errorMessage = <any>error);
     return false;
