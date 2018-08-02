@@ -44,3 +44,13 @@ export interface IbimsyncUser {
   name: string;
   username: string;
 }
+
+export interface IviewerToken {
+  token: string;
+  url: string;
+}
+
+export interface IRevisionId {
+  model_id: string;
+  revision_id: string;
+}

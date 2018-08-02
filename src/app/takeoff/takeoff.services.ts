@@ -1,7 +1,7 @@
 // Imports
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IProject, IModel, IRevision } from '../bimsync-project/bimsync-project.models';
+import { IProject, IModel, IRevision, IRevisionId, IviewerToken } from '../bimsync-project/bimsync-project.models';
 import { AppService } from 'app/app.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -11,7 +11,7 @@ import { importExpr } from '@angular/compiler/src/output/output_ast';
 import { Body } from '@angular/http/src/body';
 
 @Injectable()
-export class takeoffService {
+export class TakeoffService {
 
     // private instance variable to hold base url
     private _apiUrl = 'https://api.bimsync.com/v2/';
@@ -20,7 +20,7 @@ export class takeoffService {
     private _appService: AppService;
 
     // Resolve HTTP using the constructor
-    constructor(private _http: HttpClient,private appService: AppService) { 
+    constructor(private _http: HttpClient, private appService: AppService) {
         this._appService = appService;
     }
 
@@ -38,7 +38,7 @@ export class takeoffService {
 
     getModels(projectId: string): Observable<IModel[]> {
         return this._http.get<IModel[]>(
-            this._apiUrl + 'projects/'+ projectId +'/models',
+            this._apiUrl + 'projects/' + projectId + '/models',
             {
                 headers: new HttpHeaders()
                     .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
@@ -50,11 +50,23 @@ export class takeoffService {
 
     getRevisions(projectId: string, modelId: string): Observable<IRevision[]> {
         return this._http.get<IRevision[]>(
-            this._apiUrl + 'projects/'+ projectId +'/revisions?model='+modelId,
+            this._apiUrl + 'projects/' + projectId + '/revisions?model=' + modelId,
             {
                 headers: new HttpHeaders()
                     .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
                     .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    GetViewerToken(projectId: string, revisionsIds: IRevisionId[]): Observable<IviewerToken> {
+        return this._http.post<IviewerToken>(
+            'https://api.bimsync.com/1.0/viewer/access?project_id=' + projectId + '&access_token=' + this._appService._user.bcfToken,
+             JSON.stringify(revisionsIds),
+            {
+                headers: new HttpHeaders()
+                    .set('Content-Type', 'application/x-www-form-urlencoded')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);

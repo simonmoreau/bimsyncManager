@@ -220,6 +220,6 @@ export class BimsyncProjectComponent implements OnInit {
   }
 
   Share(project) {
-    this.modal.open(project);
+    this.modal.OpenShareModal(project);
   }
 }
