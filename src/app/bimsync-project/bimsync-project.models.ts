@@ -9,6 +9,16 @@ export interface IProject {
 export interface IModel {
   id: string;
   name: string;
+  revisions: IRevision[];
+}
+
+export interface IRevision {
+  comment: string;
+  createdAt: Date;
+  id: string;
+  model: IModel;
+  user: IbimsyncUser;
+  version: string;
 }
 
 export interface IMember {

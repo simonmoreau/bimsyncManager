@@ -219,7 +219,7 @@ export class BimsyncProjectComponent implements OnInit {
     }
   }
 
-  Share() {
-    this.modal.open();
+  Share(project) {
+    this.modal.open(project);
   }
 }

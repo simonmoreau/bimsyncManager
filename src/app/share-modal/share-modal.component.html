@@ -1,10 +1,29 @@
 <clr-modal [(clrModalOpen)]="share">
-  <h3 class="modal-title">I have a nice title</h3>
-  <div class="modal-body">
-      <p>But not much to say...</p>
-  </div>
-  <div class="modal-footer">
-      <button type="button" class="btn btn-outline" (click)="share = false">Cancel</button>
-      <button type="button" class="btn btn-primary" (click)="share = false">Ok</button>
-  </div>
+    <h3 class="modal-title" *ngIf="selectedProject">Share {{selectedProject.name}}</h3>
+    <div class="modal-body">
+        <table class="table table-noborder">
+            <tbody>
+                <tr *ngFor='let model of models'>
+                    <td>{{model.name}}</td>
+                    <td>
+                        <div class="toggle-switch" *ngIf="model.revisions?.length > 0">
+                            <input type="checkbox" id="toggle-{{model.id}}">
+                            <label for="toggle-{{model.id}}"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="select" *ngIf="model.revisions?.length > 0">
+                            <select id="selects-{{model.id}}">
+                                <option *ngFor='let revision of model.revisions; let i = index; trackBy: trackByFn' [ngValue]="model">Revision #{{revision.version}}</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="share = false">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="share = false">Ok</button>
+    </div>
 </clr-modal>

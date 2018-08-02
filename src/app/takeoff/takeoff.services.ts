@@ -1,7 +1,7 @@
 // Imports
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IProject, IModel } from '../bimsync-project/bimsync-project.models';
+import { IProject, IModel, IRevision } from '../bimsync-project/bimsync-project.models';
 import { AppService } from 'app/app.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -39,6 +39,18 @@ export class takeoffService {
     getModels(projectId: string): Observable<IModel[]> {
         return this._http.get<IModel[]>(
             this._apiUrl + 'projects/'+ projectId +'/models',
+            {
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    getRevisions(projectId: string, modelId: string): Observable<IRevision[]> {
+        return this._http.get<IRevision[]>(
+            this._apiUrl + 'projects/'+ projectId +'/revisions?model='+modelId,
             {
                 headers: new HttpHeaders()
                     .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
