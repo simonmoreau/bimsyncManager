@@ -1,7 +1,8 @@
 // Imports
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IProject, IModel, IRevision, IRevisionId, IviewerToken } from '../bimsync-project/bimsync-project.models';
+import { IProject, IModel, IRevision, IRevisionId,
+    IViewerToken, IViewerRequestBody, IViewer2DToken } from '../bimsync-project/bimsync-project.models';
 import { AppService } from 'app/app.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -60,13 +61,37 @@ export class TakeoffService {
             .catch(this.handleError);
     }
 
-    GetViewerToken(projectId: string, revisionsIds: IRevisionId[]): Observable<IviewerToken> {
-        return this._http.post<IviewerToken>(
+    GetViewerToken(projectId: string, revisionsIds: IRevisionId[]): Observable<IViewerToken> {
+        return this._http.post<IViewerToken>(
             'https://api.bimsync.com/1.0/viewer/access?project_id=' + projectId + '&access_token=' + this._appService._user.bcfToken,
              JSON.stringify(revisionsIds),
             {
                 headers: new HttpHeaders()
                     .set('Content-Type', 'application/x-www-form-urlencoded')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    GetViewer2DToken(modelId: string, revisionId: string): Observable<IViewer2DToken> {
+        return this._http.post<IViewer2DToken>(
+            'https://api.bimsync.com/beta/viewer2d/access?model_id=' + modelId
+             + '&revision_id=' + revisionId + '&access_token=' + this._appService._user.bcfToken,
+            {
+                headers: new HttpHeaders()
+                    .set('Content-Type', 'application/x-www-form-urlencoded')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    GetSharingURL(viewerRequestBody: IViewerRequestBody): Observable<string> {
+        return this._http.post<string>(
+            'https://binsyncfunction.azurewebsites.net/api/bimsync-viewer',
+             JSON.stringify(viewerRequestBody),
+            {
+                headers: new HttpHeaders()
+                    .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);

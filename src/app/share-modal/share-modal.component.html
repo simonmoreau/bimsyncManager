@@ -17,17 +17,29 @@
     <div class="modal-body">
         <table class="table table-noborder">
             <tbody>
+                <tr>
+                    <td>Model</td>
+                    <td>3D</td>
+                    <td>2D</td>
+                    <td>Revision</td>
+                </tr>
                 <tr *ngFor='let model of models'>
                     <td>{{model.name}}</td>
                     <td>
                         <div class="toggle-switch" *ngIf="model.revisions?.length > 0">
-                            <input type="checkbox" id="toggle-{{model.id}}" [(ngModel)]="model.isSelected">
+                            <input type="checkbox" id="toggle-{{model.id}}" (change)="Select3D(model)" [(ngModel)]="model.is3DSelected">
                             <label for="toggle-{{model.id}}"></label>
                         </div>
                     </td>
                     <td>
+                        <div class="toggle-switch" *ngIf="model.revisions?.length > 0">
+                            <input type="checkbox" id="toggle2d-{{model.id}}" (change)="Select2D(model)" [(ngModel)]="model.is2DSelected">
+                            <label for="toggle2d-{{model.id}}"></label>
+                        </div>
+                    </td>
+                    <td>
                         <div class="select" *ngIf="model.revisions?.length > 0">
-                            <select id="selects-{{model.id}}" [(ngModel)]="model.selectedRevision" [disabled]="!model.isSelected">
+                            <select id="selects-{{model.id}}" [(ngModel)]="model.selectedRevision" [disabled]="!model.is3DSelected">
                                 <option *ngFor='let revision of model.revisions' [ngValue]="revision">Revision #{{revision.version}}</option>
                             </select>
                         </div>
@@ -37,23 +49,26 @@
         </table>
     </div>
     <div class="modal-body">
-        <table class="table table-noborder ">
-            <tbody>
-                <tr>
-                    <td class="left">
-                        <div class="toggle-switch">
-                            <input type="checkbox" id="toggle-all" (change)="SelectAllModels()" [(ngModel)]="selectAll">
-                            <label for="toggle-all">Select All models</label>
-                        </div>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-primary" (click)="Publish()">Publish</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="row space">
+                <div class="col-xs-6">
+                        <div class="toggle-switch left">
+                                <input type="checkbox" id="toggle-all" (change)="SelectAllModels()" [(ngModel)]="selectAll">
+                                <label for="toggle-all">Select All models</label>
+                            </div>
+                </div>
+                <div class="col-xs-6">
+                        <button type="button" class="btn btn-primary right" (click)="Publish()">Publish</button>
+                </div>
+            </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline" (click)="share = false">Cancel</button>
+            <div class="row">
+                    <div class="col-xs-6">
+        
+                    </div>
+                    <div class="col-xs-6">
+        
+                    </div>
+                </div>
     </div>
 </clr-modal>

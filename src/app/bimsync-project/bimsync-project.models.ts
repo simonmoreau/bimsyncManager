@@ -11,7 +11,8 @@ export interface IModel {
   name: string;
   revisions: IRevision[];
   selectedRevision: IRevision;
-  isSelected: boolean;
+  is3DSelected: boolean;
+  is2DSelected: boolean;
 }
 
 export interface IRevision {
@@ -45,9 +46,20 @@ export interface IbimsyncUser {
   username: string;
 }
 
-export interface IviewerToken {
+export interface IViewerToken {
   token: string;
   url: string;
+}
+
+export interface IViewer2DToken {
+  token: string;
+  url: string;
+  modelId: string;
+}
+
+export interface IViewerRequestBody {
+  viewerToken: string;
+  viewer2DToken: string;
 }
 
 export interface IRevisionId {

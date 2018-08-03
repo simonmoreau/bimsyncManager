@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { IProject, IBimsyncBoard } from './bimsync-project.models';
 import { IUser } from '../bimsync-oauth/bimsync-oauth.models';
-import { bimsyncProjectService } from './bimsync-project.services';
+import { BimsyncProjectService } from './bimsync-project.services';
 import { ICreator, IMember, IModel, IBoard, IStatus, IType } from 'app/bimsync-project/creator.models';
 import { AppService } from 'app/app.service';
 import * as data from './bimsyncProject.json';
@@ -16,7 +16,7 @@ import { ShareModalComponent } from '../share-modal/share-modal.component';
   selector: 'app-bimsync-project',
   templateUrl: './bimsync-project.component.html',
   styleUrls: ['./bimsync-project.component.scss'],
-  providers: [bimsyncProjectService]
+  providers: [BimsyncProjectService]
 })
 export class BimsyncProjectComponent implements OnInit {
   errorMessage: string;
@@ -32,7 +32,7 @@ export class BimsyncProjectComponent implements OnInit {
 
   @ViewChild('shareModal') modal: ShareModalComponent;
 
-  constructor(private _bimsyncProjectService: bimsyncProjectService, private appService: AppService) {
+  constructor(private _bimsyncProjectService: BimsyncProjectService, private appService: AppService) {
     this._appService = appService;
   }
 

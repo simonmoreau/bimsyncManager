@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { TakeoffService } from '../takeoff/takeoff.services';
-import { IProject, IModel, IRevisionId } from '../bimsync-project/bimsync-project.models';
+import { IProject, IModel, IRevisionId, IViewerRequestBody } from '../bimsync-project/bimsync-project.models';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
@@ -24,6 +24,9 @@ export class ShareModalComponent implements OnInit {
   models: IModel[] = [];
   errorMessage: string;
   selectAll: boolean = false;
+  revisionId2d: string = "";
+  modelId2d: string = "";
+  sharingURL: string;
 
   constructor(private _takeoffService: TakeoffService) { }
 
@@ -40,22 +43,47 @@ export class ShareModalComponent implements OnInit {
     let revisionsIds: IRevisionId[] = [];
 
     this.models.forEach(item => {
-      if (item.isSelected) {
+      if (item.is3DSelected) {
         let revisionId: IRevisionId = {
           model_id: item.id,
           revision_id: item.selectedRevision.version
         };
         revisionsIds.push(revisionId)
+        if (item.is2DSelected) {
+          this.modelId2d = item.id;
+          this.revisionId2d = item.selectedRevision.id;
+        }
       }
     });
 
-    this.GetViewerToken(revisionsIds);
+    this.GetViewerURL(revisionsIds);
   }
 
   SelectAllModels() {
     this.models.forEach(model => {
-      model.isSelected = this.selectAll;
+      model.is3DSelected = this.selectAll;
+      if (!this.selectAll) {
+        model.is2DSelected = false;
+      }
     });
+  }
+
+  Select3D(model: IModel) {
+    if (!model.is3DSelected) {
+      model.is2DSelected = false;
+    }
+  }
+
+  Select2D(model: IModel) {
+    if (model.is2DSelected) {
+      model.is3DSelected = true;
+
+      this.models.forEach(item => {
+        if (item.id !== model.id) {
+          item.is2DSelected = false;
+        }
+      });
+    }
   }
 
   GetModels() {
@@ -76,17 +104,47 @@ export class ShareModalComponent implements OnInit {
       .subscribe(revisions => {
         model.revisions = revisions;
         model.selectedRevision = model.revisions[0];
-        model.isSelected = false;
+        model.is3DSelected = false;
       },
         error => this.errorMessage = <any>error);
     return false;
   }
 
-  GetViewerToken(revisionsIds: IRevisionId[]) {
-
+  GetViewerURL(revisionsIds: IRevisionId[]) {
     this._takeoffService.GetViewerToken(this.selectedProject.id, revisionsIds)
       .subscribe(viewerToken => {
-        console.log(JSON.stringify(viewerToken));
+        if (this.revisionId2d !== '') {
+          this._takeoffService.GetViewer2DToken(this.modelId2d, this.revisionId2d)
+          .subscribe(viewer2Dtoken => {
+
+            let viewerRequestBody: IViewerRequestBody = {
+              viewer2DToken: viewer2Dtoken.token,
+              viewerToken: viewerToken.token
+          };
+
+            this._takeoffService.GetSharingURL(viewerRequestBody)
+            .subscribe(url => {
+              console.log(url);
+              this.sharingURL = url;
+            },
+              error => this.errorMessage = <any>error);
+          },
+            error => this.errorMessage = <any>error);
+
+        } else {
+          let viewerRequestBody: IViewerRequestBody = {
+            viewer2DToken: '',
+            viewerToken: viewerToken.token
+        };
+
+          this._takeoffService.GetSharingURL(viewerRequestBody)
+          .subscribe(url => {
+            console.log(url);
+            this.sharingURL = url;
+          },
+            error => this.errorMessage = <any>error);
+        }
+
       },
         error => this.errorMessage = <any>error);
     return false;
