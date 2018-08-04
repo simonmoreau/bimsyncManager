@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="col-xs-6">
-                <button type="button" class="btn btn-primary right" (click)="Publish()">Publish</button>
+                <button type="button" [clrLoading]="publishBtnState" class="btn btn-primary right" (click)="Publish()">Publish</button>
             </div>
         </div>
     </div>
@@ -68,7 +68,7 @@
             <div class="col-xs-12">
                 <div class="form-group">
                     <label for="email_field">Link you can send in email</label>
-                    <input class="readonly" type="url" id="email_field" readonly value="https://vmware.github.io/clarity/" size="35">
+                    <input class="readonly" type="url" id="email_field" readonly value={{sharingURL}} size="35">
                 </div>
             </div>
         </div>
@@ -76,7 +76,7 @@
             <div class="col-xs-12">
                 <div class="form-group">
                     <label for="html_field">Html you can paste into your blog or website</label>
-                    <input class="readonly" type="url" id="html_field" readonly value="https://vmware.github.io/clarity/" size="35">
+                    <input class="readonly" type="url" id="html_field" readonly value={{sharingURL}} size="35">
                 </div>
             </div>
         </div>

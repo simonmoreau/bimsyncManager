@@ -66,3 +66,7 @@ export interface IRevisionId {
   model_id: string;
   revision_id: string;
 }
+
+export interface IViewerURL {
+  url: string;
+}

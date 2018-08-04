@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IProject, IModel, IRevision, IRevisionId,
-    IViewerToken, IViewerRequestBody, IViewer2DToken } from '../bimsync-project/bimsync-project.models';
+    IViewerToken, IViewerRequestBody, IViewer2DToken, IViewerURL } from '../bimsync-project/bimsync-project.models';
 import { AppService } from 'app/app.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -85,8 +85,8 @@ export class TakeoffService {
             .catch(this.handleError);
     }
 
-    GetSharingURL(viewerRequestBody: IViewerRequestBody): Observable<string> {
-        return this._http.post<string>(
+    GetSharingURL(viewerRequestBody: IViewerRequestBody): Observable<IViewerURL> {
+        return this._http.post<IViewerURL>(
             'https://binsyncfunction.azurewebsites.net/api/bimsync-viewer',
              JSON.stringify(viewerRequestBody),
             {

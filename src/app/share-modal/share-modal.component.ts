@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { TakeoffService } from '../takeoff/takeoff.services';
 import { IProject, IModel, IRevisionId, IViewerRequestBody } from '../bimsync-project/bimsync-project.models';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -122,11 +121,9 @@ export class ShareModalComponent implements OnInit {
               viewer2DToken: viewer2Dtoken.token,
               viewerToken: viewerToken.token
           };
-
             this._takeoffService.GetSharingURL(viewerRequestBody)
-            .subscribe(url => {
-              console.log(url);
-              this.sharingURL = url;
+            .subscribe(viewerURL => {
+              this.sharingURL = viewerURL.url;
             },
               error => this.errorMessage = <any>error);
           },
@@ -139,13 +136,11 @@ export class ShareModalComponent implements OnInit {
         };
 
           this._takeoffService.GetSharingURL(viewerRequestBody)
-          .subscribe(url => {
-            console.log(url);
-            this.sharingURL = url;
+          .subscribe(viewerURL => {
+            this.sharingURL = viewerURL.url;
           },
             error => this.errorMessage = <any>error);
         }
-
       },
         error => this.errorMessage = <any>error);
     return false;
