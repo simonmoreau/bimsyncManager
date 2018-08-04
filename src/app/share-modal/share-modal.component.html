@@ -16,13 +16,15 @@
     </div>
     <div class="modal-body">
         <table class="table table-noborder">
-            <tbody>
+            <thead>
                 <tr>
-                    <td>Model</td>
-                    <td>3D</td>
-                    <td>2D</td>
-                    <td>Revision</td>
+                    <th>Model</th>
+                    <th>3D</th>
+                    <th>2D</th>
+                    <th>Revision</th>
                 </tr>
+            </thead>
+            <tbody>
                 <tr *ngFor='let model of models'>
                     <td>{{model.name}}</td>
                     <td>
@@ -50,25 +52,33 @@
     </div>
     <div class="modal-body">
         <div class="row space">
-                <div class="col-xs-6">
-                        <div class="toggle-switch left">
-                                <input type="checkbox" id="toggle-all" (change)="SelectAllModels()" [(ngModel)]="selectAll">
-                                <label for="toggle-all">Select All models</label>
-                            </div>
-                </div>
-                <div class="col-xs-6">
-                        <button type="button" class="btn btn-primary right" (click)="Publish()">Publish</button>
+            <div class="col-xs-6">
+                <div class="toggle-switch left">
+                    <input type="checkbox" id="toggle-all" (change)="SelectAllModels()" [(ngModel)]="selectAll">
+                    <label for="toggle-all">Select All models</label>
                 </div>
             </div>
+            <div class="col-xs-6">
+                <button type="button" class="btn btn-primary right" (click)="Publish()">Publish</button>
+            </div>
+        </div>
     </div>
-    <div class="modal-footer">
-            <div class="row">
-                    <div class="col-xs-6">
-        
-                    </div>
-                    <div class="col-xs-6">
-        
-                    </div>
+    <div class="modal-body modal-text">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label for="email_field">Link you can send in email</label>
+                    <input class="readonly" type="url" id="email_field" readonly value="https://vmware.github.io/clarity/" size="35">
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label for="html_field">Html you can paste into your blog or website</label>
+                    <input class="readonly" type="url" id="html_field" readonly value="https://vmware.github.io/clarity/" size="35">
+                </div>
+            </div>
+        </div>
     </div>
 </clr-modal>

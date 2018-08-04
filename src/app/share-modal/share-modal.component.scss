@@ -7,6 +7,18 @@
     vertical-align: baseline;
 }
 
+.table div.toggle-switch{
+    max-width: 10px;
+}
+
+input.readonly{
+    border-bottom: 1px solid #9a9a9a;
+}
+
+.table div.select{
+    min-width: 100px;
+}
+
 .right{
     float: right;
 }

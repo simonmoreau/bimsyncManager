@@ -27,6 +27,7 @@ export class ShareModalComponent implements OnInit {
   revisionId2d: string = "";
   modelId2d: string = "";
   sharingURL: string;
+  aModelIsSelected: boolean = false;
 
   constructor(private _takeoffService: TakeoffService) { }
 
