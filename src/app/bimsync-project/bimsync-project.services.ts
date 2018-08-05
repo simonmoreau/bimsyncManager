@@ -38,7 +38,7 @@ export class BimsyncProjectService {
     }
 
     createNewProject(Name: string, Description: string): Observable<IProject> {
-        return this._http.post<IProject[]>(
+        return this._http.post<IProject>(
             this._apiUrl + 'projects',
             {
                 name: Name,
