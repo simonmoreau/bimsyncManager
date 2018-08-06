@@ -6,7 +6,7 @@
     <title>bimsync Manager</title>
     <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://daks2k3a4ib2z.cloudfront.net/5a572743cbccc300015c4cbe/5a5729c7cbccc300015c4f0e_fav32x32.png">
     <style>
         body {
             font-family: Arial;
@@ -24,8 +24,8 @@
 
         #viewer-2d {
             height: 100%;
-            background-color: rgba(252,252,252,0.9);
-            border:1px solid #eef0f1;
+            background-color: rgba(252, 252, 252, 0.9);
+            border: 1px solid #eef0f1;
         }
 
         #viewer-container {
@@ -84,43 +84,103 @@
             border-radius: 4px;
             padding: 5px 10px
         }
-    </style>
-</head>
 
-<body>
+        .buttons {
+            z-index: 100001;
+            position: relative;
+        }
+    </style>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://api.bimsync.com/1.0/js/viewer.js"></script>
     <script src="https://api.bimsync.com/1.0/js/viewer2d.js"></script>
+</head>
 
+<body>
+    <div class="buttons">
+        <button class="ark">Load ARK</button>
+        <button class="rib">Load RIB</button>
+        <button class="rie">Load RIE</button>
+        <button class="rib-and-rie">Load RIB and RIE</button>
+        <button class="ark-unload">Unload ARK</button>
+        <button class="rib-unload">Unload RIB</button>
+        <button class="rie-unload">Unload RIE</button>
+        <button class="show-spaces">Show spaces</button>
+        <button class="hide-spaces">Hide spaces</button>
+    </div>
+    
     <div id="viewer-container" tabindex="-1">
-        <div id="viewer" data-viewer="webgl" data-url="https://api.bimsync.com/1.0/viewer/access?token=@viewerToken@"
-            data-enable-touch="true" 
-            data-ui 
-            data-enable-keyboard="true" 
-            data-selected-color="#6b84bc" 
-            data-translucent-opacity="0.5"
-            data-joystick-color="darkgreen" 
-            data-joystick-position="bottom-center" 
-            data-joystick-size="70" 
-            data-joystick-hidden="false"
-            data-enable-context-menu="true" 
-            data-viewer2d-id="viewer-2d" 
-            data-enable-viewer2d-integration="true" 
-            data-show-viewer2d-storey-select="true"
-            data-show-viewer2d-locked-navigation-toggle="true" 
-            enableClippingPlaneWidget="true">
+        <div id="viewer" class="viewer" data-viewer="webgl" data-url="https://api.bimsync.com/1.0/viewer/access?token=c59d1c65be99426fbb62b1b0195a345c"
+            data-enable-touch="true" data-ui data-enable-keyboard="true" data-selected-color="#6b84bc" data-translucent-opacity="0.5"
+            data-joystick-color="darkgreen" data-joystick-position="bottom-center" data-joystick-size="70" data-joystick-hidden="false"
+            data-enable-context-menu="true" data-viewer2d-id="viewer-2d" data-enable-viewer2d-integration="true" data-show-viewer2d-storey-select="true"
+            data-show-viewer2d-locked-navigation-toggle="true" enableClippingPlaneWidget="true">
         </div>
     </div>
 
-    <div id="viewer-2d-container">
-        <div id="viewer-2d" data-viewer2d="svg" data-url="https://api.bimsync.com/beta/viewer2d/svg?token=@viewer2DToken@">
+    <!-- <div id="viewer-2d-container">
+        <div id="viewer-2d" data-viewer2d="svg" data-url="https://api.bimsync.com/beta/viewer2d/svg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0eXBlIjoidmlld2VyLTJkIiwiZXhwIjoxNTMzNTk2NTM4LCJyZXZpc2lvbi1pZCI6ImUxZGE1MmVjNWU1NDQzMGRhOThmNzE2YWQxMTBjNTIwIiwidmlld2VyMmQtaWQiOiJmZjYxYzAyZC1kNmQ2LTQwMGEtOTBhMS1iOWQyZTRmMTg0N2YifQ.jCpCBtfr_P0-R1468VI17_Zs8F2dS-xIEEVO99-2_yw">
         </div>
-    </div>
+    </div> -->
 
     <script>
-        $('#viewer').viewer('set2dLockStoreyMode',false);
-        $('.viewer').viewer('clippingPlaneWidgetViewport', {x: 0, y: 300, width: 150, height: 150});
+        var spacesIds =
+        [29756653263,29756653301,29756653336,29756653370,29756653409,29756653442,29756653475,29756653509,29756653542,29756653575,29756653621,29756653654,29756653697,29756653728,29756653765,29756653797,29756653838,29756653870,29756653909,29756653942,29756654126,29756654162,29756654200,29756654239,29756654298,29756654352,29756654382,29756654421,29756654455,29756654499,29756654543,29756654581,29756654613,29756654788,29756654824,29756654860,29756654899,29756654979,29756655020,29756655055,29756655093,29756655125,29756655297,29756655334,29756655373,29756655454,29756655507,29756655537,29756655568,29756655604,29756655641,29756655674,29756655855,29756655890,29756655930,29756656020,29756656073,29756656105,29756656138,29756656174,29756656209,29756656240,29756656417,29756656451,29756656492,29756656527,29756656565,29756656600,29756656633,29756656811,29756656846,29756656884,29756656918,29756656966,29756657195,29756657243,29756657300,29756657334,29756657434,29756657534,29756657614,29756657696,29756657736,29756657771,29756657852,29756657891,29756657926,29756658003,29756658087,29756658126,29756658165,29756658244,29756658326,29756658365,29756658402,29756658481,29756658546,29756658585,29756658623,29756658703,29756658744,29756658854,29756659019,29756659064,29756659108,29756659148,29756659186,29756659225,29756659264,29756659301];
+
+        $('#viewer').on('viewer.load', function () {
+
+            $('#viewer').viewerUI('setSpaces', spacesIds);
+            $('#viewer').viewer('modelInfo', function (modelInfos) {
+                console.log(modelInfos);
+                // This will print model info for all loaded models
+            });
+        });
+
+        $('.hide-spaces').click(function () { $('#viewer').viewerUI('setSpacesVisible', false); });
+        $('.show-spaces').click(function () { $('#viewer').viewerUI('setSpacesVisible', true); });
     </script>
+
+    <!-- <script type="text/javascript">
+        // Load the Viewer API.
+        bimsync.load();
+
+        // Set a callback to run when the Viewer API is loaded
+        bimsync.setOnLoadCallback(createViewer);
+
+
+
+        // Callback that loads a viewer access token URL
+        function createViewer() {
+            var token = 'a858a663b08c4498877075e9a9a40dd3';
+
+            var options = {
+                //defaultColor: String or Number,     // Any valid CSS color, default: '#101010'
+                //selectedColor: String or Number,    // Any valid CSS color, default: '#a7f555'
+                //translucentOpacity: Number,         // Default: 0.05
+                //fieldOfView: Number,                // Number in degrees, default: 60
+                enableContextMenu: true,
+                enableTouch: true,               // Default: false
+                enableClippingPlaneWidget: true  // Default: false
+            }
+
+            var $viewer = $('#viewer-container');
+            $('#viewer-container').viewer({
+    defaultColor: 'red',
+    selectedColor: 'blue',
+    translucentOpacity: 0.05,
+    enableContextMenu: true,
+    enableTouch: true,
+    enableClippingPlaneWidget: true
+});
+            //$viewer.viewer(options);
+            $viewer.viewer('loadUrl', 'https://api.bimsync.com/1.0/viewer/access?token=' + token);
+
+              $('.buttons').show();
+  $('#viewer').viewerUI({
+    enableContextMenu: true,
+  });
+        }
+    </script> -->
 
 </body>
 
