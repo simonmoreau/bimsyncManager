@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { TakeoffService } from '../takeoff/takeoff.services';
 import { IProject, IModel, IRevisionId, IViewerRequestBody } from '../bimsync-project/bimsync-project.models';
+import { ClrLoadingState } from '@clr/angular';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
+import { TrustedHtmlString } from '../../../node_modules/@angular/core/src/sanitization/bypass';
 
 @Component({
   selector: 'app-share-modal',
@@ -23,10 +25,11 @@ export class ShareModalComponent implements OnInit {
   models: IModel[] = [];
   errorMessage: string;
   selectAll: boolean = false;
-  revisionId2d: string = "";
+  revisionNumber2d: string = "";
   modelId2d: string = "";
   sharingURL: string;
   aModelIsSelected: boolean = false;
+  publishBtnState: ClrLoadingState = ClrLoadingState.DEFAULT;
 
   constructor(private _takeoffService: TakeoffService) { }
 
@@ -40,6 +43,8 @@ export class ShareModalComponent implements OnInit {
   }
 
   Publish() {
+    this.publishBtnState = ClrLoadingState.LOADING;
+
     let revisionsIds: IRevisionId[] = [];
 
     this.models.forEach(item => {
@@ -51,12 +56,19 @@ export class ShareModalComponent implements OnInit {
         revisionsIds.push(revisionId)
         if (item.is2DSelected) {
           this.modelId2d = item.id;
-          this.revisionId2d = item.selectedRevision.id;
+          this.revisionNumber2d = item.selectedRevision.version;
         }
       }
     });
 
     this.GetViewerURL(revisionsIds);
+  }
+
+  /* To copy Text from Textbox */
+  copyInputMessage(inputElement) {
+    inputElement.select();
+    document.execCommand('copy');
+    inputElement.setSelectionRange(0, 0);
   }
 
   SelectAllModels() {
@@ -89,11 +101,10 @@ export class ShareModalComponent implements OnInit {
   GetModels() {
     this._takeoffService.getModels(this.selectedProject.id)
       .subscribe(models => {
-        this.models = models;
         models.forEach(model => {
           this.GetRevisions(model);
-
         });
+        this.models = models;
       },
         error => this.errorMessage = <any>error);
     return false;
@@ -113,33 +124,35 @@ export class ShareModalComponent implements OnInit {
   GetViewerURL(revisionsIds: IRevisionId[]) {
     this._takeoffService.GetViewerToken(this.selectedProject.id, revisionsIds)
       .subscribe(viewerToken => {
-        if (this.revisionId2d !== '') {
-          this._takeoffService.GetViewer2DToken(this.modelId2d, this.revisionId2d)
-          .subscribe(viewer2Dtoken => {
+        if (this.revisionNumber2d !== '') {
+          this._takeoffService.GetViewer2DToken(this.modelId2d, this.revisionNumber2d)
+            .subscribe(viewer2Dtoken => {
 
-            let viewerRequestBody: IViewerRequestBody = {
-              viewer2DToken: viewer2Dtoken.token,
-              viewerToken: viewerToken.token
-          };
-            this._takeoffService.GetSharingURL(viewerRequestBody)
-            .subscribe(viewerURL => {
-              this.sharingURL = viewerURL.url;
+              let viewerRequestBody: IViewerRequestBody = {
+                viewer2DToken: viewer2Dtoken.token,
+                viewerToken: viewerToken.token
+              };
+              this._takeoffService.GetSharingURL(viewerRequestBody)
+                .subscribe(viewerURL => {
+                  this.sharingURL = viewerURL.url;
+                  this.publishBtnState = ClrLoadingState.SUCCESS;
+                },
+                  error => this.errorMessage = <any>error);
             },
               error => this.errorMessage = <any>error);
-          },
-            error => this.errorMessage = <any>error);
 
         } else {
           let viewerRequestBody: IViewerRequestBody = {
             viewer2DToken: '',
             viewerToken: viewerToken.token
-        };
+          };
 
           this._takeoffService.GetSharingURL(viewerRequestBody)
-          .subscribe(viewerURL => {
-            this.sharingURL = viewerURL.url;
-          },
-            error => this.errorMessage = <any>error);
+            .subscribe(viewerURL => {
+              this.sharingURL = viewerURL.url;
+              this.publishBtnState = ClrLoadingState.SUCCESS;
+            },
+              error => this.errorMessage = <any>error);
         }
       },
         error => this.errorMessage = <any>error);

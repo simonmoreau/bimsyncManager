@@ -73,10 +73,10 @@ export class TakeoffService {
             .catch(this.handleError);
     }
 
-    GetViewer2DToken(modelId: string, revisionId: string): Observable<IViewer2DToken> {
+    GetViewer2DToken(modelId: string, revisionNumber: string): Observable<IViewer2DToken> {
         return this._http.post<IViewer2DToken>(
             'https://api.bimsync.com/beta/viewer2d/access?model_id=' + modelId
-             + '&revision_id=' + revisionId + '&access_token=' + this._appService._user.bcfToken,
+             + '&revision_id=' + revisionNumber + '&access_token=' + this._appService._user.bcfToken,
             {
                 headers: new HttpHeaders()
                     .set('Content-Type', 'application/x-www-form-urlencoded')

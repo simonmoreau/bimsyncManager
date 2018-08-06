@@ -14,7 +14,7 @@
             </div>
         </div>
     </div>
-    <div class="modal-body">
+    <div class="modal-body modal-text">
         <table class="table table-noborder">
             <thead>
                 <tr>
@@ -50,8 +50,8 @@
             </tbody>
         </table>
     </div>
-    <div class="modal-body">
-        <div class="row space">
+    <div class="modal-body modal-text">
+        <div class="row">
             <div class="col-xs-6">
                 <div class="toggle-switch left">
                     <input type="checkbox" id="toggle-all" (change)="SelectAllModels()" [(ngModel)]="selectAll">
@@ -63,22 +63,38 @@
             </div>
         </div>
     </div>
-    <div class="modal-body modal-text">
+    <div class="modal-body modal-text"> <!-- *ngIf="sharingURL" -->
         <div class="row">
             <div class="col-xs-12">
-                <div class="form-group">
-                    <label for="email_field">Link you can send in email</label>
-                    <input class="readonly" type="url" id="email_field" readonly value={{sharingURL}} size="35">
+                <div class="clr-input-wrapper">
+                    <label for="example" class="clr-control-label">Link you can send in email</label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-xs-12">
-                <div class="form-group">
-                    <label for="html_field">Html you can paste into your blog or website</label>
-                    <input class="readonly" type="url" id="html_field" readonly value={{sharingURL}} size="35">
-                </div>
+                <input class="clr-input readonly" type="url" id="email_field" readonly value={{sharingURL}} placeholder="Your link will appear here"
+                    size="35" #sharingLink>
+                <button class="btn btn-icon btn-link" (click)="copyInputMessage(sharingLink)" value="click to copy">
+                    <clr-icon shape="copy"></clr-icon>
+                </button>
             </div>
         </div>
+        <div class="row">
+                <div class="col-xs-12">
+                    <div class="clr-input-wrapper">
+                        <label for="example" class="clr-control-label">Html you can paste into your blog or website</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <input class="clr-input readonly" type="url" id="email_field" readonly value={{sharingURL}} placeholder="Your link will appear here"
+                        size="35" #iFrameLink>
+                    <button class="btn btn-icon btn-link" (click)="copyInputMessage(iFrameLink)" value="click to copy">
+                        <clr-icon shape="copy"></clr-icon>
+                    </button>
+                </div>
+            </div>
     </div>
 </clr-modal>
