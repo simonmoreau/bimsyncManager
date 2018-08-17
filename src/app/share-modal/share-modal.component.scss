@@ -19,8 +19,9 @@ input.readonly{
     border-bottom: 1px solid #9a9a9a;
 }
 
-.table div.select{
-    min-width: 100px;
+.select{
+    min-width: 4.5rem;
+    max-width: 10rem;
 }
 
 .right{
@@ -31,6 +32,8 @@ input.readonly{
     float: left;
 }
 
-.row.space{
-    margin-top: 1rem;
+//calc(100% - 2rem);
+
+.clr-input{
+    width: calc(100% - 2rem);
 }

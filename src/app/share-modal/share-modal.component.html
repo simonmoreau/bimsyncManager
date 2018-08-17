@@ -63,8 +63,7 @@
             </div>
         </div>
     </div>
-    <div class="modal-body modal-text">
-        <!-- *ngIf="sharingURL" -->
+    <div class="modal-body modal-text" *ngIf="sharingURL">
         <div class="row">
             <div class="col-xs-12">
                 <div class="clr-input-wrapper">
@@ -90,7 +89,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12">
-                <input class="clr-input readonly" type="url" id="email_field" readonly value={{sharingURL}} placeholder="Your link will appear here"
+                <input class="clr-input readonly" type="url" id="email_field" readonly value={{sharingiFrameURL}} placeholder="Your link will appear here"
                     size="35" #iFrameLink>
                 <button class="btn btn-icon btn-link" (click)="copyInputMessage(iFrameLink)" value="click to copy">
                     <clr-icon shape="copy"></clr-icon>
@@ -98,13 +97,17 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-xs-12">
+                <div class="clr-input-wrapper">
+                    <label for="example" class="clr-control-label">Size</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-xs-12 ">
-                <label for="selectSize">Size</label>
                 <div class="select">
-                    <select id="selectSize">
-                        <option>680 x 510 px</option>
-                        <option>800 x 600 px</option>
-                        <option>933 x 700 px</option>
+                    <select id="selectSize" [(ngModel)]="selectedframeSize" (change)="ChangeFrameSize()">
+                        <option *ngFor='let size of frameSizes' [ngValue]="size">{{size.xSize}} x {{size.ySize}} px</option>
                     </select>
                 </div>
             </div>

@@ -28,12 +28,23 @@ export class ShareModalComponent implements OnInit {
   revisionNumber2d: string = "";
   modelId2d: string = "";
   sharingURL: string;
+  frameSizes: IFrameSize[] = [];
+  selectedframeSize: IFrameSize;
+  sharingiFrameURL: string;
   aModelIsSelected: boolean = false;
   publishBtnState: ClrLoadingState = ClrLoadingState.DEFAULT;
-
+  
   constructor(private _takeoffService: TakeoffService) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+
+    this.frameSizes = [
+      { "xSize": "680", "ySize": "510" },
+      { "xSize": "800", "ySize": "600" },
+      { "xSize": "933", "ySize": "700" }
+  ];
+  this.selectedframeSize = this.frameSizes[0];
+  }
 
   OpenShareModal(project) {
     this.selectedProject = project;
@@ -135,6 +146,7 @@ export class ShareModalComponent implements OnInit {
               this._takeoffService.GetSharingURL(viewerRequestBody)
                 .subscribe(viewerURL => {
                   this.sharingURL = viewerURL.url;
+                  this.sharingiFrameURL = this.GetIFrameURL();
                   this.publishBtnState = ClrLoadingState.SUCCESS;
                 },
                   error => this.errorMessage = <any>error);
@@ -150,6 +162,7 @@ export class ShareModalComponent implements OnInit {
           this._takeoffService.GetSharingURL(viewerRequestBody)
             .subscribe(viewerURL => {
               this.sharingURL = viewerURL.url;
+              this.sharingiFrameURL = this.GetIFrameURL();
               this.publishBtnState = ClrLoadingState.SUCCESS;
             },
               error => this.errorMessage = <any>error);
@@ -158,4 +171,17 @@ export class ShareModalComponent implements OnInit {
         error => this.errorMessage = <any>error);
     return false;
   }
+
+  GetIFrameURL(): string{
+    return '<iframe width="' + this.selectedframeSize.xSize + '" height="' + this.selectedframeSize.ySize + '" src="' + this.sharingURL + '" frameborder="0" allowFullScreen="true"></iframe>';
+  }
+
+  ChangeFrameSize(){
+    this.sharingiFrameURL = this.GetIFrameURL();
+  }
+}
+
+export interface IFrameSize {
+  xSize: string;
+  ySize: string;
 }
