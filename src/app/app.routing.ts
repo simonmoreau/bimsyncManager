@@ -11,12 +11,14 @@ import { BimsyncProjectComponent } from './bimsync-project/bimsync-project.compo
 import { BimsyncOauthComponent } from 'app/bimsync-oauth/bimsync-oauth.component';
 import { DocumentationComponent} from 'app/documentation/documentation.component';
 import { TakeoffComponent } from 'app/takeoff/takeoff.component';
+import { SharingPageComponent } from 'app/sharing-page/sharing-page.component';
 
 export const ROUTES: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: 'home', component: HomeComponent},
     {path: 'projects', component: BimsyncProjectComponent },
     {path: 'documentation', component: DocumentationComponent},
+    {path: 'share', component: SharingPageComponent},
     {path: 'takeoff', component: TakeoffComponent},
     {path: 'callback', component: BimsyncOauthComponent}
 ];

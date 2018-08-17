@@ -5,6 +5,14 @@
   height: auto;
   min-height: 100vh; }
 
+  #viewer-2d svg{
+    background:transparent;
+  }
+
+  #context-menu.open > .dropdown-menu {
+    visibility: inherit;
+  }
+
 body.layout-home {
   background-color: #fafafa; }
   body.layout-home .main-container {

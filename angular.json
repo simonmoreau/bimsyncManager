@@ -84,7 +84,8 @@
               "node_modules/web-animations-js/web-animations.min.js",
               "node_modules/prismjs/prism.js",
               "node_modules/prismjs/components/prism-typescript.min.js",
-              "node_modules/@clr/icons/clr-icons.min.js"
+              "node_modules/@clr/icons/clr-icons.min.js",
+              "node_modules/jquery/dist/jquery.min.js"
             ],
             "styles": [
               "node_modules/@clr/icons/clr-icons.min.css",

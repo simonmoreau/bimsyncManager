@@ -1,0 +1,23 @@
+#viewer-2d-container {
+  position: absolute;
+  right: 0px;
+  bottom: 20px;
+  width: 320px;
+  height: 320px;
+  padding: 10px;
+  background-color: transparent;
+}
+#viewer-2d {
+  height: 100%;
+  background-color:rgba(252, 252, 252, 0.9);
+  border: 1px solid #eef0f1;
+}
+
+.viewer-container {
+  height: 100%;
+  width: 100%; }
+
+.viewer-container #viewer-3d {
+  height: 100%;
+  width: 100%; }
+

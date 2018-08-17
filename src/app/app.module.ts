@@ -14,6 +14,12 @@ import { BimsyncOauthComponent } from './bimsync-oauth/bimsync-oauth.component';
 import { DocumentationComponent } from './documentation/documentation.component';
 import { TakeoffComponent } from './takeoff/takeoff.component';
 import { ShareModalComponent } from './share-modal/share-modal.component';
+import { SharingPageComponent } from './sharing-page/sharing-page.component';
+
+import * as $ from 'jquery';
+
+window["$"] = $;
+window["jQuery"] = $;
 
 @NgModule({
     declarations: [
@@ -23,7 +29,8 @@ import { ShareModalComponent } from './share-modal/share-modal.component';
         BimsyncOauthComponent,
         DocumentationComponent,
         TakeoffComponent,
-        ShareModalComponent
+        ShareModalComponent,
+        SharingPageComponent
     ],
     imports: [
         BrowserAnimationsModule,

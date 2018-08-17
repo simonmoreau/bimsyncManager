@@ -25,15 +25,17 @@
     "@clr/angular": "^0.12.7",
     "@clr/icons": "^0.12.7",
     "@clr/ui": "^0.12.7",
+    "@types/jquery": "^3.3.6",
     "@webcomponents/custom-elements": "1.0.0",
     "core-js": "^2.4.1",
+    "jquery": "^3.3.1",
     "mutationobserver-shim": "^0.3.2",
     "prismjs": "^1.9.0",
     "rxjs": "^6.2.2",
+    "rxjs-compat": "^6.0.0-rc.0",
     "ts-helpers": "^1.1.1",
     "web-animations-js": "^2.3.1",
-    "zone.js": "^0.8.26",
-    "rxjs-compat": "^6.0.0-rc.0"
+    "zone.js": "^0.8.26"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.7.0",

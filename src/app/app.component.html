@@ -19,6 +19,9 @@
       <a class="nav-link" href="#" [routerLink]="['/documentation']" routerLinkActive="active">
         <span class="nav-text">Documentation</span>
       </a>
+      <a class="nav-link" href="#" [routerLink]="['/share']" routerLinkActive="active">
+        <span class="nav-text">Share</span>
+      </a>
     </div>
     <div class="header-actions" *ngIf="appService._user">
       <span class="nav-link nav-text">Hello {{appService._user.name}}</span>
