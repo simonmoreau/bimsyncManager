@@ -21,9 +21,9 @@ export class SharingPageComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.models = [
-      { "id": 'c31e78d3f764460f830bfef908e42950', "name": "Model 1", "isVisible":true},
-      { "id": 'c31e78d3f764460f830bfef908e42950', "name": "Model 2", "isVisible":true},
-      { "id": 'c31e78d3f764460f830bfef908e42950', "name": "Model 3", "isVisible":true}
+      { "id": 'c31e78d3f764460f830bfef908e42950', "name": "Model 1 aaaa", "isVisible":true},
+      { "id": 'c31e78d3f764460f830bfef908e42950', "name": "Model 2 aaaaaaaaaaaaaaaa", "isVisible":true},
+      { "id": 'c31e78d3f764460f830bfef908e42950', "name": "Model 3 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "isVisible":true}
   ];
   }
 

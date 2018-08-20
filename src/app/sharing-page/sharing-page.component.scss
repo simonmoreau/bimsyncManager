@@ -21,7 +21,30 @@
   height: 100%;
   width: 100%; }
 
-.toggle-switch label{
-    min-width: 6rem;
-  } 
+  .dropdown-menu {
+    max-width: 18rem;
+  }
+
+  .dropdown-table tr {
+    padding-right: 0px;
+  }
+
+  .dropdown-table td:first-child {
+    max-width: 12rem;
+    min-width: 12rem;
+  }
+
+  .model-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+
+
+
+  // .dropdown-table td {
+  //   vertical-align: middle;
+  //   align-content: center;
+  // }
 
