@@ -15,11 +15,16 @@ export class SharingPageComponent implements OnInit, AfterViewInit {
 
   spacesVisibility: boolean = false;
   twoDVisibility: boolean = true;
+  models: IModel[] = [];
 
   constructor() { }
 
   ngOnInit() {
-
+    this.models = [
+      { "id": 'c31e78d3f764460f830bfef908e42950', "name": "Model 1", "isVisible":true},
+      { "id": 'c31e78d3f764460f830bfef908e42950', "name": "Model 2", "isVisible":true},
+      { "id": 'c31e78d3f764460f830bfef908e42950', "name": "Model 3", "isVisible":true}
+  ];
   }
 
   ngAfterViewInit() {
@@ -106,4 +111,25 @@ export class SharingPageComponent implements OnInit, AfterViewInit {
     let $viewer = $('#viewer-3d') as any;
     $viewer.viewerUI('setSpacesVisible', this.spacesVisibility);
   }
+
+  ToogleModelVisibility(model: IModel) {
+    let $viewer = $('#viewer-3d') as any;
+    if (model.isVisible){
+      $viewer.viewer('hideModel', model.id);
+    }
+    else
+    {
+      $viewer.viewer('showModel', model.id);
+      
+    }
+    
+  }
 }
+
+export interface IModel {
+  id: string;
+  name: string;
+  isVisible: boolean;
+}
+
+

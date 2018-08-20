@@ -1,25 +1,27 @@
-<clr-dropdown [clrCloseMenuOnItemClick]="false" style="position: absolute;">
-  <button type="button" clrDropdownTrigger>
-    <clr-icon shape="block" size="24"></clr-icon>
-    <clr-icon shape="caret down"></clr-icon>
-  </button>
-  <clr-dropdown-menu *clrIfOpen>
-    <label class="dropdown-header">Dropdown header</label>
-    <div class="dropdown-item toggle-switch">
-      <input type="checkbox" id="toggle_spacesVisibility" (change)="ToogleSpaceVisibility()" [(ngModel)]="spacesVisibility">
-      <label for="toggle_spacesVisibility">Toggles Spaces</label>
-    </div>
-    <div class="dropdown-item toggle-switch">
-      <input type="checkbox" id="toggle_twoDVisibility" [(ngModel)]="twoDVisibility">
-      <label for="toggle_twoDVisibility">Toggles 2D</label>
-    </div>
-    <button type="button" clrDropdownItem>Action 1</button>
-    <button type="button" clrDropdownItem>Action 2</button>
-    <div class="dropdown-divider"></div>
-    <button type="button" clrDropdownItem>Link 1</button>
-    <button type="button" clrDropdownItem>Link 2</button>
-  </clr-dropdown-menu>
-</clr-dropdown>
+<div style="position: absolute;">
+  <clr-dropdown [clrCloseMenuOnItemClick]="false" style="position: absolute;">
+    <button type="button" class="btn" clrDropdownTrigger>
+      <clr-icon shape="block" size="24"></clr-icon>
+      <clr-icon shape="caret down"></clr-icon>
+    </button>
+    <clr-dropdown-menu *clrIfOpen>
+      <label class="dropdown-header">Dropdown header</label>
+      <div class="dropdown-item toggle-switch">
+        <input type="checkbox" id="toggle_spacesVisibility" (change)="ToogleSpaceVisibility()" [(ngModel)]="spacesVisibility">
+        <label for="toggle_spacesVisibility">Toggles Spaces</label>
+      </div>
+      <div class="dropdown-item toggle-switch">
+        <input type="checkbox" id="toggle_twoDVisibility" [(ngModel)]="twoDVisibility">
+        <label for="toggle_twoDVisibility">Toggles 2D</label>
+      </div>
+      <div class="dropdown-divider"></div>
+      <div *ngFor="let model of models" class="dropdown-item toggle-switch">
+        <input type="checkbox" id="toggle_Visibility_{{model.name}}" (click)="ToogleModelVisibility(model)" [(ngModel)]="model.isVisible">
+        <label for="toggle_Visibility_{{model.name}}">{{model.name}}</label>
+      </div>
+    </clr-dropdown-menu>
+  </clr-dropdown>
+</div>
 
 <div class="viewer-container">
   <div id="viewer-3d" tabindex="-1">
