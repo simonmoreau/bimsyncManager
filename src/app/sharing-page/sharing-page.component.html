@@ -16,24 +16,17 @@
               </div>
             </td>
           </tr>
-          <tr class="dropdown-item">
-            <td>Toggles 2D</td>
-            <td>
-              <div class="dropdown-item toggle-switch">
-                <input type="checkbox" id="toggle_twoDVisibility" [(ngModel)]="twoDVisibility">
-                <label for="toggle_twoDVisibility"></label>
-              </div>
-            </td>
-          </tr>
           <tr>
             <td>
               <div class="dropdown-divider"></div>
             </td>
           </tr>
           <tr *ngFor="let model of models" class="dropdown-item">
-            <td><div class="model-name">
+            <td>
+              <div class="model-name">
                 {{model.name}}
-            </div></td>
+              </div>
+            </td>
             <td>
               <div class="dropdown-item toggle-switch">
                 <input type="checkbox" id="toggle_Visibility_{{model.name}}" (click)="ToogleModelVisibility(model)" [(ngModel)]="model.isVisible">
@@ -51,7 +44,17 @@
   <div id="viewer-3d" tabindex="-1">
   </div>
 </div>
-<div id="viewer-2d-container" [hidden]="!twoDVisibility">
-  <div id="viewer-2d">
-  </div>
+<div id="viewer-2d-container" [hidden]="!twoDVisibility" [ngClass]="{'enlarged' : towDLarge}">
+  <button class="bs-button bs-toggle-2d" (click)="Toogle2D()">
+    <clr-icon shape="window-close"></clr-icon>
+  </button>
+  <button class="bs-button bs-enlarge-2d" (click)="ToogleEnlarge()">
+    <clr-icon shape="two-way-arrows" style="transform: rotate(45deg);"></clr-icon>
+  </button>
+  <div id="viewer-2d"></div>
+</div>
+<div id="Toogle2DButton" [hidden]="twoDVisibility">
+    <button class="bs-button bs-toggle-2d" (click)="Toogle2D()">
+        2D
+      </button>
 </div>

@@ -15,6 +15,7 @@ export class SharingPageComponent implements OnInit, AfterViewInit {
 
   spacesVisibility: boolean = false;
   twoDVisibility: boolean = true;
+  towDLarge: boolean = false;
   models: IModel[] = [];
 
   constructor() { }
@@ -122,7 +123,26 @@ export class SharingPageComponent implements OnInit, AfterViewInit {
       $viewer.viewer('showModel', model.id);
       
     }
-    
+  }
+
+  Toogle2D() {
+    if (this.twoDVisibility){
+      this.twoDVisibility = false;
+    }
+    else
+    {
+      this.twoDVisibility = true;
+    }
+  }
+
+  ToogleEnlarge() {
+    if (this.towDLarge){
+      this.towDLarge = false;
+    }
+    else
+    {
+      this.towDLarge = true;
+    }
   }
 }
 

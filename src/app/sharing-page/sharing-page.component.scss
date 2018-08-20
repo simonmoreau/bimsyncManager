@@ -7,10 +7,22 @@
   padding: 10px;
   background-color: transparent;
 }
+
+#viewer-2d-container.enlarged {
+  width: 100%;
+  height: 80%;
+}
+
 #viewer-2d {
   height: 100%;
   background-color:rgba(252, 252, 252, 0.9);
   border: 1px solid #eef0f1;
+}
+
+#Toogle2DButton {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
 }
 
 .viewer-container {
@@ -41,7 +53,21 @@
   }
 
 
+  .bs-viewer-loaded .bs-toggle-2d {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    padding: 4px 8px;
+    display: inline-block;
+}
 
+.bs-viewer-loaded .bs-enlarge-2d {
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  padding: 4px 8px;
+  display: inline-block;
+}
 
   // .dropdown-table td {
   //   vertical-align: middle;
