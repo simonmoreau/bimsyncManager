@@ -1,8 +1,7 @@
 // Imports
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IProject, IModel, IRevision, IRevisionId,
-    IViewerToken, IViewerRequestBody, IViewer2DToken, IViewerURL } from '../bimsync-project/bimsync-project.models';
+import { IProject, IModel, IRevision, IRevisionId, ISharedRevisions, ISharingCode, IViewerToken } from '../bimsync-project/bimsync-project.models';
 import { AppService } from 'app/app.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -89,6 +88,18 @@ export class TakeoffService {
         return this._http.post<IViewerURL>(
             'https://binsyncfunction.azurewebsites.net/api/bimsync-viewer',
              JSON.stringify(viewerRequestBody),
+            {
+                headers: new HttpHeaders()
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    CreateSharedModel(sharedRevisions: ISharedRevisions): Observable<ISharingCode> {
+        return this._http.post<ISharingCode>(
+            'https://binsyncfunction.azurewebsites.net/api/manager/users/' + this._appService._user.powerBiSecret + '/share',
+             JSON.stringify(sharedRevisions),
             {
                 headers: new HttpHeaders()
                     .set('Content-Type', 'application/json')

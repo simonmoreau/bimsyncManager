@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { TakeoffService } from '../takeoff/takeoff.services';
-import { IProject, IModel, IRevisionId, IViewerRequestBody } from '../bimsync-project/bimsync-project.models';
+import { IProject, IModel, IRevisionId, IViewerRequestBody, ISharedRevisions } from '../bimsync-project/bimsync-project.models';
 import { ClrLoadingState } from '@clr/angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -33,10 +33,10 @@ export class ShareModalComponent implements OnInit {
   sharingiFrameURL: string;
   aModelIsSelected: boolean = false;
   publishBtnState: ClrLoadingState = ClrLoadingState.DEFAULT;
-  
+
   constructor(private _takeoffService: TakeoffService) { }
 
-  ngOnInit() { 
+  ngOnInit() {
 
     this.frameSizes = [
       { "xSize": "680", "ySize": "510" },
@@ -57,17 +57,14 @@ export class ShareModalComponent implements OnInit {
     this.publishBtnState = ClrLoadingState.LOADING;
 
     let revisionsIds: IRevisionId[] = [];
+    let sharedRevisions: ISharedRevisions;
+    sharedRevisions.projectId = this.selectedProject.id;
 
-    this.models.forEach(item => {
-      if (item.is3DSelected) {
-        let revisionId: IRevisionId = {
-          model_id: item.id,
-          revision_id: item.selectedRevision.version
-        };
-        revisionsIds.push(revisionId)
-        if (item.is2DSelected) {
-          this.modelId2d = item.id;
-          this.revisionNumber2d = item.selectedRevision.version;
+    this.models.forEach(model => {
+      if (model.is3DSelected) {
+        sharedRevisions.revisions3D.push(model.selectedRevision.id);
+        if (model.is2DSelected) {
+          sharedRevisions.revision2D = model.selectedRevision.id;
         }
       }
     });
@@ -172,11 +169,26 @@ export class ShareModalComponent implements OnInit {
     return false;
   }
 
-  GetIFrameURL(): string{
-    return '<iframe width="' + this.selectedframeSize.xSize + '" height="' + this.selectedframeSize.ySize + '" src="' + this.sharingURL + '" frameborder="0" allowFullScreen="true"></iframe>';
+  CreateSharedModel(sharedRevisions: ISharedRevisions) {
+
+    this._takeoffService.CreateSharedModel(sharedRevisions, )
+    .subscribe(viewerURL => {
+      this.sharingURL = viewerURL.Viewer3dToken.url;
+      this.sharingiFrameURL = this.GetIFrameURL();
+      this.publishBtnState = ClrLoadingState.SUCCESS;
+    },
+      error => this.errorMessage = <any>error);
   }
 
-  ChangeFrameSize(){
+  GetIFrameURL(): string {
+    return '<iframe width="'
+    + this.selectedframeSize.xSize
+    + '" height="' + this.selectedframeSize.ySize
+    + '" src="' + this.sharingURL
+    + '" frameborder="0" allowFullScreen="true"></iframe>';
+  }
+
+  ChangeFrameSize() {
     this.sharingiFrameURL = this.GetIFrameURL();
   }
 }
