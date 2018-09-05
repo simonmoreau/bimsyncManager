@@ -1,7 +1,7 @@
 // Imports
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IProject, IModel, IRevision, IRevisionId, ISharedRevisions, ISharingCode, IViewerToken } from '../bimsync-project/bimsync-project.models';
+import { IProject, IModel, IRevision, IRevisionId, ISharedRevisions, ISharingCode, IViewerToken, IViewer2DToken, IViewerRequestBody, IViewerURL } from '../bimsync-project/bimsync-project.models';
 import { AppService } from 'app/app.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -29,7 +29,7 @@ export class TakeoffService {
             this._apiUrl + 'projects',
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -41,7 +41,7 @@ export class TakeoffService {
             this._apiUrl + 'projects/' + projectId + '/models',
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -53,7 +53,7 @@ export class TakeoffService {
             this._apiUrl + 'projects/' + projectId + '/revisions?model=' + modelId,
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -62,7 +62,7 @@ export class TakeoffService {
 
     GetViewerToken(projectId: string, revisionsIds: IRevisionId[]): Observable<IViewerToken> {
         return this._http.post<IViewerToken>(
-            'https://api.bimsync.com/1.0/viewer/access?project_id=' + projectId + '&access_token=' + this._appService._user.bcfToken,
+            'https://api.bimsync.com/1.0/viewer/access?project_id=' + projectId + '&access_token=' + this._appService._user.BCFToken,
              JSON.stringify(revisionsIds),
             {
                 headers: new HttpHeaders()
@@ -75,7 +75,7 @@ export class TakeoffService {
     GetViewer2DToken(modelId: string, revisionNumber: string): Observable<IViewer2DToken> {
         return this._http.post<IViewer2DToken>(
             'https://api.bimsync.com/beta/viewer2d/access?model_id=' + modelId
-             + '&revision_id=' + revisionNumber + '&access_token=' + this._appService._user.bcfToken,
+             + '&revision_id=' + revisionNumber + '&access_token=' + this._appService._user.BCFToken,
             {
                 headers: new HttpHeaders()
                     .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -98,7 +98,7 @@ export class TakeoffService {
 
     CreateSharedModel(sharedRevisions: ISharedRevisions): Observable<ISharingCode> {
         return this._http.post<ISharingCode>(
-            'https://binsyncfunction.azurewebsites.net/api/manager/users/' + this._appService._user.powerBiSecret + '/share',
+            'https://binsyncfunction.azurewebsites.net/api/manager/users/' + this._appService._user.PowerBISecret + '/share',
              JSON.stringify(sharedRevisions),
             {
                 headers: new HttpHeaders()

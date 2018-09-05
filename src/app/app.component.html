@@ -24,13 +24,13 @@
       </a>
     </div>
     <div class="header-actions" *ngIf="appService._user">
-      <span class="nav-link nav-text">Hello {{appService._user.name}}</span>
+      <span class="nav-link nav-text">Hello {{appService._user.Name}}</span>
       <a class="nav-link" href="#" (click)="LogOut()">
         <span class="nav-text">Log Out</span>
       </a>
     </div>
     <div class="header-actions" *ngIf="!appService._user">
-      <a class="nav-link nav-text" href="https://api.bimsync.com/oauth2/authorize?client_id=6E63g0C2zVOwlNm&response_type=code&state=api&redirect_uri={{appService._callbackUrl}}">
+      <a class="nav-link nav-text" href="https://api.bimsync.com/oauth2/authorize?client_id=hl94XJLXaQe3ogX&response_type=code&state=api&redirect_uri={{appService._callbackUrl}}">
         Connect
       </a>
     </div>

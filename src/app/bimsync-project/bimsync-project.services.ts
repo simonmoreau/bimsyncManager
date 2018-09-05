@@ -30,7 +30,7 @@ export class BimsyncProjectService {
             this._apiUrl + 'projects',
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -47,7 +47,7 @@ export class BimsyncProjectService {
             {
                 // params: new HttpParams().set('id', '56784'),
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -64,7 +64,7 @@ export class BimsyncProjectService {
             {
                 // params: new HttpParams().set('id', '56784'),
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -79,7 +79,7 @@ export class BimsyncProjectService {
             },
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -95,7 +95,7 @@ export class BimsyncProjectService {
             },
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -112,7 +112,7 @@ export class BimsyncProjectService {
             },
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -134,7 +134,7 @@ export class BimsyncProjectService {
             },
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -149,7 +149,7 @@ export class BimsyncProjectService {
             {
                 body: deleteBody,
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -165,7 +165,7 @@ export class BimsyncProjectService {
             },
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -182,7 +182,7 @@ export class BimsyncProjectService {
             },
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -197,7 +197,7 @@ export class BimsyncProjectService {
             {
                 body: deleteBody,
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().bcfToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))

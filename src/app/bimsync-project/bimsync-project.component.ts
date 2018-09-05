@@ -39,7 +39,7 @@ export class BimsyncProjectComponent implements OnInit {
   ngOnInit() {
     this.GetProjects();
     this.User = this._appService.GetUser();
-    this.IsBCF = (this.User.bcfToken === "");
+    this.IsBCF = (this.User.BCFToken === "");
   }
 
   GetProjects() {

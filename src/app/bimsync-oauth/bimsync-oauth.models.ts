@@ -1,14 +1,10 @@
 export interface IUser {
     id: number;
-    name: string;
-    bimsync_id: string;
-    powerBiSecret: string;
-    accessToken: string;
-    tokenType: string;
-    tokenExpireIn: number;
-    refreshToken: string;
-    refreshDate?: Date;
-    bcfToken: string;
+    Name: string;
+    PowerBISecret: string;
+    AccessToken: IAccessToken;
+    RefreshDate?: Date;
+    BCFToken: string;
 }
 
 export interface IbimsyncUser {
