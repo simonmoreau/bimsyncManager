@@ -56,20 +56,25 @@ export class ShareModalComponent implements OnInit {
   Publish() {
     this.publishBtnState = ClrLoadingState.LOADING;
 
-    let revisionsIds: IRevisionId[] = [];
-    let sharedRevisions: ISharedRevisions;
-    sharedRevisions.projectId = this.selectedProject.id;
+    let selectedRevisions: string[] = [];
+    let selected2dRevision: string;
 
     this.models.forEach(model => {
       if (model.is3DSelected) {
-        sharedRevisions.revisions3D.push(model.selectedRevision.id);
+        selectedRevisions.push(model.selectedRevision.id);
         if (model.is2DSelected) {
-          sharedRevisions.revision2D = model.selectedRevision.id;
+          selected2dRevision = model.selectedRevision.id;
         }
       }
     });
+    let sharedRevisions: ISharedRevisions = {
+      projectId:  this.selectedProject.id,
+      revision2D: selected2dRevision,
+      revisions3D: selectedRevisions
+    };
 
-    this.GetViewerURL(revisionsIds);
+    this.CreateSharedModel(sharedRevisions);
+
   }
 
   /* To copy Text from Textbox */
@@ -186,8 +191,8 @@ export class ShareModalComponent implements OnInit {
   CreateSharedModel(sharedRevisions: ISharedRevisions) {
 
     this._takeoffService.CreateSharedModel(sharedRevisions)
-      .subscribe(viewerURL => {
-        this.sharingURL = viewerURL.id;
+      .subscribe(sharingCode => {
+        this.sharingURL = 'http://localhost:4200/share?code=' + sharingCode.id;
         this.sharingiFrameURL = this.GetIFrameURL();
         this.publishBtnState = ClrLoadingState.SUCCESS;
       },

@@ -22,7 +22,6 @@ export class SharingPageComponent implements OnInit, AfterViewInit {
     spaces: number[];
     errorMessage: string;
     sharingCodeId: string = '';
-    originPosition: any;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -63,7 +62,6 @@ export class SharingPageComponent implements OnInit, AfterViewInit {
         let url2D: string = this.viewer2dUrl;
         let url3D: string = this.viewer3dUrl;
         let spaceIds: number[] = this.spaces;
-        let context: any = this;
 
         // 2D Viewer
         bimsync.loadViewer2d();
@@ -115,9 +113,9 @@ export class SharingPageComponent implements OnInit, AfterViewInit {
 
                 console.log("Viewer loaded!");
 
-                // Get current viewpoint for future references
-                $viewer.viewer('viewpoint', null, function (viewpoint) {
-                    context.originPosition = viewpoint;
+                $viewer.viewer('modelInfo', function(modelInfos) {
+                    console.log(modelInfos);
+                    // This will print model info for all loaded models
                 });
             });
         });
@@ -155,7 +153,7 @@ export class SharingPageComponent implements OnInit, AfterViewInit {
 
     FocusModel() {
         let $viewer = $("#viewer-3d") as any;
-        $viewer.viewer('viewpoint', this.originPosition);
+        $viewer.viewer('viewpoint', 'home');
 
         $viewer.viewer('viewpoint', null, function (viewpoint) {
             console.log(viewpoint);
