@@ -1,15 +1,14 @@
 #viewer-2d-container {
   position: absolute;
-  right: 0px;
-  bottom: 20px;
+  right: 1rem;
+  bottom: 1rem;
   width: 320px;
   height: 320px;
-  padding: 10px;
   background-color: transparent;
 }
 
 #viewer-2d-container.enlarged {
-  width: 100%;
+  width: calc(100% - 2rem);
   height: 80%;
 }
 
@@ -52,7 +51,6 @@
     white-space: nowrap;
   }
 
-
   .bs-viewer-loaded .bs-toggle-2d {
     position: absolute;
     right: 15px;
@@ -67,6 +65,15 @@
   top: 15px;
   padding: 4px 8px;
   display: inline-block;
+}
+
+.button-container {
+  position: absolute;
+}
+
+.button-container .btn {
+  margin: 0px;
+  margin-right: 1rem;
 }
 
   // .dropdown-table td {

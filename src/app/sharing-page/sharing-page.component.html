@@ -1,4 +1,4 @@
-<div style="position: absolute;">
+<div class="button-container">
   <clr-dropdown [clrCloseMenuOnItemClick]="false" style="position: absolute;">
     <button type="button" class="btn" clrDropdownTrigger>
       <clr-icon shape="block" size="24"></clr-icon>
@@ -38,6 +38,12 @@
       </table>
     </clr-dropdown-menu>
   </clr-dropdown>
+</div>
+
+<div class="button-container" style="right: 0px">
+  <button type="button" class="btn" (click)="FocusModel()">
+    <clr-icon shape="home" size="24"></clr-icon>
+  </button>
 </div>
 
 <div class="viewer-container">
