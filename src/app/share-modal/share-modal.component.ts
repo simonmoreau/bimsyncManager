@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { TakeoffService } from '../takeoff/takeoff.services';
-import { IProject, IModel, IRevisionId, IViewerRequestBody, ISharedRevisions } from '../bimsync-project/bimsync-project.models';
+import { IProject, IModel, IRevisionId, IViewerRequestBody, ISharedRevisions, IRevision } from '../bimsync-project/bimsync-project.models';
 import { ClrLoadingState } from '@clr/angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -42,13 +42,13 @@ export class ShareModalComponent implements OnInit {
       { "xSize": "680", "ySize": "510" },
       { "xSize": "800", "ySize": "600" },
       { "xSize": "933", "ySize": "700" }
-  ];
-  this.selectedframeSize = this.frameSizes[0];
+    ];
+    this.selectedframeSize = this.frameSizes[0];
   }
 
   OpenShareModal(project) {
     this.selectedProject = project;
-    this.GetModels();
+    this.GetAllRevisions();
     this.selectAll = false;
     this.share = true;
   }
@@ -104,6 +104,43 @@ export class ShareModalComponent implements OnInit {
         }
       });
     }
+  }
+
+  GetAllRevisions() {
+    this.models = new Array() as Array<IModel>;
+    this._takeoffService.getModels(this.selectedProject.id)
+      .subscribe(models => {
+        this.models = models;
+
+        this._takeoffService.getAllRevisions(this.selectedProject.id)
+          .subscribe(revisions => {
+            revisions.forEach(revision => {
+              let index: number = this.models.indexOf(this.models.find(m => m.id === revision.model.id));
+
+              let newRevisions: IRevision[] = new Array(revision);
+
+              if (this.models[index].revisions != null) {
+                newRevisions = this.models[index].revisions;
+                newRevisions.push(revision);
+              }
+
+              let newModel: IModel = {
+                id: this.models[index].id,
+                name: this.models[index].name,
+                revisions: newRevisions,
+                selectedRevision: newRevisions[0],
+                is3DSelected: false,
+                is2DSelected: false
+              };
+              this.models[index] = newModel;
+
+            });
+          },
+            error => this.errorMessage = <any>error);
+
+      },
+        error => this.errorMessage = <any>error);
+    return false;
   }
 
   GetModels() {
@@ -171,21 +208,21 @@ export class ShareModalComponent implements OnInit {
 
   CreateSharedModel(sharedRevisions: ISharedRevisions) {
 
-    this._takeoffService.CreateSharedModel(sharedRevisions, )
-    .subscribe(viewerURL => {
-      this.sharingURL = viewerURL.Viewer3dToken.url;
-      this.sharingiFrameURL = this.GetIFrameURL();
-      this.publishBtnState = ClrLoadingState.SUCCESS;
-    },
-      error => this.errorMessage = <any>error);
+    this._takeoffService.CreateSharedModel(sharedRevisions)
+      .subscribe(viewerURL => {
+        this.sharingURL = viewerURL.Viewer3dToken.url;
+        this.sharingiFrameURL = this.GetIFrameURL();
+        this.publishBtnState = ClrLoadingState.SUCCESS;
+      },
+        error => this.errorMessage = <any>error);
   }
 
   GetIFrameURL(): string {
     return '<iframe width="'
-    + this.selectedframeSize.xSize
-    + '" height="' + this.selectedframeSize.ySize
-    + '" src="' + this.sharingURL
-    + '" frameborder="0" allowFullScreen="true"></iframe>';
+      + this.selectedframeSize.xSize
+      + '" height="' + this.selectedframeSize.ySize
+      + '" src="' + this.sharingURL
+      + '" frameborder="0" allowFullScreen="true"></iframe>';
   }
 
   ChangeFrameSize() {

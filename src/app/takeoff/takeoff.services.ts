@@ -60,6 +60,18 @@ export class TakeoffService {
             .catch(this.handleError);
     }
 
+    getAllRevisions(projectId: string): Observable<IRevision[]> {
+        return this._http.get<IRevision[]>(
+            this._apiUrl + 'projects/' + projectId + '/revisions?pageSize=1000',
+            {
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
     GetViewerToken(projectId: string, revisionsIds: IRevisionId[]): Observable<IViewerToken> {
         return this._http.post<IViewerToken>(
             'https://api.bimsync.com/1.0/viewer/access?project_id=' + projectId + '&access_token=' + this._appService._user.BCFToken,
