@@ -143,29 +143,6 @@ export class ShareModalComponent implements OnInit {
     return false;
   }
 
-  GetModels() {
-    this._takeoffService.getModels(this.selectedProject.id)
-      .subscribe(models => {
-        models.forEach(model => {
-          this.GetRevisions(model);
-        });
-        this.models = models;
-      },
-        error => this.errorMessage = <any>error);
-    return false;
-  }
-
-  GetRevisions(model: IModel) {
-    this._takeoffService.getRevisions(this.selectedProject.id, model.id)
-      .subscribe(revisions => {
-        model.revisions = revisions;
-        model.selectedRevision = model.revisions[0];
-        model.is3DSelected = false;
-      },
-        error => this.errorMessage = <any>error);
-    return false;
-  }
-
   GetViewerURL(revisionsIds: IRevisionId[]) {
     this._takeoffService.GetViewerToken(this.selectedProject.id, revisionsIds)
       .subscribe(viewerToken => {
@@ -210,7 +187,7 @@ export class ShareModalComponent implements OnInit {
 
     this._takeoffService.CreateSharedModel(sharedRevisions)
       .subscribe(viewerURL => {
-        this.sharingURL = viewerURL.Viewer3dToken.url;
+        this.sharingURL = viewerURL.id;
         this.sharingiFrameURL = this.GetIFrameURL();
         this.publishBtnState = ClrLoadingState.SUCCESS;
       },

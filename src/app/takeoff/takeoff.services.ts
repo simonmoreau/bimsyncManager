@@ -75,7 +75,7 @@ export class TakeoffService {
     GetViewerToken(projectId: string, revisionsIds: IRevisionId[]): Observable<IViewerToken> {
         return this._http.post<IViewerToken>(
             'https://api.bimsync.com/1.0/viewer/access?project_id=' + projectId + '&access_token=' + this._appService._user.BCFToken,
-             JSON.stringify(revisionsIds),
+            JSON.stringify(revisionsIds),
             {
                 headers: new HttpHeaders()
                     .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -87,7 +87,7 @@ export class TakeoffService {
     GetViewer2DToken(modelId: string, revisionNumber: string): Observable<IViewer2DToken> {
         return this._http.post<IViewer2DToken>(
             'https://api.bimsync.com/beta/viewer2d/access?model_id=' + modelId
-             + '&revision_id=' + revisionNumber + '&access_token=' + this._appService._user.BCFToken,
+            + '&revision_id=' + revisionNumber + '&access_token=' + this._appService._user.BCFToken,
             {
                 headers: new HttpHeaders()
                     .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -99,7 +99,7 @@ export class TakeoffService {
     GetSharingURL(viewerRequestBody: IViewerRequestBody): Observable<IViewerURL> {
         return this._http.post<IViewerURL>(
             'https://binsyncfunction.azurewebsites.net/api/bimsync-viewer',
-             JSON.stringify(viewerRequestBody),
+            JSON.stringify(viewerRequestBody),
             {
                 headers: new HttpHeaders()
                     .set('Content-Type', 'application/json')
@@ -111,10 +111,21 @@ export class TakeoffService {
     CreateSharedModel(sharedRevisions: ISharedRevisions): Observable<ISharingCode> {
         return this._http.post<ISharingCode>(
             'https://binsyncfunction.azurewebsites.net/api/manager/users/' + this._appService._user.PowerBISecret + '/share',
-             JSON.stringify(sharedRevisions),
+            JSON.stringify(sharedRevisions),
             {
                 headers: new HttpHeaders()
                     .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    GetSharingCode(sharingCodeId: string): Observable<ISharingCode> {
+        return this._http.get<ISharingCode>(
+            'https://binsyncfunction.azurewebsites.net/api/manager/model/' + sharingCodeId,
+            {
+                headers: new HttpHeaders()
+                    .set('Content-Type', 'application/x-www-form-urlencoded')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);

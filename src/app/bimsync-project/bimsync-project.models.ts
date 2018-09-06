@@ -83,7 +83,7 @@ export interface ISharingCode {
     Viewer3dToken: IViewerToken;
     SharedModels: ISharedModel[];
     SharedRevisions: ISharedRevisions;
-    SpacesId: string[];
+    SpacesId: number[];
 }
 
 export interface IViewerToken {
