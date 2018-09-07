@@ -148,46 +148,6 @@ export class ShareModalComponent implements OnInit {
     return false;
   }
 
-  GetViewerURL(revisionsIds: IRevisionId[]) {
-    this._takeoffService.GetViewerToken(this.selectedProject.id, revisionsIds)
-      .subscribe(viewerToken => {
-        if (this.revisionNumber2d !== '') {
-          this._takeoffService.GetViewer2DToken(this.modelId2d, this.revisionNumber2d)
-            .subscribe(viewer2Dtoken => {
-
-              let viewerRequestBody: IViewerRequestBody = {
-                viewer2DToken: viewer2Dtoken.token,
-                viewerToken: viewerToken.token
-              };
-              this._takeoffService.GetSharingURL(viewerRequestBody)
-                .subscribe(viewerURL => {
-                  this.sharingURL = viewerURL.url;
-                  this.sharingiFrameURL = this.GetIFrameURL();
-                  this.publishBtnState = ClrLoadingState.SUCCESS;
-                },
-                  error => this.errorMessage = <any>error);
-            },
-              error => this.errorMessage = <any>error);
-
-        } else {
-          let viewerRequestBody: IViewerRequestBody = {
-            viewer2DToken: '',
-            viewerToken: viewerToken.token
-          };
-
-          this._takeoffService.GetSharingURL(viewerRequestBody)
-            .subscribe(viewerURL => {
-              this.sharingURL = viewerURL.url;
-              this.sharingiFrameURL = this.GetIFrameURL();
-              this.publishBtnState = ClrLoadingState.SUCCESS;
-            },
-              error => this.errorMessage = <any>error);
-        }
-      },
-        error => this.errorMessage = <any>error);
-    return false;
-  }
-
   CreateSharedModel(sharedRevisions: ISharedRevisions) {
 
     this._takeoffService.CreateSharedModel(sharedRevisions)
