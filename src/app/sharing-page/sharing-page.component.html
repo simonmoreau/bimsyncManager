@@ -1,3 +1,11 @@
+<div class="dimmed" *ngIf="displayLoading">
+  <div class="centered">
+      <span class="spinner spinner-inverse">
+          Loading...
+      </span>
+      <h4>Loading ...</h4>
+  </div>
+</div>
 <div class="button-container">
   <clr-dropdown [clrCloseMenuOnItemClick]="false" style="position: absolute;">
     <button type="button" class="btn" clrDropdownTrigger>
@@ -29,7 +37,8 @@
             </td>
             <td>
               <div class="dropdown-item toggle-switch">
-                <input type="checkbox" id="toggle_Visibility_{{model.name}}" (click)="ToogleModelVisibility(model)" [(ngModel)]="model.isVisible">
+                <input type="checkbox" id="toggle_Visibility_{{model.name}}" (click)="ToogleModelVisibility(model)"
+                  [(ngModel)]="model.isVisible">
                 <label for="toggle_Visibility_{{model.name}}"></label>
               </div>
             </td>
@@ -60,7 +69,7 @@
   <div id="viewer-2d"></div>
 </div>
 <div id="Toogle2DButton" [hidden]="twoDVisibility">
-    <button class="bs-button bs-toggle-2d" (click)="Toogle2D()">
-        2D
-      </button>
+  <button class="bs-button bs-toggle-2d" (click)="Toogle2D()">
+    2D
+  </button>
 </div>

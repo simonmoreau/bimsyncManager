@@ -3,6 +3,7 @@ import { ActivatedRoute, Params } from "@angular/router";
 import { TakeoffService } from "../takeoff/takeoff.services";
 import * as $ from "jquery";
 import { flatten } from "@angular/compiler";
+import { fade } from "@clr/angular";
 
 declare var bimsync: any;
 
@@ -22,6 +23,7 @@ export class SharingPageComponent implements OnInit, AfterViewInit {
     spaces: number[];
     errorMessage: string;
     sharingCodeId: string = '';
+    displayLoading: boolean = true;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -62,6 +64,7 @@ export class SharingPageComponent implements OnInit, AfterViewInit {
         let url2D: string = this.viewer2dUrl;
         let url3D: string = this.viewer3dUrl;
         let spaceIds: number[] = this.spaces;
+        let context: any = this;
 
         // 2D Viewer
         bimsync.loadViewer2d();
@@ -112,6 +115,8 @@ export class SharingPageComponent implements OnInit, AfterViewInit {
                 $viewer.viewerUI("setSpaces", spaceIds);
 
                 console.log("Viewer loaded!");
+
+                context.displayLoading = false;
 
                 $viewer.viewer('modelInfo', function(modelInfos) {
                     console.log(modelInfos);

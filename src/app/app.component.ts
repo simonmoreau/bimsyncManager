@@ -26,4 +26,11 @@ export class AppComponent implements OnInit {
         this.appService._user = null;
         this.router.navigate(['/home']);
     }
+
+    DisplayHeader(): boolean {
+        if (this.router.url.includes('/share')) {
+                  return false;
+          }
+        return true;
+      }
 }

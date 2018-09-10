@@ -1,5 +1,5 @@
 <clr-main-container class="main-container">
-  <clr-header>
+  <clr-header *ngIf="DisplayHeader()">
     <div class="branding">
       <a href="#" class="nav-link">
         <span class="clr-icon clr-clarity-logo"></span>
@@ -18,9 +18,6 @@
       </a> -->
       <a class="nav-link" href="#" [routerLink]="['/documentation']" routerLinkActive="active">
         <span class="nav-text">Documentation</span>
-      </a>
-      <a class="nav-link" href="#" [routerLink]="['/share']" routerLinkActive="active">
-        <span class="nav-text">Share</span>
       </a>
     </div>
     <div class="header-actions" *ngIf="appService._user">
