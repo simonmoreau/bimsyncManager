@@ -27,7 +27,7 @@ export class BimsyncProjectService {
 
     getProjects(): Observable<IProject[]> {
         return this._http.get<IProject[]>(
-            this._apiUrl + 'projects',
+            this._apiUrl + 'projects?pageSize=1000',
             {
                 headers: new HttpHeaders()
                     .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)

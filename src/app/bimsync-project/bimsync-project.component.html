@@ -1,11 +1,21 @@
 <div class="content-container">
     <div class="content-area" style="padding-right: 2rem;padding-left: 2rem;">
-        <div *ngIf='IsBCF'>
-            <p>To create issue boards on your project, you must authorized it first</p>
-            <a class="btn btn-primary" href="https://api.bimsync.com/1.0/oauth/authorize?client_id=hl94XJLXaQe3ogX&response_type=code&state=bcf&redirect_uri={{_appService._callbackUrl}}">Authorize</a>
+        <div class="alert alert-warning" *ngIf='IsBCF'>
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-triangle"></clr-icon>
+                    </div>
+                    <span class="alert-text">To create issue boards on your project, you must authorize it first</span>
+                    <div class="alert-actions">
+                        <a href="https://api.bimsync.com/1.0/oauth/authorize?client_id={{appService._client_id}}&response_type=code&state=bcf&redirect_uri={{appService._callbackUrl}}"
+                            class="alert-action">Authorize</a>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <button class="btn btn-primary" (click)="open = true">Create Project</button>
+        <button class="btn btn-primary" (click)="open = true">Create a new project</button>
         <form #bimsyncProjectForm="ngForm" (ngSubmit)="onSubmit()" [hidden]="submitted">
             <clr-modal [(clrModalOpen)]="open">
                 <h3 class="modal-title">Create a new project</h3>
@@ -18,13 +28,14 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <textarea id="jsonConfig" rows="8" placeholder="Type in JSON configuration commands" required name="jsonConfig" [(ngModel)]="jsonConfig"
-                                    #jsonConfigImput="ngModel"></textarea>
+                                <textarea id="jsonConfig" rows="8" placeholder="Type in JSON configuration commands"
+                                    required name="jsonConfig" [(ngModel)]="jsonConfig" #jsonConfigImput="ngModel"></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label for="jsonConfig" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-md tooltip-left" [class.invalid]="jsonConfigImput.invalid && (jsonConfigImput.dirty || jsonConfigImput.touched)">
+                                <label for="jsonConfig" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-md tooltip-left"
+                                    [class.invalid]="jsonConfigImput.invalid && (jsonConfigImput.dirty || jsonConfigImput.touched)">
                                     <span class="tooltip-content">
                                         Project Name is Required.
                                     </span>
@@ -35,7 +46,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline" (click)="open = false">Cancel</button>
-                    <button type="button" class="btn btn-primary" (click)="onSubmit()" (click)="open = false" [disabled]="bimsyncProjectForm.form.invalid">Create</button>
+                    <button type="button" class="btn btn-primary" (click)="onSubmit()" (click)="open = false"
+                        [disabled]="bimsyncProjectForm.form.invalid">Create</button>
                 </div>
             </clr-modal>
         </form>
@@ -61,7 +73,6 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Description</th>
                     <th>Id</th>
                     <th></th>
                 </tr>
@@ -71,7 +82,6 @@
                     <td>
                         <a href="https://bimsync.com/project/{{project.id}}">{{project.name}}</a>
                     </td>
-                    <td>{{project.description}}</td>
                     <td>{{project.id}}</td>
                     <td>
                         <button class="btn btn-link btn-icon btn-inline" (click)="Share(project)">

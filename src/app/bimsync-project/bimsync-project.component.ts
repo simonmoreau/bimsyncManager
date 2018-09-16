@@ -28,17 +28,17 @@ export class BimsyncProjectComponent implements OnInit {
   share: boolean;
   jsonConfig: any;
   submitted: boolean;
-  _appService: AppService;
+  appService: AppService;
 
   @ViewChild('shareModal') modal: ShareModalComponent;
 
-  constructor(private _bimsyncProjectService: BimsyncProjectService, private appService: AppService) {
-    this._appService = appService;
+  constructor(private _bimsyncProjectService: BimsyncProjectService, private _appService: AppService) {
+    this.appService = _appService;
   }
 
   ngOnInit() {
     this.GetProjects();
-    this.User = this._appService.GetUser();
+    this.User = this.appService.GetUser();
     this.IsBCF = (this.User.BCFToken === "");
   }
 

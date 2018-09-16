@@ -3,19 +3,15 @@ import { AppService } from 'app/app.service';
 import * as prismjs from 'prismjs';
 
 @Component({
-  selector: 'app-documentation',
-  templateUrl: './documentation.component.html',
-  styleUrls: ['./documentation.component.scss']
+    selector: 'app-documentation',
+    templateUrl: './documentation.component.html',
+    styleUrls: ['./documentation.component.scss']
 })
 export class DocumentationComponent implements OnInit {
 
-  appService: AppService;
+    appService: AppService;
 
-  constructor(private _appService: AppService) {
-    this.appService = _appService;
-  }
-
-  private code = `
+    code = `
   [
     {
       "name":"En cours",
@@ -27,14 +23,14 @@ export class DocumentationComponent implements OnInit {
     }
   ]`;
 
-  private code1 = `
+    code1 = `
   [
     {
         "projectName": “The name of your new project",
         "projectDescription": “The description of your new project",
         "users":[ … ]
-        "models":[ ... ] 
-        "boards": [ … ] 
+        "models":[ ... ]
+        "boards": [ … ]
     },
     {
         "projectName": “...",
@@ -43,38 +39,38 @@ export class DocumentationComponent implements OnInit {
     }
   ]`;
 
-  private code2 = `
+    code2 = `
   {
       "id":"the Id of the new member",
       "role":"administrator"
   }`;
 
-  private code3 = `
+    code3 = `
   {
       “name":"The name of your model"
   }`;
 
-  private code4 = `
+    code4 = `
   {
       "name":"My new Issue Board",
       "statuses": [ … ],
       "types": [ … ]
   }`;
 
-  private code5 = `
+    code5 = `
   {
       "name":"Current",
       "color":"#e69138",
       "type":"candidate"
   }`;
 
-  private code6 = `
+    code6 = `
   {
       "name": "Warning",
       "color": "#e69138"
   },`;
 
-  private example = `
+    example = `
   [
     {
         "projectName": "00000 - My New Project",
@@ -104,7 +100,7 @@ export class DocumentationComponent implements OnInit {
             },
             {
                 "name":"HVAC"
-            }           
+            }
         ],
         "boards":
         [
@@ -169,8 +165,12 @@ export class DocumentationComponent implements OnInit {
     }
 ]`;
 
-  ngOnInit() {
+    constructor(private _appService: AppService) {
+        this.appService = _appService;
+    }
 
-  }
+    ngOnInit() {
+
+    }
 
 }

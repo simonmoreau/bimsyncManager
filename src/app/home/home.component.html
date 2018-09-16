@@ -12,7 +12,7 @@
     </p>
     <div class="home-hero-btn">
         <div class="header-actions" *ngIf="!appService._user">
-            <a class="btn btn-primary" href="https://api.bimsync.com/oauth2/authorize?client_id=hl94XJLXaQe3ogX&response_type=code&state=api&redirect_uri={{appService._callbackUrl}}">Get Started</a>
+            <a class="btn btn-primary" href="https://api.bimsync.com/oauth2/authorize?client_id={{appService._client_id}}&response_type=code&state=api&redirect_uri={{appService._callbackUrl}}">Get Started</a>
         </div>
       </div>
     <p class="subtext">
