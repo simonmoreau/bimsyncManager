@@ -15,8 +15,9 @@ export class AppService {
 
   errorMessage: string;
   private _projectsUrl = 'https://binsyncfunction.azurewebsites.net/api';
-  // _callbackUrl:string = 'https://bimsyncmanager.firebaseapp.com/callback';
-  _callbackUrl: string = 'http://localhost:4200/callback';
+  // _url:string = 'https://bimsyncmanager.firebaseapp.com';
+  _url: string = 'http://localhost:4200';
+  _callbackUrl: string = this._url + '/callback';
   _client_id = 'hl94XJLXaQe3ogX';
   _user: IUser;
 

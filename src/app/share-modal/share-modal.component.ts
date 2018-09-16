@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { TakeoffService } from '../takeoff/takeoff.services';
 import { IProject, IModel, IRevisionId, IViewerRequestBody, ISharedRevisions, IRevision } from '../bimsync-project/bimsync-project.models';
 import { ClrLoadingState } from '@clr/angular';
+import { AppService } from 'app/app.service';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -33,8 +34,11 @@ export class ShareModalComponent implements OnInit {
   sharingiFrameURL: string;
   aModelIsSelected: boolean = false;
   publishBtnState: ClrLoadingState = ClrLoadingState.DEFAULT;
+  appService: AppService;
 
-  constructor(private _takeoffService: TakeoffService) { }
+  constructor(private _takeoffService: TakeoffService, private _appService: AppService) {
+    this.appService = _appService;
+  }
 
   ngOnInit() {
 
@@ -68,7 +72,7 @@ export class ShareModalComponent implements OnInit {
       }
     });
     let sharedRevisions: ISharedRevisions = {
-      projectId:  this.selectedProject.id,
+      projectId: this.selectedProject.id,
       revision2D: selected2dRevision,
       revisions3D: selectedRevisions
     };
@@ -152,7 +156,7 @@ export class ShareModalComponent implements OnInit {
 
     this._takeoffService.CreateSharedModel(sharedRevisions)
       .subscribe(sharingCode => {
-        this.sharingURL = 'http://localhost:4200/share?code=' + sharingCode.id;
+        this.sharingURL = this.appService._url + '/share?code=' + sharingCode.id;
         this.sharingiFrameURL = this.GetIFrameURL();
         this.publishBtnState = ClrLoadingState.SUCCESS;
       },
