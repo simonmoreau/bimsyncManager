@@ -1,7 +1,7 @@
 <clr-main-container class="main-container">
   <clr-header *ngIf="DisplayHeader()">
     <div class="branding">
-      <a href="#" class="nav-link">
+      <a href="#" class="nav-link" [routerLink]="['/home']" routerLinkActive="active">
         <span class="clr-icon clr-clarity-logo"></span>
         <span class="title">bimsync Manager</span>
       </a>
