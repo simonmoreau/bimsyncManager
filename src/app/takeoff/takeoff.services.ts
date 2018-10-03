@@ -28,7 +28,7 @@ export class TakeoffService {
 
     getProjects(): Observable<IProject[]> {
         return this._http.get<IProject[]>(
-            this._bimsyncUrlV2 + 'projects',
+            this._bimsyncUrlV2 + 'projects?pageSize=1000',
             {
                 headers: new HttpHeaders()
                     .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
@@ -40,7 +40,7 @@ export class TakeoffService {
 
     getModels(projectId: string): Observable<IModel[]> {
         return this._http.get<IModel[]>(
-            this._bimsyncUrlV2 + 'projects/' + projectId + '/models',
+            this._bimsyncUrlV2 + 'projects/' + projectId + '/models?pageSize=1000',
             {
                 headers: new HttpHeaders()
                     .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
@@ -52,7 +52,19 @@ export class TakeoffService {
 
     getRevisions(projectId: string, modelId: string): Observable<IRevision[]> {
         return this._http.get<IRevision[]>(
-            this._bimsyncUrlV2 + 'projects/' + projectId + '/revisions?model=' + modelId,
+            this._bimsyncUrlV2 + 'projects/' + projectId + '/revisions?pageSize=1000&model=' + modelId,
+            {
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    getProductsTypeSummary(projectId: string, revisionId: string): Observable<object> {
+        return this._http.get<object>(
+            this._bimsyncUrlV2 + 'projects/' + projectId + '/ifc/products/ifctypes?revision=' + revisionId,
             {
                 headers: new HttpHeaders()
                     .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
