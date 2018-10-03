@@ -1,33 +1,30 @@
 <clr-main-container class="main-container">
-  <clr-header>
+  <clr-header *ngIf="DisplayHeader()">
     <div class="branding">
-      <a href="#" class="nav-link">
+      <a href="#" class="nav-link" [routerLink]="['/home']" routerLinkActive="active">
         <span class="clr-icon clr-clarity-logo"></span>
         <span class="title">bimsync Manager</span>
       </a>
     </div>
     <div class="header-nav" [clr-nav-level]="1">
-      <a class="nav-link" href="#" [routerLink]="['/home']" routerLinkActive="active">
-        <span class="nav-text">Home</span>
-      </a>
       <a class="nav-link" href="#" [routerLink]="['/projects']" routerLinkActive="active" *ngIf="appService._user">
         <span class="nav-text">Projects</span>
       </a>
-      <a class="nav-link" href="#" [routerLink]="['/takeoff']" routerLinkActive="active">
+      <!-- <a class="nav-link" href="#" [routerLink]="['/takeoff']" routerLinkActive="active" *ngIf="appService._user">
         <span class="nav-text">Takeoff</span>
-      </a>
+      </a> -->
       <a class="nav-link" href="#" [routerLink]="['/documentation']" routerLinkActive="active">
-        <span class="nav-text">Documentation</span>
+        <span class="nav-text">Help</span>
       </a>
     </div>
     <div class="header-actions" *ngIf="appService._user">
-      <span class="nav-link nav-text">Hello {{appService._user.name}}</span>
+      <span class="nav-link nav-text">Hello {{appService._user.Name}}</span>
       <a class="nav-link" href="#" (click)="LogOut()">
         <span class="nav-text">Log Out</span>
       </a>
     </div>
     <div class="header-actions" *ngIf="!appService._user">
-      <a class="nav-link nav-text" href="https://api.bimsync.com/oauth2/authorize?client_id=6E63g0C2zVOwlNm&response_type=code&state=api&redirect_uri={{appService._callbackUrl}}">
+      <a class="nav-link nav-text" href="https://api.bimsync.com/oauth2/authorize?client_id={{appService._client_id}}&response_type=code&state=api&redirect_uri={{appService._callbackUrl}}">
         Connect
       </a>
     </div>

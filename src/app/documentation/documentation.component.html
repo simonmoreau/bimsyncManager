@@ -1,7 +1,7 @@
 <div class="content-container">
   <div class="content-area">
     <div class="row" *ngIf="appService._user">
-      <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12">
+      <div class="col-lg-10 col-md-8 col-sm-12 col-xs-12">
         <div class="card">
           <div class="card-header">
             Power BI Secret
@@ -9,7 +9,7 @@
           <div class="card-block">
             <div class="card-text">
               <p>Use this code to connect Power BI to your bimsync® Account:
-                <b>{{appService._user.powerBiSecret}}</b>
+                <b>{{appService._user.PowerBISecret}}</b>
               </p>
             </div>
           </div>
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
       <h1 id="started">Getting started</h1>
       <p>To use bimsync® Manager, you must be connected to bimsync® using your usual credentials.</p>
       <p>Click on "Connect" or "Getting Started"</p>
@@ -205,14 +205,19 @@
       </div>
       <h2 id="ProjectDashboard">Project Dashboard</h2>
 
-      <a href="https://github.com/simonmoreau/bimsyncManager/raw/master/src/images/Project%20Dashboard.pbix" class="btn btn-primary btn-block btn-icon">
+      <a href="https://github.com/simonmoreau/bimsyncToPowerBI/raw/master/Project/bimsync%20-%20Project%20dashboard.pbix" class="btn btn-primary btn-block btn-icon">
         <clr-icon shape="download"></clr-icon> Download the Project Dashboard Template
       </a>
 
 
       <p>The Project Dashboard template allows you to extract data from a specific project. This enable data extraction from
-        any models. To use this dashboard, you must add your bimsync® project Id to the Power BI parameters. This Id is available
-        in the project list of bimsync® Manager.</p>
+        any models. To use this dashboard, you must add your bimsync® project Id to the Power BI parameters.</p>
+        <p>You can find your bimsync® project Id in the project list of bimsync® Manager:</p>
+        <div class="card">
+          <div class="card-img">
+            <img alt="grant" src="../images/bimsync/07_getGuid.png">
+          </div>
+        </div>
       <p>To be able to extract data from your model, the following tables are available:</p>
       <ul>
         <li>AllRevisions: A list of the revisions in the project</li>
@@ -233,13 +238,13 @@
       </ul>
       <h2 id="GlobalDashboard">Global Dashboard</h2>
 
-      <a href="https://github.com/simonmoreau/bimsyncManager/raw/master/src/images/Global%20Dashboard.pbix" class="btn btn-primary btn-block btn-icon">
+      <a href="https://github.com/simonmoreau/bimsyncToPowerBI/raw/master/Management/bimsync%20-%20Global%20dashboard.pbix" class="btn btn-primary btn-block btn-icon">
         <clr-icon shape="download"></clr-icon> Download the Global Dashboard Template
       </a>
 
 
 
-      <p>The Global Dashboardtemplategive you an overview of all your binsync projects, along with their members, models, revisions,
+      <p>The Global Dashboardtemplate give you an overview of all your binsync projects, along with their members, models, revisions,
         ...
       </p>
       <p>It can be used for cross-project analysis and management. However, for performance reason, you can't use it extract
@@ -266,7 +271,7 @@
       <a class="nav-link" routerlinkactive="active" href="/documentation#started">Get Started</a>
       <section class="nav-group collapsible">
         <input id="tab" type="checkbox">
-        <label for="tab">Create a new bimsync® project</label>
+        <label for="tab">Create a new project</label>
         <ul class="nav-list">
           <li>
             <a class="nav-link" routerlinkactive="active" href="/documentation#createNewProject">Template</a>

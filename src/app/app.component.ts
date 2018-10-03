@@ -12,19 +12,25 @@ import { appendFile } from 'fs';
 })
 export class AppComponent implements OnInit {
 
-    appService:AppService;
+    appService: AppService;
 
-    constructor(private router: Router, private _appService : AppService) {
+    constructor(private router: Router, private _appService: AppService) {
         this.appService = _appService;
     }
 
     ngOnInit() {
     }
 
-    LogOut(){
+    LogOut() {
         localStorage.removeItem('user');
         this.appService._user = null;
         this.router.navigate(['/home']);
     }
 
+    DisplayHeader(): boolean {
+        if (this.router.url.includes('/share')) {
+                  return false;
+          }
+        return true;
+      }
 }

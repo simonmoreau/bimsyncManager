@@ -1,0 +1,116 @@
+<clr-modal [(clrModalOpen)]="share" class="modal-dialog">
+    <h3 class="modal-title" *ngIf="selectedProject">Share {{selectedProject.name}}</h3>
+    <div class="modal-body modal-text">
+        <div class="alert alert-warning">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="exclamation-triangle"></clr-icon>
+                    </div>
+                    <span class="alert-text">
+                        You are about to create a link to your models. Once published, anyone with the link will be able to access your models.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body modal-text">
+        <table class="table table-noborder">
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>3D</th>
+                    <th>2D</th>
+                    <th>Revision</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor='let model of models'>
+                    <td>{{model.name}}</td>
+                    <td>
+                        <div class="toggle-switch" *ngIf="model.revisions?.length > 0">
+                            <input type="checkbox" id="toggle-{{model.id}}" (change)="Select3D(model)" [(ngModel)]="model.is3DSelected">
+                            <label for="toggle-{{model.id}}"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="toggle-switch" *ngIf="model.revisions?.length > 0">
+                            <input type="checkbox" id="toggle2d-{{model.id}}" (change)="Select2D(model)" [(ngModel)]="model.is2DSelected">
+                            <label for="toggle2d-{{model.id}}"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="select" *ngIf="model.revisions?.length > 0">
+                            <select id="selects-{{model.id}}" [(ngModel)]="model.selectedRevision" [disabled]="!model.is3DSelected">
+                                <option *ngFor='let revision of model.revisions' [ngValue]="revision">Revision #{{revision.version}}</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-body modal-text">
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="toggle-switch left">
+                    <input type="checkbox" id="toggle-all" (change)="SelectAllModels()" [(ngModel)]="selectAll">
+                    <label for="toggle-all">Select All models</label>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <button type="button" [clrLoading]="publishBtnState" class="btn btn-primary right" (click)="Publish()">Publish</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body modal-text" *ngIf="sharingURL">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="clr-input-wrapper">
+                    <label for="example" class="clr-control-label">Link you can send in email</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <input class="clr-input readonly" type="url" id="email_field" readonly value={{sharingURL}} placeholder="Your link will appear here"
+                    size="35" #sharingLink>
+                <button class="btn btn-icon btn-link" (click)="copyInputMessage(sharingLink)" value="click to copy">
+                    <clr-icon shape="copy"></clr-icon>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="clr-input-wrapper">
+                    <label for="example" class="clr-control-label">Html you can paste into your blog or website</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <input class="clr-input readonly" type="url" id="email_field" readonly value={{sharingiFrameURL}} placeholder="Your link will appear here"
+                    size="35" #iFrameLink>
+                <button class="btn btn-icon btn-link" (click)="copyInputMessage(iFrameLink)" value="click to copy">
+                    <clr-icon shape="copy"></clr-icon>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="clr-input-wrapper">
+                    <label for="example" class="clr-control-label">Size</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 ">
+                <div class="select">
+                    <select id="selectSize" [(ngModel)]="selectedframeSize" (change)="ChangeFrameSize()">
+                        <option *ngFor='let size of frameSizes' [ngValue]="size">{{size.xSize}} x {{size.ySize}} px</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</clr-modal>

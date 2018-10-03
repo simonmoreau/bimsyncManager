@@ -1,7 +1,9 @@
 // Imports
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IProject, IModel } from '../bimsync-project/bimsync-project.models';
+import { IProject, IModel, IRevision, IRevisionId,
+    ISharedRevisions, ISharingCode, IViewerToken,
+    IViewer2DToken, IViewerRequestBody, IViewerURL } from '../bimsync-project/bimsync-project.models';
 import { AppService } from 'app/app.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -11,25 +13,25 @@ import { importExpr } from '@angular/compiler/src/output/output_ast';
 import { Body } from '@angular/http/src/body';
 
 @Injectable()
-export class takeoffService {
+export class TakeoffService {
 
     // private instance variable to hold base url
-    private _apiUrl = 'https://api.bimsync.com/v2/';
-    private _projectId = '';
+    private _bimsyncUrlV2 = 'https://api.bimsync.com/v2/';
+    private _apiUrl = 'https://binsyncfunction.azurewebsites.net/api/';
 
     private _appService: AppService;
 
     // Resolve HTTP using the constructor
-    constructor(private _http: HttpClient,private appService: AppService) { 
+    constructor(private _http: HttpClient, private appService: AppService) {
         this._appService = appService;
     }
 
     getProjects(): Observable<IProject[]> {
         return this._http.get<IProject[]>(
-            this._apiUrl + 'projects',
+            this._bimsyncUrlV2 + 'projects',
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -38,11 +40,70 @@ export class takeoffService {
 
     getModels(projectId: string): Observable<IModel[]> {
         return this._http.get<IModel[]>(
-            this._apiUrl + 'projects/'+ projectId +'/models',
+            this._bimsyncUrlV2 + 'projects/' + projectId + '/models',
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().accessToken)
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
                     .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    getRevisions(projectId: string, modelId: string): Observable<IRevision[]> {
+        return this._http.get<IRevision[]>(
+            this._bimsyncUrlV2 + 'projects/' + projectId + '/revisions?model=' + modelId,
+            {
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    getAllRevisions(projectId: string): Observable<IRevision[]> {
+        return this._http.get<IRevision[]>(
+            this._bimsyncUrlV2 + 'projects/' + projectId + '/revisions?pageSize=1000',
+            {
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    GetSharingURL(viewerRequestBody: IViewerRequestBody): Observable<IViewerURL> {
+        return this._http.post<IViewerURL>(
+            this._apiUrl + 'bimsync-viewer',
+            JSON.stringify(viewerRequestBody),
+            {
+                headers: new HttpHeaders()
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    CreateSharedModel(sharedRevisions: ISharedRevisions): Observable<ISharingCode> {
+        return this._http.post<ISharingCode>(
+            this._apiUrl + 'manager/users/' + this._appService._user.PowerBISecret + '/share',
+            JSON.stringify(sharedRevisions),
+            {
+                headers: new HttpHeaders()
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    GetSharingCode(sharingCodeId: string): Observable<ISharingCode> {
+        return this._http.get<ISharingCode>(
+            this._apiUrl + 'manager/model/' + sharingCodeId,
+            {
+                headers: new HttpHeaders()
+                    .set('Content-Type', 'application/x-www-form-urlencoded')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
             .catch(this.handleError);

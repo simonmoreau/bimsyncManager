@@ -1,0 +1,75 @@
+<div class="dimmed" *ngIf="displayLoading">
+  <div class="centered">
+      <span class="spinner spinner-inverse">
+          Loading...
+      </span>
+      <h4>Loading ...</h4>
+  </div>
+</div>
+<div class="button-container">
+  <clr-dropdown [clrCloseMenuOnItemClick]="false" style="position: absolute;">
+    <button type="button" class="btn" clrDropdownTrigger>
+      <clr-icon shape="block" size="24"></clr-icon>
+      <clr-icon shape="caret down"></clr-icon>
+    </button>
+    <clr-dropdown-menu *clrIfOpen>
+      <table class="dropdown-table">
+        <tbody style="width: 100%">
+          <tr class="dropdown-item">
+            <td>Toggles Spaces</td>
+            <td>
+              <div class="dropdown-item toggle-switch">
+                <input type="checkbox" id="toggle_spacesVisibility" (change)="ToogleSpaceVisibility()" [(ngModel)]="spacesVisibility">
+                <label for="toggle_spacesVisibility"></label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="dropdown-divider"></div>
+            </td>
+          </tr>
+          <tr *ngFor="let model of models" class="dropdown-item">
+            <td>
+              <div class="model-name">
+                {{model.name}}
+              </div>
+            </td>
+            <td>
+              <div class="dropdown-item toggle-switch">
+                <input type="checkbox" id="toggle_Visibility_{{model.name}}" (click)="ToogleModelVisibility(model)"
+                  [(ngModel)]="model.isVisible">
+                <label for="toggle_Visibility_{{model.name}}"></label>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </clr-dropdown-menu>
+  </clr-dropdown>
+</div>
+
+<div class="button-container" style="right: 0px">
+  <button type="button" class="btn" (click)="FocusModel()">
+    <clr-icon shape="home" size="24"></clr-icon>
+  </button>
+</div>
+
+<div class="viewer-container">
+  <div id="viewer-3d" tabindex="-1">
+  </div>
+</div>
+<div id="viewer-2d-container" [hidden]="!twoDVisibility" [ngClass]="{'enlarged' : towDLarge}">
+  <button class="bs-button bs-toggle-2d" (click)="Toogle2D()">
+    <clr-icon shape="window-close"></clr-icon>
+  </button>
+  <button class="bs-button bs-enlarge-2d" (click)="ToogleEnlarge()">
+    <clr-icon shape="two-way-arrows" style="transform: rotate(45deg);"></clr-icon>
+  </button>
+  <div id="viewer-2d"></div>
+</div>
+<div id="Toogle2DButton" [hidden]="twoDVisibility">
+  <button class="bs-button bs-toggle-2d" (click)="Toogle2D()">
+    2D
+  </button>
+</div>

@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import {takeoffService} from './takeoff.services';
+import {TakeoffService} from './takeoff.services';
 import { IProject, IModel } from '../bimsync-project/bimsync-project.models';
 
 @Component({
   selector: 'app-takeoff',
   templateUrl: './takeoff.component.html',
   styleUrls: ['./takeoff.component.scss'],
-  providers: [takeoffService]
+  providers: [TakeoffService]
 })
 export class TakeoffComponent implements OnInit {
 
   projects: IProject[] = [];
-  selectedProject:IProject;
+  selectedProject: IProject;
   models: IModel[] = [];
-  selectedModel:IModel;
+  selectedModel: IModel;
   errorMessage: string;
 
-  constructor(private _takeoffService: takeoffService) { }
+  constructor(private _takeoffService: TakeoffService) { }
 
   ngOnInit() {
     this.GetProjects();
@@ -35,12 +35,9 @@ export class TakeoffComponent implements OnInit {
     this._takeoffService.getModels(this.selectedProject.id)
       .subscribe(models => {
         this.models = models;
-        if (this.models != null && this.models.length != 0)
-        {
+        if (this.models != null && this.models.length !== 0) {
           this.selectedModel = this.models[0];
-        }
-        else
-        {
+        } else {
           this.selectedModel = null;
         }
       },

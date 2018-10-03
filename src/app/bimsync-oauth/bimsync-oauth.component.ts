@@ -24,16 +24,15 @@ export class BimsyncOauthComponent implements OnInit {
         this.activatedRoute.queryParams.subscribe((params: Params) => {
             authorization_code = params['code'];
             state = params['state'];
-            //console.log(this._authorization_code);
         });
 
-        //Get the connected user
-        if (state == 'api') {
-            this.appService.ConnectUser(authorization_code);
+        // Get the connected user
+        if (state === 'api') {
+            this.appService.CreateUser(authorization_code);
         }
 
-        if (state == 'bcf') {
-            this.appService.GetBCFToken(authorization_code);
+        if (state === 'bcf') {
+            this.appService.CreateBCFToken(authorization_code);
         }
     }
 }

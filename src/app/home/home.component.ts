@@ -12,9 +12,9 @@ import {AppService} from 'app/app.service';
 })
 export class HomeComponent {
 
-    appService:AppService;
+    appService: AppService;
 
-    constructor(private _appService : AppService) {
+    constructor(private _appService: AppService) {
         this.appService = _appService;
     }
 }

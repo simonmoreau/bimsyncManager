@@ -1,0 +1,100 @@
+#viewer-2d-container {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  width: 320px;
+  height: 320px;
+  background-color: transparent;
+}
+
+#viewer-2d-container.enlarged {
+  width: calc(100% - 2rem);
+  height: 80%;
+}
+
+#viewer-2d {
+  height: 100%;
+  background-color:rgba(252, 252, 252, 0.9);
+  border: 1px solid #eef0f1;
+}
+
+#Toogle2DButton {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+
+.viewer-container {
+  height: 100%;
+  width: 100%; }
+
+.viewer-container #viewer-3d {
+  height: 100%;
+  width: 100%; }
+
+  .dropdown-menu {
+    max-width: 18rem;
+  }
+
+  .dropdown-table tr {
+    padding-right: 0px;
+  }
+
+  .dropdown-table td:first-child {
+    max-width: 12rem;
+    min-width: 12rem;
+  }
+
+  .model-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bs-viewer-loaded .bs-toggle-2d {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    padding: 4px 8px;
+    display: inline-block;
+}
+
+.bs-viewer-loaded .bs-enlarge-2d {
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  padding: 4px 8px;
+  display: inline-block;
+}
+
+.button-container {
+  position: absolute;
+}
+
+.button-container .btn {
+  margin: 0px;
+  margin-right: 1rem;
+}
+
+.dimmed {
+  z-index: 10;
+  display: block;
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.centered {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+}
+
+.centered h4 {
+  color: white;
+  font-weight: bold;
+}
+
