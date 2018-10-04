@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TakeoffService } from './takeoff.services';
-import { IProject, IModel, IRevision } from '../bimsync-project/bimsync-project.models';
+import { IProject, IModel, IRevision, IProduct } from '../bimsync-project/bimsync-project.models';
 import { ITypeSummary } from './takeoff.model';
 
 @Component({
@@ -20,7 +20,7 @@ export class TakeoffComponent implements OnInit {
   errorMessage: string;
   typesSummary: ITypeSummary[] = [];
   selectedIfcClass: ITypeSummary;
-  productCount: number;
+  selectedElements: IProduct[] = [];
 
   constructor(private _takeoffService: TakeoffService) { }
 
@@ -82,6 +82,7 @@ export class TakeoffComponent implements OnInit {
             this.typesSummary.push(summary);
           }
         );
+        this.selectedElements.length = 0;
         this.GetProducts();
       },
         error => this.errorMessage = <any>error);
@@ -89,10 +90,11 @@ export class TakeoffComponent implements OnInit {
   }
 
   GetProducts() {
-    this._takeoffService.getProducts(this.selectedProject.id, this.selectedRevision.id, this.selectedIfcClass.typeName)
+    this.selectedElements.length = 0;
+    //It will loop on all requests
+    this._takeoffService.getProducts(this.selectedProject.id, this.selectedRevision.id, this.selectedIfcClass.typeName, this.selectedIfcClass.typeQuantity)
       .subscribe(products => {
-
-        this.productCount = products.length
+        this.selectedElements = this.selectedElements.concat(products);
       },
         error => this.errorMessage = <any>error);
     return false;

@@ -1,16 +1,20 @@
 // Imports
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IProject, IModel, IRevision, IRevisionId, IProduct,
+import {
+    IProject, IModel, IRevision, IRevisionId, IProduct,
     ISharedRevisions, ISharingCode, IViewerToken,
-    IViewer2DToken, IViewerRequestBody, IViewerURL } from '../bimsync-project/bimsync-project.models';
+    IViewer2DToken, IViewerRequestBody, IViewerURL
+} from '../bimsync-project/bimsync-project.models';
 import { AppService } from 'app/app.service';
 
 import { Observable } from 'rxjs/Observable';
+import { concatAll } from 'rxjs/operators';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import { importExpr } from '@angular/compiler/src/output/output_ast';
 import { Body } from '@angular/http/src/body';
+import { forkJoin } from 'rxjs';
 
 @Injectable()
 export class TakeoffService {
@@ -74,17 +78,23 @@ export class TakeoffService {
             .catch(this.handleError);
     }
 
-    getProducts(projectId: string, revisionId: string, ifcClass: string): Observable<IProduct[]> {
-        return this._http.get<IProduct[]>(
-            this._bimsyncUrlV2 + 'projects/' + projectId + '/ifc/products?pageSize=1000&revision=' + revisionId + '&ifcType=' + ifcClass,
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+    getProducts(projectId: string, revisionId: string, ifcClass: string, productsNumber: number): Observable<IProduct[]> {
+        let requestsNumber = Math.ceil(productsNumber / 1000);
+        let requestsPages = Array.from(new Array(requestsNumber), (val, index) => index + 1);
+
+        return <Observable<IProduct[]>>forkJoin(
+            requestsPages.map(pageNumber => <Observable<IProduct[]>>this._http.get<IProduct[]>(
+                this._bimsyncUrlV2 + 'projects/' + projectId + '/ifc/products?pageSize=1000&page=' + pageNumber + '&revision=' + revisionId + '&ifcType=' + ifcClass,
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                }))
+        ).pipe(concatAll())
+        .do(data => console.log('All: ' + JSON.stringify(data)))
+        .catch(this.handleError);
     }
+
 
     getAllRevisions(projectId: string): Observable<IRevision[]> {
         return this._http.get<IRevision[]>(
