@@ -25,20 +25,25 @@
     </div>
 </div>
 
-<div *ngIf='typesSummary && typesSummary.length'>
+<div *ngIf='ifcClasses && ifcClasses.length'>
     <label for="selects_4">Categories</label>
     <div class="select">
         <select id="selects_4" (change)="GetProducts()" [(ngModel)]="selectedIfcClass">
-            <option *ngFor='let typeSummary of typesSummary; let i = index; trackBy: trackByFn' [ngValue]="typeSummary">{{typeSummary.typeName}}</option>
+            <option *ngFor='let ifcClass of ifcClasses; let i = index; trackBy: trackByFn' [ngValue]="ifcClass">{{ifcClass.typeName}}</option>
         </select>
     </div>
 </div>
 <p *ngIf='selectedModel'>{{selectedModel.name}}</p>
 <p *ngIf='selectedRevision'>Revision N°{{selectedRevision.version}}</p>
 <p *ngIf='selectedIfcClass'>Category : {{selectedIfcClass.typeName}}</p>
-<p *ngIf='selectedIfcClass'>Number of elements : {{selectedElements.length}}</p>
+<p *ngIf='selectedIfcClass'>Number of elements : 
+    <span *ngIf='selectedElementsLoading' class="spinner spinner-inline">
+        Loading...
+    </span>
+    <span *ngIf='!selectedElementsLoading'>{{selectedElements.length}}</span>
+</p>
 
-<table class="table" *ngIf='typesSummary && typesSummary.length'>
+<table class="table" *ngIf='ifcClasses && ifcClasses.length'>
     <thead>
         <tr>
             <th>Product</th>
@@ -46,9 +51,9 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor='let typeSummary of typesSummary'>
-            <td>{{typeSummary.typeName}}</td>
-            <td>{{typeSummary.typeQuantity}}</td>
+        <tr *ngFor='let ifcClass of ifcClasses'>
+            <td>{{ifcClass.typeName}}</td>
+            <td>{{ifcClass.typeQuantity}}</td>
         </tr>
     </tbody>
 </table>
