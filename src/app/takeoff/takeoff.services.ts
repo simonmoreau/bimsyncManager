@@ -84,14 +84,15 @@ export class TakeoffService {
 
         return <Observable<IProduct[]>>forkJoin(
             requestsPages.map(pageNumber => <Observable<IProduct[]>>this._http.get<IProduct[]>(
-                this._bimsyncUrlV2 + 'projects/' + projectId + '/ifc/products?pageSize=1000&page=' + pageNumber + '&revision=' + revisionId + '&ifcType=' + ifcClass,
+                this._bimsyncUrlV2 + 'projects/'
+                + projectId + '/ifc/products?pageSize=1000&page='
+                + pageNumber + '&revision=' + revisionId + '&ifcType=' + ifcClass,
                 {
                     headers: new HttpHeaders()
                         .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
                         .set('Content-Type', 'application/json')
                 }))
         ).pipe(concatAll())
-        .do(data => console.log('All: ' + JSON.stringify(data)))
         .catch(this.handleError);
     }
 

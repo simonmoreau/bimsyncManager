@@ -3,10 +3,9 @@ import { TakeoffService } from "./takeoff.services";
 import {
     IProject,
     IModel,
-    IRevision,
-    IProduct
+    IRevision
 } from "../bimsync-project/bimsync-project.models";
-import { ITypeSummary } from "./takeoff.model";
+import { ITypeSummary, IProduct, IPropertySet, IQuantitySet, IProperty, IQuantity } from "./takeoff.model";
 
 @Component({
     selector: "app-takeoff",
@@ -122,10 +121,31 @@ export class TakeoffComponent implements OnInit {
                         products
                     );
                     this.selectedElementsLoading = false;
+                    this.GetParameters(this.selectedElements[0]);
                 },
                 error => (this.errorMessage = <any>error)
             );
         return false;
+    }
+
+    GetParameters(product: IProduct) {
+      let parameters: any[] = [];
+
+      Object.keys(product.propertySets).forEach(propertySetKey => {
+        let propertySet = product.propertySets[propertySetKey] as IPropertySet;
+        Object.keys(propertySet.properties).forEach(propertyKey => {
+          parameters.push(propertySet.properties[propertyKey] as IProperty);
+        });
+      });
+
+      Object.keys(product.quantitySets).forEach(key => {
+        let quantitySet = product.quantitySets[key] as IQuantitySet;
+        Object.keys(quantitySet.quantities).forEach(quantityKey => {
+          parameters.push(quantitySet.quantities[quantityKey] as IQuantity);
+        });
+      });
+
+      console.log(parameters);
     }
 
     trackByFn(index, model) {
