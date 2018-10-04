@@ -95,3 +95,14 @@ export interface ISharedModel {
     id: string;
     name: string;
 }
+
+export interface IProduct {
+    revisionId: string;
+    objectId: number;
+    ifcType: string;
+    attributes: any;
+    type?: IProduct;
+    propertySets: any;
+    quantitySets: any;
+    materials: any[];
+}

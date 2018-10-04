@@ -1,7 +1,7 @@
 // Imports
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IProject, IModel, IRevision, IRevisionId,
+import { IProject, IModel, IRevision, IRevisionId, IProduct,
     ISharedRevisions, ISharingCode, IViewerToken,
     IViewer2DToken, IViewerRequestBody, IViewerURL } from '../bimsync-project/bimsync-project.models';
 import { AppService } from 'app/app.service';
@@ -65,6 +65,18 @@ export class TakeoffService {
     getProductsTypeSummary(projectId: string, revisionId: string): Observable<object> {
         return this._http.get<object>(
             this._bimsyncUrlV2 + 'projects/' + projectId + '/ifc/products/ifctypes?revision=' + revisionId,
+            {
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    getProducts(projectId: string, revisionId: string, ifcClass: string): Observable<IProduct[]> {
+        return this._http.get<IProduct[]>(
+            this._bimsyncUrlV2 + 'projects/' + projectId + '/ifc/products?pageSize=1000&revision=' + revisionId + '&ifcType=' + ifcClass,
             {
                 headers: new HttpHeaders()
                     .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)

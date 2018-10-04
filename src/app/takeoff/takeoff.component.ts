@@ -19,6 +19,8 @@ export class TakeoffComponent implements OnInit {
   selectedRevision: IRevision;
   errorMessage: string;
   typesSummary: ITypeSummary[] = [];
+  selectedIfcClass: ITypeSummary;
+  productCount: number;
 
   constructor(private _takeoffService: TakeoffService) { }
 
@@ -80,6 +82,17 @@ export class TakeoffComponent implements OnInit {
             this.typesSummary.push(summary);
           }
         );
+        this.GetProducts();
+      },
+        error => this.errorMessage = <any>error);
+    return false;
+  }
+
+  GetProducts() {
+    this._takeoffService.getProducts(this.selectedProject.id, this.selectedRevision.id, this.selectedIfcClass.typeName)
+      .subscribe(products => {
+
+        this.productCount = products.length
       },
         error => this.errorMessage = <any>error);
     return false;

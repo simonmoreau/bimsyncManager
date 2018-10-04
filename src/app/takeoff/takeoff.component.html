@@ -24,8 +24,19 @@
         </select>
     </div>
 </div>
+
+<div *ngIf='typesSummary && typesSummary.length'>
+    <label for="selects_4">Categories</label>
+    <div class="select">
+        <select id="selects_4" (change)="GetProducts()" [(ngModel)]="selectedIfcClass">
+            <option *ngFor='let typeSummary of typesSummary; let i = index; trackBy: trackByFn' [ngValue]="typeSummary">{{typeSummary.typeName}}</option>
+        </select>
+    </div>
+</div>
 <p *ngIf='selectedModel'>{{selectedModel.name}}</p>
 <p *ngIf='selectedRevision'>Revision N°{{selectedRevision.version}}</p>
+<p *ngIf='selectedIfcClass'>Category : {{selectedIfcClass.typeName}}</p>
+<p *ngIf='selectedIfcClass'>Number of elements : {{productCount}}</p>
 
 <table class="table" *ngIf='typesSummary && typesSummary.length'>
     <thead>
