@@ -120,10 +120,12 @@ export class TakeoffComponent implements OnInit {
                     this.selectedElements = this.selectedElements.concat(
                         products
                     );
-                    this.selectedElementsLoading = false;
-                    this.GetParameters(this.selectedElements[0]);
                 },
-                error => (this.errorMessage = <any>error)
+                error => (this.errorMessage = <any>error),
+                () => {
+                  this.selectedElementsLoading = false;
+                  this.GetParameters(this.selectedElements[0]);
+                }
             );
         return false;
     }
