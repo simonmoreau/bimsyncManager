@@ -5,7 +5,7 @@ import {
     IModel,
     IRevision
 } from "../bimsync-project/bimsync-project.models";
-import { ITypeSummary, IProduct, IPropertySet, IQuantitySet, IProperty, IQuantity } from "./takeoff.model";
+import { ITypeSummary, IProduct, IPropertySet, IQuantitySet, IDisplayProperty, IDisplayPropertySet } from "./takeoff.model";
 
 @Component({
     selector: "app-takeoff",
@@ -23,8 +23,10 @@ export class TakeoffComponent implements OnInit {
     errorMessage: string;
     ifcClasses: ITypeSummary[] = [];
     selectedIfcClass: ITypeSummary;
-    selectedElements: IProduct[] = [];
-    selectedElementsLoading: boolean = false;
+    selectedProducts: IProduct[] = [];
+    selectedProductsLoading: boolean = false;
+    displayedPropertySets: IDisplayPropertySet[] = [];
+    selectedProperties: IDisplayProperty[] = [];
 
     constructor(private _takeoffService: TakeoffService) {}
 
@@ -105,8 +107,8 @@ export class TakeoffComponent implements OnInit {
     }
 
     GetProducts() {
-        this.selectedElements.length = 0;
-        this.selectedElementsLoading = true;
+        this.selectedProducts.length = 0;
+        this.selectedProductsLoading = true;
         // It will loop on all requests
         this._takeoffService
             .getProducts(
@@ -117,37 +119,59 @@ export class TakeoffComponent implements OnInit {
             )
             .subscribe(
                 products => {
-                    this.selectedElements = this.selectedElements.concat(
+                    this.selectedProducts = this.selectedProducts.concat(
                         products
                     );
                 },
                 error => (this.errorMessage = <any>error),
                 () => {
-                  this.selectedElementsLoading = false;
-                  this.GetParameters(this.selectedElements[0]);
+                  this.selectedProductsLoading = false;
+                  this.GetProductProperties(this.selectedProducts[0]);
                 }
             );
         return false;
     }
 
-    GetParameters(product: IProduct) {
-      let parameters: any[] = [];
+    GetProductProperties(product: IProduct) {
+
+      this.displayedPropertySets.length = 0;
 
       Object.keys(product.propertySets).forEach(propertySetKey => {
         let propertySet = product.propertySets[propertySetKey] as IPropertySet;
+        let displayedPropertySet: IDisplayPropertySet = {name: propertySet.attributes.Name.value, properties: [] }
         Object.keys(propertySet.properties).forEach(propertyKey => {
-          parameters.push(propertySet.properties[propertyKey] as IProperty);
+          // let property: IProperty = propertySet.properties[propertyKey] as IProperty;
+          let displayProperty: IDisplayProperty = { name: propertyKey, enable: false};
+          displayedPropertySet.properties.push(displayProperty);
         });
+        this.displayedPropertySets.push(displayedPropertySet);
       });
 
-      Object.keys(product.quantitySets).forEach(key => {
-        let quantitySet = product.quantitySets[key] as IQuantitySet;
+
+      Object.keys(product.quantitySets).forEach(quantitySetKey => {
+        let quantitySet = product.quantitySets[quantitySetKey] as IQuantitySet;
+        let displayedQunatitySet: IDisplayPropertySet = {name: quantitySet.attributes.Name.value, properties: [] }
         Object.keys(quantitySet.quantities).forEach(quantityKey => {
-          parameters.push(quantitySet.quantities[quantityKey] as IQuantity);
+          // let property: IProperty = propertySet.properties[propertyKey] as IProperty;
+          let displayProperty: IDisplayProperty = { name: quantityKey, enable: false};
+          displayedQunatitySet.properties.push(displayProperty);
         });
+        this.displayedPropertySets.push(displayedQunatitySet);
       });
 
-      console.log(parameters);
+      console.log(this.displayedPropertySets);
+    }
+
+    UpdateColumns() {
+      this.selectedProperties.length = 0;
+
+      this.displayedPropertySets.forEach(displayedPropertySet => {
+        displayedPropertySet.properties.forEach(displayedProperty => {
+          if (displayedProperty.enable) {
+            this.selectedProperties.push(displayedProperty);
+          }
+        });
+      });
     }
 
     trackByFn(index, model) {

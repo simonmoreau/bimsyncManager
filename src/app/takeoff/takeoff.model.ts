@@ -61,3 +61,14 @@ export interface IQuantity {
 }
 
 
+export interface IDisplayProperty {
+    name: string;
+    enable: boolean;
+}
+
+export interface IDisplayPropertySet {
+    name: string;
+    properties: IDisplayProperty[];
+}
+
+
