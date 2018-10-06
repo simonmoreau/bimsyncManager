@@ -27,8 +27,10 @@ export class TakeoffComponent implements OnInit {
     selectedProductsLoading: boolean = false;
     displayedPropertySets: IDisplayPropertySet[] = [];
     selectedProperties: IDisplayProperty[] = [];
+    groupedProperties: any;
+    objectKeys = Object.keys;
 
-    constructor(private _takeoffService: TakeoffService) {}
+    constructor(private _takeoffService: TakeoffService) { }
 
     ngOnInit() {
         this.GetProjects();
@@ -95,7 +97,7 @@ export class TakeoffComponent implements OnInit {
 
                         this.ifcClasses.push(summary);
                     });
-                    this.selectedIfcClass = this.ifcClasses.filter(function(x) {
+                    this.selectedIfcClass = this.ifcClasses.filter(function (x) {
                         return x.typeName === "IfcProject";
                     })[0];
 
@@ -125,8 +127,8 @@ export class TakeoffComponent implements OnInit {
                 },
                 error => (this.errorMessage = <any>error),
                 () => {
-                  this.selectedProductsLoading = false;
-                  this.GetProductProperties(this.selectedProducts[0]);
+                    this.selectedProductsLoading = false;
+                    this.GetProductProperties(this.selectedProducts[0]);
                 }
             );
         return false;
@@ -134,44 +136,79 @@ export class TakeoffComponent implements OnInit {
 
     GetProductProperties(product: IProduct) {
 
-      this.displayedPropertySets.length = 0;
+        this.displayedPropertySets.length = 0;
 
-      Object.keys(product.propertySets).forEach(propertySetKey => {
-        let propertySet = product.propertySets[propertySetKey] as IPropertySet;
-        let displayedPropertySet: IDisplayPropertySet = {name: propertySet.attributes.Name.value, properties: [] }
-        Object.keys(propertySet.properties).forEach(propertyKey => {
-          // let property: IProperty = propertySet.properties[propertyKey] as IProperty;
-          let displayProperty: IDisplayProperty = { name: propertyKey, enable: false};
-          displayedPropertySet.properties.push(displayProperty);
+        Object.keys(product.propertySets).forEach(propertySetKey => {
+            let propertySet = product.propertySets[propertySetKey] as IPropertySet;
+            let displayedPropertySet: IDisplayPropertySet = { name: propertySet.attributes.Name.value, properties: [] }
+            Object.keys(propertySet.properties).forEach(propertyKey => {
+                // let property: IProperty = propertySet.properties[propertyKey] as IProperty;
+                let displayProperty: IDisplayProperty = { name: propertyKey, enable: false };
+                displayedPropertySet.properties.push(displayProperty);
+            });
+            this.displayedPropertySets.push(displayedPropertySet);
         });
-        this.displayedPropertySets.push(displayedPropertySet);
-      });
 
 
-      Object.keys(product.quantitySets).forEach(quantitySetKey => {
-        let quantitySet = product.quantitySets[quantitySetKey] as IQuantitySet;
-        let displayedQunatitySet: IDisplayPropertySet = {name: quantitySet.attributes.Name.value, properties: [] }
-        Object.keys(quantitySet.quantities).forEach(quantityKey => {
-          // let property: IProperty = propertySet.properties[propertyKey] as IProperty;
-          let displayProperty: IDisplayProperty = { name: quantityKey, enable: false};
-          displayedQunatitySet.properties.push(displayProperty);
+        Object.keys(product.quantitySets).forEach(quantitySetKey => {
+            let quantitySet = product.quantitySets[quantitySetKey] as IQuantitySet;
+            let displayedQunatitySet: IDisplayPropertySet = { name: quantitySet.attributes.Name.value, properties: [] }
+            Object.keys(quantitySet.quantities).forEach(quantityKey => {
+                // let property: IProperty = propertySet.properties[propertyKey] as IProperty;
+                let displayProperty: IDisplayProperty = { name: quantityKey, enable: false };
+                displayedQunatitySet.properties.push(displayProperty);
+            });
+            this.displayedPropertySets.push(displayedQunatitySet);
         });
-        this.displayedPropertySets.push(displayedQunatitySet);
-      });
 
-      console.log(this.displayedPropertySets);
+        console.log(this.displayedPropertySets);
     }
 
     UpdateColumns() {
-      this.selectedProperties.length = 0;
+        this.selectedProperties.length = 0;
 
-      this.displayedPropertySets.forEach(displayedPropertySet => {
-        displayedPropertySet.properties.forEach(displayedProperty => {
-          if (displayedProperty.enable) {
-            this.selectedProperties.push(displayedProperty);
-          }
+        this.displayedPropertySets.forEach(displayedPropertySet => {
+            displayedPropertySet.properties.forEach(displayedProperty => {
+                if (displayedProperty.enable) {
+                    this.selectedProperties.push(displayedProperty);
+
+                    this.GetGroupedPropertyCount(
+                        this.selectedProducts,
+                        displayedPropertySet.name,
+                        displayedProperty.name,
+                        displayedPropertySet.name,
+                        displayedProperty.name,
+                        )
+                }
+            });
         });
-      });
+    }
+
+
+    GetGroupedPropertyCount(
+        value: IProduct[],
+        groupingSetName: string,
+        groupingPropertyName: string,
+        setName: string,
+        propertyName: string): any {
+
+        // let groupedProperties: IGroupedProperty[] = [];
+        this.groupedProperties = {};
+
+        for (let i = 0; i < value.length; i++) {
+
+            // TO DO Check everytime if the property actually exist and push the product to an "undified" property if not
+            // TO DO Be able to find the proprety with any arbitrary path
+            // cf https://medium.com/javascript-inside/safely-accessing-deeply-nested-values-in-javascript-99bf72a0855a
+            let groupingPropertyValue =
+                value[i]['propertySets'][groupingSetName]['properties'][groupingPropertyName]['nominalValue']['value'];
+            let groupedPropertyValue =
+                value[i]['propertySets'][setName]['properties'][propertyName]['nominalValue']['value'];
+
+            this.groupedProperties[groupingPropertyValue] = this.groupedProperties[groupingPropertyValue] ?
+                this.groupedProperties[groupingPropertyValue] + 1 : 1;
+
+        }
     }
 
     trackByFn(index, model) {

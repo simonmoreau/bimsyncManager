@@ -33,9 +33,6 @@
         </select>
     </div>
 </div>
-<p *ngIf='selectedModel'>{{selectedModel.name}}</p>
-<p *ngIf='selectedRevision'>Revision N°{{selectedRevision.version}}</p>
-<p *ngIf='selectedIfcClass'>Category : {{selectedIfcClass.typeName}}</p>
 <p *ngIf='selectedIfcClass'>Number of elements :
     <span *ngIf='selectedProductsLoading' class="spinner spinner-inline">
         Loading...
@@ -44,7 +41,7 @@
 </p>
 
 <div class="clr-row">
-    <div class="clr-col-4">
+    <div class="clr-col-4" style="height: 30rem; overflow: auto">
         <clr-tree-node *ngFor="let displayedPropertySet of displayedPropertySets">
             {{displayedPropertySet.name}}
             <ng-template [clrIfExpanded]="true">
@@ -56,16 +53,20 @@
             </ng-template>
         </clr-tree-node>
     </div>
-    <div class="clr-col-8">
+    <div class="clr-col-8" style="height: 30rem; overflow: auto">
         <table class="table" *ngIf='selectedProperties && selectedProperties.length'>
             <thead>
                 <tr>
+                    <th>Grouping Prop</th>
+                    <th>Count</th>
                     <th *ngFor="let selectedProperty of selectedProperties">{{selectedProperty.name}}</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor='let ifcClass of ifcClasses'>
-                    <td *ngFor="let selectedProperty of selectedProperties">{{selectedProperty.name}}{{ifcClass.typeQuantity}}</td>
+                <tr *ngFor='let key of objectKeys(groupedProperties)'>
+                    <td>{{key}}</td>
+                    <td>{{groupedProperties[key]}}</td>
+                    <td *ngFor="let selectedProperty of selectedProperties">{{selectedProperty.name}}</td>
                 </tr>
             </tbody>
         </table>

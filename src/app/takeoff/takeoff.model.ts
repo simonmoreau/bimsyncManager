@@ -71,4 +71,15 @@ export interface IDisplayPropertySet {
     properties: IDisplayProperty[];
 }
 
+export interface IGroupedProperty {
+    name: string;
+    count: number;
+    groupedValue: any;
+}
+
+export enum PropertyType {
+    PropertySet,
+    QuantitySet,
+}
+
 
