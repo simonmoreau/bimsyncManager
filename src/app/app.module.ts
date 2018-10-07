@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 
 import { ClarityModule } from '@clr/angular';
+import { NgDragDropModule } from 'ng-drag-drop';
 
 import { AppComponent } from './app.component';
 import { ROUTING } from "./app.routing";
@@ -38,7 +39,8 @@ window["jQuery"] = $;
         FormsModule,
         HttpClientModule,
         ClarityModule,
-        ROUTING
+        ROUTING,
+        NgDragDropModule.forRoot()
     ],
     providers: [],
     bootstrap: [AppComponent]

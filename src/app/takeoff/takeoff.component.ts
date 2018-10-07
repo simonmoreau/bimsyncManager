@@ -27,8 +27,8 @@ export class TakeoffComponent implements OnInit {
     selectedProducts: IProduct[] = [];
     selectedProductsLoading: boolean = false;
     displayedPropertySets: IDisplayPropertySet[] = [];
-    selectedProperties: IDisplayProperty[] = [];
-    groupedProperties: any;
+    selectedValueProperties: IDisplayProperty[] = [];
+    groupedProperties: any = {};
     objectKeys = Object.keys;
 
     constructor(private _takeoffService: TakeoffService) { }
@@ -130,6 +130,7 @@ export class TakeoffComponent implements OnInit {
                 () => {
                     this.selectedProductsLoading = false;
                     this.GetProductProperties(this.selectedProducts[0]);
+                    this.selectedValueProperties.length = 0;
                 }
             );
         return false;
@@ -146,21 +147,21 @@ export class TakeoffComponent implements OnInit {
             enable: false,
             path: ['attributes', 'Name', 'value']
         };
-        if (product.attributes['Name']['value']) {displayedPropertyMainSet.properties.push(objectNameProperty); }
+        if (product.attributes['Name']['value']) { displayedPropertyMainSet.properties.push(objectNameProperty); }
 
         let objectTypeProperty: IDisplayProperty = {
             name: 'Type',
             enable: false,
             path: ['attributes', 'ObjectType', 'value']
         };
-        if (product.attributes['ObjectType']['value']) {displayedPropertyMainSet.properties.push(objectTypeProperty); }
+        if (product.attributes['ObjectType']['value']) { displayedPropertyMainSet.properties.push(objectTypeProperty); }
 
         let objectClassProperty: IDisplayProperty = {
             name: 'Entity',
             enable: false,
             path: ['ifcType']
         };
-        if (product.ifcType ) { displayedPropertyMainSet.properties.push(objectClassProperty); }
+        if (product.ifcType) { displayedPropertyMainSet.properties.push(objectClassProperty); }
 
         this.displayedPropertySets.push(displayedPropertyMainSet);
 
@@ -198,22 +199,34 @@ export class TakeoffComponent implements OnInit {
         console.log(this.displayedPropertySets);
     }
 
-    UpdateColumns() {
-        this.selectedProperties.length = 0;
+    onTreeSelectionChange(e: IDisplayProperty) {
+        this.UpdateSelectedValueProperties(e);
+    }
 
-        this.displayedPropertySets.forEach(displayedPropertySet => {
-            displayedPropertySet.properties.forEach(displayedProperty => {
-                if (displayedProperty.enable) {
-                    this.selectedProperties.push(displayedProperty);
+    onValuePropertyDrop(e: DropEvent) {
+        e.dragData.enable = true;
+    }
 
-                    this.GetGroupedPropertyCount(
-                        this.selectedProducts,
-                        displayedProperty.path,
-                        displayedProperty.path,
-                    )
-                }
-            });
-        });
+    onValueLabelClick(e: IDisplayProperty) {
+        e.enable = false;
+    }
+
+    UpdateSelectedValueProperties(selectedDisplayedProperty: IDisplayProperty) {
+        if (selectedDisplayedProperty.enable) {
+            this.selectedValueProperties.push(selectedDisplayedProperty);
+        } else {
+            let index = this.selectedValueProperties.indexOf(selectedDisplayedProperty, 0);
+            if (index > -1) {
+                this.selectedValueProperties.splice(index, 1);
+            }
+        }
+
+        this.GetGroupedPropertyCount(
+            this.selectedProducts,
+            selectedDisplayedProperty.path,
+            selectedDisplayedProperty.path,
+        )
+
     }
 
 
@@ -239,6 +252,8 @@ export class TakeoffComponent implements OnInit {
         return path.reduce((acc, currValue) => (acc && acc[currValue]) ? acc[currValue] : null
             , object)
     }
+
+
 
     trackByFn(index, model) {
         return model.id;

@@ -51,14 +51,17 @@
                 </div>
             </div>
         </div>
-        <div *ngIf='selectedIfcClass' class="card" droppable>
+        <div *ngIf='selectedIfcClass' class="card" droppable (onDrop)="onValuePropertyDrop($event)">
             <div class="card-block">
                 <div class="card-title">
                     Values
                 </div>
                 <div class="card-text">
-                    <span *ngIf='!selectedProperties.length'>Drop here</span>
-                    <span class="label" *ngFor="let selectedProperty of selectedProperties">{{selectedProperty.name}}</span>
+                    <span *ngIf='!selectedValueProperties.length'>Drop here</span>
+                    <span class="label clickable" (click)=onValueLabelClick(selectedProperty) *ngFor="let selectedProperty of selectedValueProperties">
+                        {{selectedProperty.name}}
+                        <clr-icon shape="window-close"></clr-icon>
+                    </span>
                 </div>
             </div>
         </div>
@@ -67,26 +70,27 @@
             {{displayedPropertySet.name}}
             <ng-template [clrIfExpanded]="true">
                 <clr-tree-node draggable *ngFor="let displayedProperty of displayedPropertySet.properties"
-                    [(clrSelected)]="displayedProperty.enable" (clrSelectedChange)="UpdateColumns()">
+                    [(clrSelected)]="displayedProperty.enable" (clrSelectedChange)="onTreeSelectionChange(displayedProperty)"
+                    [dragData]="displayedProperty">
                     {{displayedProperty.name}}
                 </clr-tree-node>
             </ng-template>
         </clr-tree-node>
     </div>
     <div class="clr-col-8" style="height: 30rem; overflow: auto">
-        <table class="table" *ngIf='selectedProperties && selectedProperties.length'>
+        <table class="table" *ngIf='selectedValueProperties && selectedValueProperties.length'>
             <thead>
                 <tr>
                     <th>Grouping Prop</th>
                     <th>Count</th>
-                    <th *ngFor="let selectedProperty of selectedProperties">{{selectedProperty.name}}</th>
+                    <th *ngFor="let selectedProperty of selectedValueProperties">{{selectedProperty.name}}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor='let key of objectKeys(groupedProperties)'>
                     <td>{{key}}</td>
                     <td>{{groupedProperties[key]}}</td>
-                    <td *ngFor="let selectedProperty of selectedProperties">{{selectedProperty.name}}</td>
+                    <td *ngFor="let selectedProperty of selectedValueProperties">{{selectedProperty.name}}</td>
                 </tr>
             </tbody>
         </table>
