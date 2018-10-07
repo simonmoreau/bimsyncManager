@@ -41,12 +41,33 @@
             </span>
             <span *ngIf='!selectedProductsLoading'>{{selectedProducts.length}}</span>
         </p>
+        <div *ngIf='selectedIfcClass' class="card" droppable>
+            <div class="card-block">
+                <div class="card-title">
+                    Row
+                </div>
+                <div class="card-text">
+                    Drop here
+                </div>
+            </div>
+        </div>
+        <div *ngIf='selectedIfcClass' class="card" droppable>
+            <div class="card-block">
+                <div class="card-title">
+                    Values
+                </div>
+                <div class="card-text">
+                    <span *ngIf='!selectedProperties.length'>Drop here</span>
+                    <span class="label" *ngFor="let selectedProperty of selectedProperties">{{selectedProperty.name}}</span>
+                </div>
+            </div>
+        </div>
 
         <clr-tree-node *ngFor="let displayedPropertySet of displayedPropertySets">
             {{displayedPropertySet.name}}
             <ng-template [clrIfExpanded]="true">
-                <clr-tree-node *ngFor="let displayedProperty of displayedPropertySet.properties" [(clrSelected)]="displayedProperty.enable"
-                    (clrSelectedChange)="UpdateColumns()">
+                <clr-tree-node draggable *ngFor="let displayedProperty of displayedPropertySet.properties"
+                    [(clrSelected)]="displayedProperty.enable" (clrSelectedChange)="UpdateColumns()">
                     {{displayedProperty.name}}
                 </clr-tree-node>
             </ng-template>

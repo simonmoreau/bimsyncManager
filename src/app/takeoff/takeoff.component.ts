@@ -6,6 +6,7 @@ import {
     IRevision
 } from "../bimsync-project/bimsync-project.models";
 import { ITypeSummary, IProduct, IPropertySet, IQuantitySet, IDisplayProperty, IDisplayPropertySet } from "./takeoff.model";
+import { DropEvent } from 'ng-drag-drop';
 
 @Component({
     selector: "app-takeoff",
