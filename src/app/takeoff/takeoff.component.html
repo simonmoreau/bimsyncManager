@@ -31,51 +31,64 @@
             <label for="selects_4">Categories</label>
             <div class="select">
                 <select id="selects_4" (change)="GetProducts()" [(ngModel)]="selectedIfcClass">
-                    <option *ngFor='let ifcClass of ifcClasses; let i = index; trackBy: trackByFn' [ngValue]="ifcClass">{{ifcClass.typeName}}</option>
+                    <option *ngFor='let ifcClass of ifcClasses; let i = index; trackBy: trackByFn' [ngValue]="ifcClass">{{ifcClass.typeName}} ({{ifcClass.typeQuantity}})</option>
                 </select>
             </div>
         </div>
-        <p *ngIf='selectedIfcClass'>Number of elements :
-            <span *ngIf='selectedProductsLoading' class="spinner spinner-inline">
-                Loading...
-            </span>
-            <span *ngIf='!selectedProductsLoading'>{{selectedProducts.length}}</span>
-        </p>
-        <div *ngIf='selectedIfcClass' class="card" droppable>
-            <div class="card-block">
-                <div class="card-title">
-                    Row
-                </div>
-                <div class="card-text">
-                    Drop here
-                </div>
-            </div>
-        </div>
-        <div *ngIf='selectedIfcClass' class="card" droppable (onDrop)="onValuePropertyDrop($event)">
-            <div class="card-block">
-                <div class="card-title">
-                    Values
-                </div>
-                <div class="card-text">
-                    <span *ngIf='!selectedValueProperties.length'>Drop here</span>
-                    <span class="label clickable" (click)=onValueLabelClick(selectedProperty) *ngFor="let selectedProperty of selectedValueProperties">
-                        {{selectedProperty.name}}
-                        <clr-icon shape="window-close"></clr-icon>
-                    </span>
-                </div>
-            </div>
-        </div>
+        <table class="table" *ngIf='selectedIfcClass' droppable>
+            <thead>
+                <tr>
+                    <th class="left">Row</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="left">Drop properties here ...</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <clr-tree-node *ngFor="let displayedPropertySet of displayedPropertySets">
-            {{displayedPropertySet.name}}
-            <ng-template [clrIfExpanded]="true">
-                <clr-tree-node draggable *ngFor="let displayedProperty of displayedPropertySet.properties"
-                    [(clrSelected)]="displayedProperty.enable" (clrSelectedChange)="onTreeSelectionChange(displayedProperty)"
-                    [dragData]="displayedProperty">
-                    {{displayedProperty.name}}
-                </clr-tree-node>
-            </ng-template>
-        </clr-tree-node>
+        <table class="table" *ngIf='selectedIfcClass' droppable (onDrop)="onValuePropertyDrop($event)">
+            <thead>
+                <tr>
+                    <th class="left">Values</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="left">
+                        <span *ngIf='!selectedValueProperties.length'>Drop properties here ...</span>
+                        <span class="label clickable" (click)=onValueLabelClick(selectedProperty) *ngFor="let selectedProperty of selectedValueProperties">
+                            {{selectedProperty.name}}
+                            <clr-icon shape="window-close"></clr-icon>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table" *ngIf='selectedIfcClass'>
+            <thead>
+                <tr>
+                    <th class="left">Properties</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="left">
+                        <clr-tree-node *ngFor="let displayedPropertySet of displayedPropertySets">
+                            {{displayedPropertySet.name}}
+                            <ng-template [clrIfExpanded]="true">
+                                <clr-tree-node draggable *ngFor="let displayedProperty of displayedPropertySet.properties"
+                                    [(clrSelected)]="displayedProperty.enable" (clrSelectedChange)="onTreeSelectionChange(displayedProperty)"
+                                    [dragData]="displayedProperty">
+                                    {{displayedProperty.name}}
+                                </clr-tree-node>
+                            </ng-template>
+                        </clr-tree-node>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <div class="clr-col-8" style="height: 30rem; overflow: auto">
         <table class="table" *ngIf='selectedValueProperties && selectedValueProperties.length'>
@@ -96,18 +109,3 @@
         </table>
     </div>
 </div>
-
-<table class="table" *ngIf='ifcClasses && ifcClasses.length'>
-    <thead>
-        <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor='let ifcClass of ifcClasses'>
-            <td>{{ifcClass.typeName}}</td>
-            <td>{{ifcClass.typeQuantity}}</td>
-        </tr>
-    </tbody>
-</table>
