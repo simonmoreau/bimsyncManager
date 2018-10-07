@@ -64,6 +64,7 @@ export interface IQuantity {
 export interface IDisplayProperty {
     name: string;
     enable: boolean;
+    path: string[];
 }
 
 export interface IDisplayPropertySet {

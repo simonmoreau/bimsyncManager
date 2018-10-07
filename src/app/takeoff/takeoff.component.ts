@@ -138,12 +138,41 @@ export class TakeoffComponent implements OnInit {
 
         this.displayedPropertySets.length = 0;
 
+        let displayedPropertyMainSet: IDisplayPropertySet = { name: 'Identification', properties: [] }
+
+        let objectNameProperty: IDisplayProperty = {
+            name: 'Name',
+            enable: false,
+            path: ['attributes', 'Name', 'value']
+        };
+        if (product.attributes['Name']['value']) {displayedPropertyMainSet.properties.push(objectNameProperty); }
+
+        let objectTypeProperty: IDisplayProperty = {
+            name: 'Type',
+            enable: false,
+            path: ['attributes', 'ObjectType', 'value']
+        };
+        if (product.attributes['ObjectType']['value']) {displayedPropertyMainSet.properties.push(objectTypeProperty); }
+
+        let objectClassProperty: IDisplayProperty = {
+            name: 'Entity',
+            enable: false,
+            path: ['ifcType']
+        };
+        if (product.ifcType ) { displayedPropertyMainSet.properties.push(objectClassProperty); }
+
+        this.displayedPropertySets.push(displayedPropertyMainSet);
+
         Object.keys(product.propertySets).forEach(propertySetKey => {
             let propertySet = product.propertySets[propertySetKey] as IPropertySet;
             let displayedPropertySet: IDisplayPropertySet = { name: propertySet.attributes.Name.value, properties: [] }
             Object.keys(propertySet.properties).forEach(propertyKey => {
                 // let property: IProperty = propertySet.properties[propertyKey] as IProperty;
-                let displayProperty: IDisplayProperty = { name: propertyKey, enable: false };
+                let displayProperty: IDisplayProperty = {
+                    name: propertyKey,
+                    enable: false,
+                    path: ['propertySets', propertySetKey, 'properties', propertyKey, 'nominalValue', 'value']
+                };
                 displayedPropertySet.properties.push(displayProperty);
             });
             this.displayedPropertySets.push(displayedPropertySet);
@@ -155,7 +184,11 @@ export class TakeoffComponent implements OnInit {
             let displayedQunatitySet: IDisplayPropertySet = { name: quantitySet.attributes.Name.value, properties: [] }
             Object.keys(quantitySet.quantities).forEach(quantityKey => {
                 // let property: IProperty = propertySet.properties[propertyKey] as IProperty;
-                let displayProperty: IDisplayProperty = { name: quantityKey, enable: false };
+                let displayProperty: IDisplayProperty = {
+                    name: quantityKey,
+                    enable: false,
+                    path: ['quantitySets', quantitySetKey, 'quantities', quantityKey, 'value', 'value']
+                };
                 displayedQunatitySet.properties.push(displayProperty);
             });
             this.displayedPropertySets.push(displayedQunatitySet);
@@ -174,11 +207,9 @@ export class TakeoffComponent implements OnInit {
 
                     this.GetGroupedPropertyCount(
                         this.selectedProducts,
-                        displayedPropertySet.name,
-                        displayedProperty.name,
-                        displayedPropertySet.name,
-                        displayedProperty.name,
-                        )
+                        displayedProperty.path,
+                        displayedProperty.path,
+                    )
                 }
             });
         });
@@ -187,28 +218,25 @@ export class TakeoffComponent implements OnInit {
 
     GetGroupedPropertyCount(
         value: IProduct[],
-        groupingSetName: string,
-        groupingPropertyName: string,
-        setName: string,
-        propertyName: string): any {
+        groupingPropertyPath: string[],
+        groupedPropertyPath: string[]): any {
 
-        // let groupedProperties: IGroupedProperty[] = [];
         this.groupedProperties = {};
 
         for (let i = 0; i < value.length; i++) {
 
-            // TO DO Check everytime if the property actually exist and push the product to an "undified" property if not
-            // TO DO Be able to find the proprety with any arbitrary path
-            // cf https://medium.com/javascript-inside/safely-accessing-deeply-nested-values-in-javascript-99bf72a0855a
-            let groupingPropertyValue =
-                value[i]['propertySets'][groupingSetName]['properties'][groupingPropertyName]['nominalValue']['value'];
-            let groupedPropertyValue =
-                value[i]['propertySets'][setName]['properties'][propertyName]['nominalValue']['value'];
+            // How to properly round the value if it is a number ?
+            let groupingPropertyValue = this.GetPropertyFromPath(groupingPropertyPath, value[i]);
+            let groupedPropertyValue = this.GetPropertyFromPath(groupedPropertyPath, value[i]);
 
             this.groupedProperties[groupingPropertyValue] = this.groupedProperties[groupingPropertyValue] ?
                 this.groupedProperties[groupingPropertyValue] + 1 : 1;
-
         }
+    }
+
+    GetPropertyFromPath(path: string[], object: any): any {
+        return path.reduce((acc, currValue) => (acc && acc[currValue]) ? acc[currValue] : null
+            , object)
     }
 
     trackByFn(index, model) {
