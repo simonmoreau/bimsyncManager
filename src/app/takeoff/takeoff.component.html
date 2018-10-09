@@ -35,15 +35,21 @@
                 </select>
             </div>
         </div>
-        <table class="table" *ngIf='selectedIfcClass' droppable>
+        <table class="table" *ngIf='selectedIfcClass' droppable (onDrop)="onRowPropertyDrop($event)">
             <thead>
                 <tr>
-                    <th class="left">Row</th>
+                    <th class="left">Rows</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="left">Drop properties here ...</td>
+                    <td class="left">
+                        <span *ngIf='!selectedRowProperty'>Drop a property here ...</span>
+                        <span *ngIf='selectedRowProperty' class="label clickable" (click)=onRowLabelClick()>
+                            {{selectedRowProperty.name}}
+                            <clr-icon shape="window-close"></clr-icon>
+                        </span>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -91,10 +97,10 @@
         </table>
     </div>
     <div class="clr-col-8" style="height: 30rem; overflow: auto">
-        <table class="table" *ngIf='selectedValueProperties && selectedValueProperties.length'>
+        <table class="table" *ngIf='groupedProperties && objectKeys(groupedProperties).length'>
             <thead>
                 <tr>
-                    <th>Grouping Prop</th>
+                    <th>{{selectedRowProperty.name}}</th>
                     <th>Count</th>
                     <th *ngFor="let selectedProperty of selectedValueProperties">{{selectedProperty.name}}</th>
                 </tr>

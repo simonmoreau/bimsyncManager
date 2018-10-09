@@ -28,6 +28,7 @@ export class TakeoffComponent implements OnInit {
     selectedProductsLoading: boolean = false;
     displayedPropertySets: IDisplayPropertySet[] = [];
     selectedValueProperties: IDisplayProperty[] = [];
+    selectedRowProperty: IDisplayProperty;
     groupedProperties: any = {};
     objectKeys = Object.keys;
 
@@ -211,6 +212,16 @@ export class TakeoffComponent implements OnInit {
         e.enable = false;
     }
 
+    onRowPropertyDrop(e: DropEvent) {
+        this.selectedRowProperty = e.dragData;
+        this.GetGroupedPropertyCount();
+    }
+
+    onRowLabelClick() {
+        this.selectedRowProperty = null;
+        this.GetGroupedPropertyCount();
+    }
+
     UpdateSelectedValueProperties(selectedDisplayedProperty: IDisplayProperty) {
         if (selectedDisplayedProperty.enable) {
             this.selectedValueProperties.push(selectedDisplayedProperty);
@@ -221,27 +232,27 @@ export class TakeoffComponent implements OnInit {
             }
         }
 
-        this.GetGroupedPropertyCount(
-            this.selectedProducts,
-            selectedDisplayedProperty.path,
-            selectedDisplayedProperty.path,
-        )
+        this.GetGroupedPropertyCount();
 
     }
 
 
-    GetGroupedPropertyCount(
-        value: IProduct[],
-        groupingPropertyPath: string[],
-        groupedPropertyPath: string[]): any {
+    GetGroupedPropertyCount(): any {
 
+        let products = this.selectedProducts;
+        let groupingPropertyPath: string[];
+        if (this.selectedRowProperty) {groupingPropertyPath = this.selectedRowProperty.path;}
+        let groupedPropertiesPath: string[];
+        if (this.selectedValueProperties.length) { groupedPropertiesPath = this.selectedValueProperties[0].path;}
+        
         this.groupedProperties = {};
 
-        for (let i = 0; i < value.length; i++) {
+        for (let i = 0; i < products.length; i++) {
 
             // How to properly round the value if it is a number ?
-            let groupingPropertyValue = this.GetPropertyFromPath(groupingPropertyPath, value[i]);
-            let groupedPropertyValue = this.GetPropertyFromPath(groupedPropertyPath, value[i]);
+            let groupingPropertyValue = this.GetPropertyFromPath(groupingPropertyPath, products[i]);
+            let groupedPropertyValue = null;
+            if (groupedPropertiesPath)  { groupedPropertyValue = this.GetPropertyFromPath(groupedPropertiesPath, products[i]);}
 
             this.groupedProperties[groupingPropertyValue] = this.groupedProperties[groupingPropertyValue] ?
                 this.groupedProperties[groupingPropertyValue] + 1 : 1;
