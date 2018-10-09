@@ -80,7 +80,12 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="left">
+                    <td *ngIf="selectedProductsLoading">
+                        <span class="spinner">
+                            Loading
+                        </span>
+                    </td>
+                    <td *ngIf="!selectedProductsLoading" class="left">
                         <clr-tree-node *ngFor="let displayedPropertySet of displayedPropertySets">
                             {{displayedPropertySet.name}}
                             <ng-template [clrIfExpanded]="true">
