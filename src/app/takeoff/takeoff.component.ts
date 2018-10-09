@@ -7,6 +7,7 @@ import {
 } from "../bimsync-project/bimsync-project.models";
 import { ITypeSummary, IProduct, IPropertySet, IQuantitySet, IDisplayProperty, IDisplayPropertySet } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
+import { retry } from "rxjs/operators";
 
 @Component({
     selector: "app-takeoff",
@@ -140,6 +141,7 @@ export class TakeoffComponent implements OnInit {
     GetProductProperties(product: IProduct) {
 
         this.displayedPropertySets.length = 0;
+        this.groupedProperties = null;
 
         let displayedPropertyMainSet: IDisplayPropertySet = { name: 'Identification', properties: [] }
 
@@ -232,6 +234,14 @@ export class TakeoffComponent implements OnInit {
             }
         }
 
+        if (!this.selectedRowProperty) {
+            this.selectedRowProperty = {
+                name: 'Entity',
+                enable: false,
+                path: ['ifcType']
+            };
+        }
+
         this.GetGroupedPropertyCount();
 
     }
@@ -239,23 +249,37 @@ export class TakeoffComponent implements OnInit {
 
     GetGroupedPropertyCount(): any {
 
-        let products = this.selectedProducts;
-        let groupingPropertyPath: string[];
-        if (this.selectedRowProperty) {groupingPropertyPath = this.selectedRowProperty.path;}
-        let groupedPropertiesPath: string[];
-        if (this.selectedValueProperties.length) { groupedPropertiesPath = this.selectedValueProperties[0].path;}
-        
-        this.groupedProperties = {};
+        if (this.selectedRowProperty) {
+            let products = this.selectedProducts;
 
-        for (let i = 0; i < products.length; i++) {
+            this.groupedProperties = {};
 
-            // How to properly round the value if it is a number ?
-            let groupingPropertyValue = this.GetPropertyFromPath(groupingPropertyPath, products[i]);
-            let groupedPropertyValue = null;
-            if (groupedPropertiesPath)  { groupedPropertyValue = this.GetPropertyFromPath(groupedPropertiesPath, products[i]);}
+            for (let i = 0; i < products.length; i++) {
 
-            this.groupedProperties[groupingPropertyValue] = this.groupedProperties[groupingPropertyValue] ?
-                this.groupedProperties[groupingPropertyValue] + 1 : 1;
+                let groupingPropertyValue = this.GetPropertyFromPath(this.selectedRowProperty.path, products[i]);
+
+                for (let j = 0; j < this.selectedValueProperties.length; j++) {
+                    let selectedValuePropertyValue = this.GetPropertyFromPath(this.selectedValueProperties[j].path, products[i]);
+
+                    let addedValue: number = 1;
+                    if (typeof selectedValuePropertyValue === "number") { addedValue = selectedValuePropertyValue; }
+
+                    if (this.groupedProperties[groupingPropertyValue]) {
+                        if (this.groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name]) {
+                            this.groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name]
+                                = this.groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] + addedValue;
+                        } else {
+                            this.groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] = addedValue;
+                        }
+                    }
+                    else {
+                        this.groupedProperties[groupingPropertyValue] = {};
+                        this.groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] = addedValue;
+                    }
+                }
+            }
+        } else {
+            this.groupedProperties = null;
         }
     }
 

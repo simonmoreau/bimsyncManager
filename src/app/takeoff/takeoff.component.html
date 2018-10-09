@@ -101,15 +101,13 @@
             <thead>
                 <tr>
                     <th>{{selectedRowProperty.name}}</th>
-                    <th>Count</th>
                     <th *ngFor="let selectedProperty of selectedValueProperties">{{selectedProperty.name}}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor='let key of objectKeys(groupedProperties)'>
                     <td>{{key}}</td>
-                    <td>{{groupedProperties[key]}}</td>
-                    <td *ngFor="let selectedProperty of selectedValueProperties">{{selectedProperty.name}}</td>
+                    <td *ngFor="let selectedProperty of objectKeys(groupedProperties[key])">{{groupedProperties[key][selectedProperty]}}</td>
                 </tr>
             </tbody>
         </table>
