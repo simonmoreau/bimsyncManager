@@ -5,7 +5,7 @@ import {
     IModel,
     IRevision
 } from "../bimsync-project/bimsync-project.models";
-import { ITypeSummary, IProduct, IPropertySet, IQuantitySet, IDisplayProperty, IDisplayPropertySet } from "./takeoff.model";
+import { ITypeSummary, IProduct, IPropertySet, IQuantitySet, IDisplayProperty, IDisplayPropertySet, IGroupedProperty } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
 import { retry } from "rxjs/operators";
 
@@ -150,14 +150,14 @@ export class TakeoffComponent implements OnInit {
             enable: false,
             path: ['attributes', 'Name', 'value']
         };
-        if (product.attributes['Name']['value']) { displayedPropertyMainSet.properties.push(objectNameProperty); }
+        if (this.GetPropertyValueFromPath(['attributes', 'Name', 'value'],product)) { displayedPropertyMainSet.properties.push(objectNameProperty); }
 
         let objectTypeProperty: IDisplayProperty = {
             name: 'Type',
             enable: false,
             path: ['attributes', 'ObjectType', 'value']
         };
-        if (product.attributes['ObjectType']['value']) { displayedPropertyMainSet.properties.push(objectTypeProperty); }
+        if (this.GetPropertyValueFromPath(['attributes', 'ObjectType', 'value'],product)) { displayedPropertyMainSet.properties.push(objectTypeProperty); }
 
         let objectClassProperty: IDisplayProperty = {
             name: 'Entity',
@@ -253,13 +253,19 @@ export class TakeoffComponent implements OnInit {
             let products = this.selectedProducts;
 
             this.groupedProperties = {};
+            let listIGroupedProperty: IGroupedProperty[] = [];
 
             for (let i = 0; i < products.length; i++) {
 
-                let groupingPropertyValue = this.GetPropertyFromPath(this.selectedRowProperty.path, products[i]);
+                let groupingPropertyValue = this.GetPropertyValueFromPath(this.selectedRowProperty.path, products[i]);
+                let groupingProperty = {
+                    name: groupingPropertyValue,
+                    count: 0,
+                    values: []
+                };
 
                 for (let j = 0; j < this.selectedValueProperties.length; j++) {
-                    let selectedValuePropertyValue = this.GetPropertyFromPath(this.selectedValueProperties[j].path, products[i]);
+                    let selectedValuePropertyValue = this.GetPropertyValueFromPath(this.selectedValueProperties[j].path, products[i]);
 
                     let addedValue: number = 1;
                     if (typeof selectedValuePropertyValue === "number") { addedValue = selectedValuePropertyValue; }
@@ -283,7 +289,7 @@ export class TakeoffComponent implements OnInit {
         }
     }
 
-    GetPropertyFromPath(path: string[], object: any): any {
+    GetPropertyValueFromPath(path: string[], object: any): any {
         return path.reduce((acc, currValue) => (acc && acc[currValue]) ? acc[currValue] : null
             , object)
     }

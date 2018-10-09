@@ -31,7 +31,8 @@
             <label for="selects_4">Categories</label>
             <div class="select">
                 <select id="selects_4" (change)="GetProducts()" [(ngModel)]="selectedIfcClass">
-                    <option *ngFor='let ifcClass of ifcClasses; let i = index; trackBy: trackByFn' [ngValue]="ifcClass">{{ifcClass.typeName}} ({{ifcClass.typeQuantity}})</option>
+                    <option *ngFor='let ifcClass of ifcClasses; let i = index; trackBy: trackByFn' [ngValue]="ifcClass">{{ifcClass.typeName}}
+                        ({{ifcClass.typeQuantity}})</option>
                 </select>
             </div>
         </div>
@@ -72,6 +73,7 @@
                 </tr>
             </tbody>
         </table>
+
         <table class="table" *ngIf='selectedIfcClass'>
             <thead>
                 <tr>
@@ -102,19 +104,16 @@
         </table>
     </div>
     <div class="clr-col-8" style="height: 30rem; overflow: auto">
-        <table class="table" *ngIf='groupedProperties && objectKeys(groupedProperties).length'>
-            <thead>
-                <tr>
-                    <th>{{selectedRowProperty.name}}</th>
-                    <th *ngFor="let selectedProperty of selectedValueProperties">{{selectedProperty.name}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor='let key of objectKeys(groupedProperties)'>
-                    <td>{{key}}</td>
-                    <td *ngFor="let selectedProperty of objectKeys(groupedProperties[key])">{{groupedProperties[key][selectedProperty]}}</td>
-                </tr>
-            </tbody>
-        </table>
+        <clr-datagrid *ngIf='groupedProperties && objectKeys(groupedProperties).length'>
+            <clr-dg-column [clrDgField]="'key'">{{selectedRowProperty.name}}</clr-dg-column>
+            <clr-dg-column *ngFor="let selectedProperty of selectedValueProperties" [clrDgField]="'selectedProperty.name'">{{selectedProperty.name}}</clr-dg-column>
+
+            <clr-dg-row *ngFor='let key of objectKeys(groupedProperties)'>
+                <clr-dg-cell>{{key}}</clr-dg-cell>
+                <clr-dg-cell *ngFor="let selectedProperty of objectKeys(groupedProperties[key])">{{groupedProperties[key][selectedProperty]}}</clr-dg-cell>
+            </clr-dg-row>
+
+            <clr-dg-footer>{{selectedIfcClass.typeQuantity}} {{selectedIfcClass.typeName}}</clr-dg-footer>
+        </clr-datagrid>
     </div>
 </div>
