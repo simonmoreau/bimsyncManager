@@ -5,7 +5,9 @@ import {
     IModel,
     IRevision
 } from "../bimsync-project/bimsync-project.models";
-import { ITypeSummary, IProduct, IPropertySet, IQuantitySet, IDisplayProperty, IDisplayPropertySet, IGroupedProperty } from "./takeoff.model";
+import { ITypeSummary, IProduct, IPropertySet, IProperty,
+    IQuantitySet, IDisplayProperty,
+    IDisplayPropertySet, IGroupedProperty } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
 import { retry } from "rxjs/operators";
 
@@ -147,20 +149,27 @@ export class TakeoffComponent implements OnInit {
         let objectNameProperty: IDisplayProperty = {
             name: 'Name',
             enable: false,
+            icon: 'text',
             path: ['attributes', 'Name', 'value']
         };
-        if (this.GetPropertyValueFromPath(['attributes', 'Name', 'value'], product)) { displayedPropertyMainSet.properties.push(objectNameProperty); }
+        if (this.GetPropertyValueFromPath(['attributes', 'Name', 'value'], product)) {
+            displayedPropertyMainSet.properties.push(objectNameProperty);
+        }
 
         let objectTypeProperty: IDisplayProperty = {
             name: 'Type',
             enable: false,
+            icon: 'text',
             path: ['attributes', 'ObjectType', 'value']
         };
-        if (this.GetPropertyValueFromPath(['attributes', 'ObjectType', 'value'], product)) { displayedPropertyMainSet.properties.push(objectTypeProperty); }
+        if (this.GetPropertyValueFromPath(['attributes', 'ObjectType', 'value'], product)) {
+            displayedPropertyMainSet.properties.push(objectTypeProperty);
+        }
 
         let objectClassProperty: IDisplayProperty = {
             name: 'Entity',
             enable: false,
+            icon: 'text',
             path: ['ifcType']
         };
         if (product.ifcType) { displayedPropertyMainSet.properties.push(objectClassProperty); }
@@ -171,10 +180,12 @@ export class TakeoffComponent implements OnInit {
             let propertySet = product.propertySets[propertySetKey] as IPropertySet;
             let displayedPropertySet: IDisplayPropertySet = { name: propertySet.attributes.Name.value, properties: [] }
             Object.keys(propertySet.properties).forEach(propertyKey => {
-                // let property: IProperty = propertySet.properties[propertyKey] as IProperty;
+                let property: IProperty = propertySet.properties[propertyKey] as IProperty;
+                let icon = property.nominalValue.type === 'string' ? 'text' : 'slider';
                 let displayProperty: IDisplayProperty = {
                     name: propertyKey,
                     enable: false,
+                    icon: icon,
                     path: ['propertySets', propertySetKey, 'properties', propertyKey, 'nominalValue', 'value']
                 };
                 displayedPropertySet.properties.push(displayProperty);
@@ -187,10 +198,12 @@ export class TakeoffComponent implements OnInit {
             let quantitySet = product.quantitySets[quantitySetKey] as IQuantitySet;
             let displayedQunatitySet: IDisplayPropertySet = { name: quantitySet.attributes.Name.value, properties: [] }
             Object.keys(quantitySet.quantities).forEach(quantityKey => {
-                // let property: IProperty = propertySet.properties[propertyKey] as IProperty;
+                let property: IProperty = quantitySet.quantities[quantityKey] as IProperty;
+                let icon = property.nominalValue.type === 'string' ? 'text' : 'slider';
                 let displayProperty: IDisplayProperty = {
                     name: quantityKey,
                     enable: false,
+                    icon: icon,
                     path: ['quantitySets', quantitySetKey, 'quantities', quantityKey, 'value', 'value']
                 };
                 displayedQunatitySet.properties.push(displayProperty);
@@ -229,6 +242,7 @@ export class TakeoffComponent implements OnInit {
             this.selectedRowProperty = {
                 name: 'Entity',
                 enable: false,
+                icon: 'text',
                 path: ['ifcType']
             };
         }
@@ -244,7 +258,6 @@ export class TakeoffComponent implements OnInit {
             let products = this.selectedProducts;
 
             let groupedProperties = {};
-            
 
             for (let i = 0; i < products.length; i++) {
 
@@ -263,14 +276,13 @@ export class TakeoffComponent implements OnInit {
                         } else {
                             groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] = addedValue;
                         }
-                    }
-                    else {
+                    } else {
                         groupedProperties[groupingPropertyValue] = {};
                         groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] = addedValue;
                     }
                 }
             }
-            
+
             let tempListOfGroupedProperty: IGroupedProperty[] = [];
 
             Object.keys(groupedProperties).forEach(function (groupedProperty) {

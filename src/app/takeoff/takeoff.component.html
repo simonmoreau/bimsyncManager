@@ -76,6 +76,7 @@
                                     <clr-tree-node draggable *ngFor="let displayedProperty of displayedPropertySet.properties"
                                         [(clrSelected)]="displayedProperty.enable" (clrSelectedChange)="onTreeSelectionChange(displayedProperty)"
                                         [dragData]="displayedProperty">
+                                        <clr-icon class="is-highlight" [attr.shape]="displayedProperty.icon"></clr-icon>
                                         {{displayedProperty.name}}
                                     </clr-tree-node>
                                 </ng-template>
