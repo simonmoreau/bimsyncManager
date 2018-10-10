@@ -1,5 +1,5 @@
-<div class="clr-row">
-    <div class="clr-col-4" style="height: 30rem; overflow: auto">
+<div class="clr-row" style="height: 34rem">
+    <div class="clr-col-4">
         <div *ngIf='projects && projects.length'>
             <label for="selects_1">Projects</label>
             <div class="select">
@@ -73,7 +73,6 @@
                 </tr>
             </tbody>
         </table>
-
         <table class="table" *ngIf='selectedIfcClass'>
             <thead>
                 <tr>
@@ -87,23 +86,25 @@
                             Loading
                         </span>
                     </td>
-                    <td *ngIf="!selectedProductsLoading" class="left">
-                        <clr-tree-node *ngFor="let displayedPropertySet of displayedPropertySets">
-                            {{displayedPropertySet.name}}
-                            <ng-template [clrIfExpanded]="true">
-                                <clr-tree-node draggable *ngFor="let displayedProperty of displayedPropertySet.properties"
-                                    [(clrSelected)]="displayedProperty.enable" (clrSelectedChange)="onTreeSelectionChange(displayedProperty)"
-                                    [dragData]="displayedProperty">
-                                    {{displayedProperty.name}}
-                                </clr-tree-node>
-                            </ng-template>
-                        </clr-tree-node>
+                    <td *ngIf="!selectedProductsLoading" class="left" style="padding: 0; padding-left: 0.5rem">
+                        <div style="max-height: 14.6rem; overflow: auto;">
+                            <clr-tree-node *ngFor="let displayedPropertySet of displayedPropertySets">
+                                {{displayedPropertySet.name}}
+                                <ng-template [clrIfExpanded]="true">
+                                    <clr-tree-node draggable *ngFor="let displayedProperty of displayedPropertySet.properties"
+                                        [(clrSelected)]="displayedProperty.enable" (clrSelectedChange)="onTreeSelectionChange(displayedProperty)"
+                                        [dragData]="displayedProperty">
+                                        {{displayedProperty.name}}
+                                    </clr-tree-node>
+                                </ng-template>
+                            </clr-tree-node>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div class="clr-col-8" style="height: 30rem; overflow: auto">
+    <div class="clr-col-8" style="overflow: auto">
         <clr-datagrid *ngIf='groupedProperties && objectKeys(groupedProperties).length'>
             <clr-dg-column [clrDgField]="'key'">{{selectedRowProperty.name}}</clr-dg-column>
             <clr-dg-column *ngFor="let selectedProperty of selectedValueProperties" [clrDgField]="'selectedProperty.name'">{{selectedProperty.name}}</clr-dg-column>
