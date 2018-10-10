@@ -203,6 +203,8 @@ export class TakeoffComponent implements OnInit {
 
     onTreeSelectionChange(e: IDisplayProperty) {
         this.UpdateSelectedValueProperties(e);
+        this.selectedRowProperty = this.selectedValueProperties[0] ? this.selectedValueProperties[0] : null;
+        this.GetGroupedPropertyCount();
     }
 
     onValuePropertyDrop(e: DropEvent) {
@@ -211,16 +213,6 @@ export class TakeoffComponent implements OnInit {
 
     onValueLabelClick(e: IDisplayProperty) {
         e.enable = false;
-    }
-
-    onRowPropertyDrop(e: DropEvent) {
-        this.selectedRowProperty = e.dragData;
-        this.GetGroupedPropertyCount();
-    }
-
-    onRowLabelClick() {
-        this.selectedRowProperty = null;
-        this.GetGroupedPropertyCount();
     }
 
     UpdateSelectedValueProperties(selectedDisplayedProperty: IDisplayProperty) {

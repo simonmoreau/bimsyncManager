@@ -36,24 +36,6 @@
                 </select>
             </div>
         </div>
-        <table class="table" *ngIf='selectedIfcClass' droppable (onDrop)="onRowPropertyDrop($event)">
-            <thead>
-                <tr>
-                    <th class="left">Rows</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="left">
-                        <span *ngIf='!selectedRowProperty'>Drop a property here ...</span>
-                        <span *ngIf='selectedRowProperty' class="label clickable" (click)=onRowLabelClick()>
-                            {{selectedRowProperty.name}}
-                            <clr-icon shape="window-close"></clr-icon>
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
 
         <table class="table" *ngIf='selectedIfcClass' droppable (onDrop)="onValuePropertyDrop($event)">
             <thead>
@@ -87,7 +69,7 @@
                         </span>
                     </td>
                     <td *ngIf="!selectedProductsLoading" class="left" style="padding: 0; padding-left: 0.5rem">
-                        <div style="max-height: 14.6rem; overflow: auto;">
+                        <div style="max-height: 19rem; overflow: auto;">
                             <clr-tree-node *ngFor="let displayedPropertySet of displayedPropertySets">
                                 {{displayedPropertySet.name}}
                                 <ng-template [clrIfExpanded]="true">
