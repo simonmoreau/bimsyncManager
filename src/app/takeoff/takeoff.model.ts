@@ -74,8 +74,6 @@ export interface IDisplayPropertySet {
 
 export interface IGroupedProperty {
     name: string;
-    count: number;
-    values: any[];
 }
 
 export enum PropertyType {

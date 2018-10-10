@@ -105,15 +105,14 @@
         </table>
     </div>
     <div class="clr-col-8" style="overflow: auto">
-        <clr-datagrid *ngIf='groupedProperties && objectKeys(groupedProperties).length'>
-            <clr-dg-column [clrDgField]="'key'">{{selectedRowProperty.name}}</clr-dg-column>
-            <clr-dg-column *ngFor="let selectedProperty of selectedValueProperties" [clrDgField]="'selectedProperty.name'">{{selectedProperty.name}}</clr-dg-column>
+        <clr-datagrid *ngIf='listOfGroupedProperty && listOfGroupedProperty.length'>
+            <clr-dg-column [clrDgField]="'name'">{{selectedRowProperty.name}}</clr-dg-column>
+            <clr-dg-column [clrDgField]="selectedValueProperty.name" *ngFor="let selectedValueProperty of selectedValueProperties">{{selectedValueProperty.name}}</clr-dg-column>
 
-            <clr-dg-row *ngFor='let key of objectKeys(groupedProperties)'>
-                <clr-dg-cell>{{key}}</clr-dg-cell>
-                <clr-dg-cell *ngFor="let selectedProperty of objectKeys(groupedProperties[key])">{{groupedProperties[key][selectedProperty]}}</clr-dg-cell>
+            <clr-dg-row *clrDgItems='let groupedProperty of listOfGroupedProperty'>
+                <clr-dg-cell>{{groupedProperty.name}}</clr-dg-cell>
+                <clr-dg-cell *ngFor="let selectedValueProperty of selectedValueProperties">{{groupedProperty[selectedValueProperty.name]}}</clr-dg-cell>
             </clr-dg-row>
-
             <clr-dg-footer>{{selectedIfcClass.typeQuantity}} {{selectedIfcClass.typeName}}</clr-dg-footer>
         </clr-datagrid>
     </div>

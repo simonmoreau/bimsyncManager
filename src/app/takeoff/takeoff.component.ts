@@ -30,7 +30,7 @@ export class TakeoffComponent implements OnInit {
     displayedPropertySets: IDisplayPropertySet[] = [];
     selectedValueProperties: IDisplayProperty[] = [];
     selectedRowProperty: IDisplayProperty;
-    groupedProperties: any = {};
+    listOfGroupedProperty: IGroupedProperty[] = [];
     objectKeys = Object.keys;
 
     constructor(private _takeoffService: TakeoffService) { }
@@ -141,7 +141,6 @@ export class TakeoffComponent implements OnInit {
     GetProductProperties(product: IProduct) {
 
         this.displayedPropertySets.length = 0;
-        this.groupedProperties = null;
 
         let displayedPropertyMainSet: IDisplayPropertySet = { name: 'Identification', properties: [] }
 
@@ -150,14 +149,14 @@ export class TakeoffComponent implements OnInit {
             enable: false,
             path: ['attributes', 'Name', 'value']
         };
-        if (this.GetPropertyValueFromPath(['attributes', 'Name', 'value'],product)) { displayedPropertyMainSet.properties.push(objectNameProperty); }
+        if (this.GetPropertyValueFromPath(['attributes', 'Name', 'value'], product)) { displayedPropertyMainSet.properties.push(objectNameProperty); }
 
         let objectTypeProperty: IDisplayProperty = {
             name: 'Type',
             enable: false,
             path: ['attributes', 'ObjectType', 'value']
         };
-        if (this.GetPropertyValueFromPath(['attributes', 'ObjectType', 'value'],product)) { displayedPropertyMainSet.properties.push(objectTypeProperty); }
+        if (this.GetPropertyValueFromPath(['attributes', 'ObjectType', 'value'], product)) { displayedPropertyMainSet.properties.push(objectTypeProperty); }
 
         let objectClassProperty: IDisplayProperty = {
             name: 'Entity',
@@ -252,17 +251,12 @@ export class TakeoffComponent implements OnInit {
         if (this.selectedRowProperty) {
             let products = this.selectedProducts;
 
-            this.groupedProperties = {};
-            let listIGroupedProperty: IGroupedProperty[] = [];
+            let groupedProperties = {};
+            
 
             for (let i = 0; i < products.length; i++) {
 
                 let groupingPropertyValue = this.GetPropertyValueFromPath(this.selectedRowProperty.path, products[i]);
-                let groupingProperty = {
-                    name: groupingPropertyValue,
-                    count: 0,
-                    values: []
-                };
 
                 for (let j = 0; j < this.selectedValueProperties.length; j++) {
                     let selectedValuePropertyValue = this.GetPropertyValueFromPath(this.selectedValueProperties[j].path, products[i]);
@@ -270,22 +264,39 @@ export class TakeoffComponent implements OnInit {
                     let addedValue: number = 1;
                     if (typeof selectedValuePropertyValue === "number") { addedValue = selectedValuePropertyValue; }
 
-                    if (this.groupedProperties[groupingPropertyValue]) {
-                        if (this.groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name]) {
-                            this.groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name]
-                                = this.groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] + addedValue;
+                    if (groupedProperties[groupingPropertyValue]) {
+                        if (groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name]) {
+                            groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name]
+                                = groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] + addedValue;
                         } else {
-                            this.groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] = addedValue;
+                            groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] = addedValue;
                         }
                     }
                     else {
-                        this.groupedProperties[groupingPropertyValue] = {};
-                        this.groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] = addedValue;
+                        groupedProperties[groupingPropertyValue] = {};
+                        groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] = addedValue;
                     }
                 }
             }
+            
+            let tempListOfGroupedProperty: IGroupedProperty[] = [];
+
+            Object.keys(groupedProperties).forEach(function (groupedProperty) {
+
+                let newGroupedProperty: IGroupedProperty = {
+                    name: groupedProperty,
+                }
+
+                Object.keys(groupedProperties[groupedProperty]).forEach(function (valueProperty) {
+                    newGroupedProperty[valueProperty] = groupedProperties[groupedProperty][valueProperty];
+                });
+
+                tempListOfGroupedProperty.push(newGroupedProperty);
+            });
+
+            this.listOfGroupedProperty = tempListOfGroupedProperty;
         } else {
-            this.groupedProperties = null;
+            this.listOfGroupedProperty.length = 0;
         }
     }
 
