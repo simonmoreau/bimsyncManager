@@ -31,6 +31,7 @@ export class TakeoffComponent implements OnInit {
     selectedProductsLoading: boolean = false;
     displayedPropertySets: IDisplayPropertySet[] = [];
     selectedValueProperties: IDisplayProperty[] = [];
+    selectedFilterProperties: IDisplayProperty[] = [];
     selectedRowProperty: IDisplayProperty;
     listOfGroupedProperty: IGroupedProperty[] = [];
     objectKeys = Object.keys;
@@ -218,6 +219,17 @@ export class TakeoffComponent implements OnInit {
         this.UpdateSelectedValueProperties(e);
         this.selectedRowProperty = this.selectedValueProperties[0] ? this.selectedValueProperties[0] : null;
         this.GetGroupedPropertyCount();
+    }
+
+    onFilterPropertyDrop(e: DropEvent) {
+        this.selectedFilterProperties.push(e.dragData);
+    }
+
+    onFilterLabelClick(e: IDisplayProperty) {
+        let index = this.selectedFilterProperties.indexOf(e, 0);
+        if (index > -1) {
+            this.selectedFilterProperties.splice(index, 1);
+        }
     }
 
     onValuePropertyDrop(e: DropEvent) {

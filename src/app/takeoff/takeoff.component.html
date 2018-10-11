@@ -36,24 +36,49 @@
                 </select>
             </div>
         </div>
+        <div class="row" *ngIf='selectedIfcClass'>
+            <div class='clr-col-6'>
+                <table class='table' droppable (onDrop)='onValuePropertyDrop($event)'>
+                    <thead>
+                        <tr>
+                            <th class='left'>Values</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class='left'>
+                                <span *ngIf='!selectedValueProperties.length'>Drop properties here ...</span>
+                                <app-field-selector *ngFor='let selectedProperty of selectedValueProperties'
+                                    (propertyClicked)='onValueLabelClick(selectedProperty)' 
+                                    [propertyName]='selectedProperty.name'>
+                                </app-field-selector>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class='clr-col-6'>
+                <table class='table' droppable (onDrop)='onFilterPropertyDrop($event)'>
+                    <thead>
+                        <tr>
+                            <th class='left'>Filters</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class='left'>
+                                <span *ngIf='!selectedFilterProperties.length'>Drop properties here ...</span>
+                                <app-field-selector *ngFor='let selectedProperty of selectedFilterProperties'
+                                (propertyClicked)='onFilterLabelClick(selectedProperty)' 
+                                [propertyName]='selectedProperty.name'>
+                            </app-field-selector>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-        <table class='table' *ngIf='selectedIfcClass' droppable (onDrop)='onValuePropertyDrop($event)'>
-            <thead>
-                <tr>
-                    <th class='left'>Values</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class='left'>
-                        <span *ngIf='!selectedValueProperties.length'>Drop properties here ...</span>
-                        <app-field-selector *ngFor='let selectedProperty of selectedValueProperties' (propertyClicked)='onValueLabelClick(selectedProperty)'
-                            [propertyName]='selectedProperty.name'>
-                        </app-field-selector>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
         <table class='table' *ngIf='selectedIfcClass'>
             <thead>
                 <tr>

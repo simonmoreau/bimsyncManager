@@ -21,7 +21,7 @@ export class FieldSelectorComponent implements OnChanges {
       // this.starWidth = this.rating * 86 / 5;
   }
 
-  onClick(): void {
+  onClosing(): void {
       this.propertyClicked.emit(`The property ${this.propertyName} was clicked!`);
   }
 }
