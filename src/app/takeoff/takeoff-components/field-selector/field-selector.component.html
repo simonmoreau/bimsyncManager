@@ -1,0 +1,28 @@
+<div class='label'>
+  {{propertyName}}
+  <div class='dropdown'>
+    <clr-dropdown>
+      <button type='button' clrDropdownTrigger class='btn-drop with-margin'>
+        <clr-icon shape='caret' dir='down'></clr-icon>
+      </button>
+      <clr-dropdown-menu *clrIfOpen>
+        <button type='button' clrDropdownItem>Remove field</button>
+        <button type='button' clrDropdownItem>Rename</button>
+        <div class='dropdown-divider'></div>
+        <button type='button' clrDropdownItem>
+          <clr-icon shape='check' *ngIf='summarize' class="is-info"></clr-icon> Don't summarize
+        </button>
+        <button type='button' clrDropdownItem>
+            <clr-icon shape='check' *ngIf='first' class="is-info"></clr-icon> First</button>
+        <button type='button' clrDropdownItem>
+            <clr-icon shape='check' *ngIf='last' class="is-info"></clr-icon> Last</button>
+        <button type='button' clrDropdownItem>
+            <clr-icon shape='check' *ngIf='countDistinct' class="is-info"></clr-icon> Count (Distinct)</button>
+        <button type='button' clrDropdownItem>
+            <clr-icon shape='check' *ngIf='count' class="is-info"></clr-icon> Count</button>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+    <button class='btn btn-icon btn-link btn-label with-margin' (click)=onClick()>
+      <clr-icon shape='window-close'></clr-icon>
+    </button>
+  </div>

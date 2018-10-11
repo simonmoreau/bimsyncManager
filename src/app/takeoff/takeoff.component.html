@@ -1,82 +1,81 @@
-<div class="clr-row" style="height: 34rem">
-    <div class="clr-col-4">
+<div class='clr-row' style='height: 34rem'>
+    <div class='clr-col-4'>
         <div *ngIf='projects && projects.length'>
-            <label for="selects_1">Projects</label>
-            <div class="select">
-                <select id="selects_1" (change)="GetModels()" [(ngModel)]="selectedProject">
-                    <option *ngFor='let project of projects' [ngValue]="project">{{project.name}}</option>
+            <label for='selects_1'>Projects</label>
+            <div class='select'>
+                <select id='selects_1' (change)='GetModels()' [(ngModel)]='selectedProject'>
+                    <option *ngFor='let project of projects' [ngValue]='project'>{{project.name}}</option>
                 </select>
             </div>
         </div>
 
         <div *ngIf='models && models.length'>
-            <label for="selects_2">Models</label>
-            <div class="select">
-                <select id="selects_2" (change)="GetRevisions()" [(ngModel)]="selectedModel">
-                    <option *ngFor='let model of models; let i = index; trackBy: trackByFn' [ngValue]="model">{{model.name}}</option>
+            <label for='selects_2'>Models</label>
+            <div class='select'>
+                <select id='selects_2' (change)='GetRevisions()' [(ngModel)]='selectedModel'>
+                    <option *ngFor='let model of models; let i = index; trackBy: trackByFn' [ngValue]='model'>{{model.name}}</option>
                 </select>
             </div>
         </div>
 
         <div *ngIf='revisions && revisions.length'>
-            <label for="selects_3">Revisions</label>
-            <div class="select">
-                <select id="selects_3" (change)="GetProductTypeSummary()" [(ngModel)]="selectedRevision">
-                    <option *ngFor='let revision of revisions; let i = index; trackBy: trackByFn' [ngValue]="revision">{{revision.version}}</option>
+            <label for='selects_3'>Revisions</label>
+            <div class='select'>
+                <select id='selects_3' (change)='GetProductTypeSummary()' [(ngModel)]='selectedRevision'>
+                    <option *ngFor='let revision of revisions; let i = index; trackBy: trackByFn' [ngValue]='revision'>{{revision.version}}</option>
                 </select>
             </div>
         </div>
 
         <div *ngIf='ifcClasses && ifcClasses.length'>
-            <label for="selects_4">Categories</label>
-            <div class="select">
-                <select id="selects_4" (change)="GetProducts()" [(ngModel)]="selectedIfcClass">
-                    <option *ngFor='let ifcClass of ifcClasses; let i = index; trackBy: trackByFn' [ngValue]="ifcClass">{{ifcClass.typeName}}
+            <label for='selects_4'>Categories</label>
+            <div class='select'>
+                <select id='selects_4' (change)='GetProducts()' [(ngModel)]='selectedIfcClass'>
+                    <option *ngFor='let ifcClass of ifcClasses; let i = index; trackBy: trackByFn' [ngValue]='ifcClass'>{{ifcClass.typeName}}
                         ({{ifcClass.typeQuantity}})</option>
                 </select>
             </div>
         </div>
 
-        <table class="table" *ngIf='selectedIfcClass' droppable (onDrop)="onValuePropertyDrop($event)">
+        <table class='table' *ngIf='selectedIfcClass' droppable (onDrop)='onValuePropertyDrop($event)'>
             <thead>
                 <tr>
-                    <th class="left">Values</th>
+                    <th class='left'>Values</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="left">
+                    <td class='left'>
                         <span *ngIf='!selectedValueProperties.length'>Drop properties here ...</span>
-                        <span class="label clickable" (click)=onValueLabelClick(selectedProperty) *ngFor="let selectedProperty of selectedValueProperties">
-                            {{selectedProperty.name}}
-                            <clr-icon shape="window-close"></clr-icon>
-                        </span>
+                        <app-field-selector *ngFor='let selectedProperty of selectedValueProperties' (propertyClicked)='onValueLabelClick(selectedProperty)'
+                            [propertyName]='selectedProperty.name'>
+                        </app-field-selector>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <table class="table" *ngIf='selectedIfcClass'>
+        <table class='table' *ngIf='selectedIfcClass'>
             <thead>
                 <tr>
-                    <th class="left">Properties</th>
+                    <th class='left'>Properties</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td *ngIf="selectedProductsLoading">
-                        <span class="spinner">
+                    <td *ngIf='selectedProductsLoading'>
+                        <span class='spinner'>
                             Loading
                         </span>
                     </td>
-                    <td *ngIf="!selectedProductsLoading" class="left" style="padding: 0; padding-left: 0.5rem">
-                        <div style="max-height: 19rem; overflow: auto;">
-                            <clr-tree-node *ngFor="let displayedPropertySet of displayedPropertySets">
+                    <td *ngIf='!selectedProductsLoading' class='left' style='padding: 0; padding-left: 0.5rem'>
+                        <div style='max-height: 19rem; overflow: auto;'>
+                            <clr-tree-node *ngFor='let displayedPropertySet of displayedPropertySets'>
                                 {{displayedPropertySet.name}}
-                                <ng-template [clrIfExpanded]="true">
-                                    <clr-tree-node draggable *ngFor="let displayedProperty of displayedPropertySet.properties"
-                                        [(clrSelected)]="displayedProperty.enable" (clrSelectedChange)="onTreeSelectionChange(displayedProperty)"
-                                        [dragData]="displayedProperty">
-                                        <clr-icon class="is-highlight" [attr.shape]="displayedProperty.icon"></clr-icon>
+                                <ng-template [clrIfExpanded]='true'>
+                                    <clr-tree-node draggable *ngFor='let displayedProperty of displayedPropertySet.properties'
+                                        [(clrSelected)]='displayedProperty.enable' (clrSelectedChange)='onTreeSelectionChange(displayedProperty)'
+                                        [dragData]='displayedProperty'>
+                                        <clr-icon class='is-highlight' [attr.shape]='displayedProperty.icon'></clr-icon>
                                         {{displayedProperty.name}}
                                     </clr-tree-node>
                                 </ng-template>
@@ -87,14 +86,14 @@
             </tbody>
         </table>
     </div>
-    <div class="clr-col-8" style="overflow: auto">
+    <div class='clr-col-8' style='overflow: auto'>
         <clr-datagrid *ngIf='listOfGroupedProperty && listOfGroupedProperty.length'>
             <clr-dg-column [clrDgField]="'name'">{{selectedRowProperty.name}}</clr-dg-column>
-            <clr-dg-column [clrDgField]="selectedValueProperty.name" *ngFor="let selectedValueProperty of selectedValueProperties">{{selectedValueProperty.name}}</clr-dg-column>
+            <clr-dg-column [clrDgField]="'selectedValueProperty.name'" *ngFor='let selectedValueProperty of selectedValueProperties'>{{selectedValueProperty.name}}</clr-dg-column>
 
             <clr-dg-row *clrDgItems='let groupedProperty of listOfGroupedProperty'>
                 <clr-dg-cell>{{groupedProperty.name}}</clr-dg-cell>
-                <clr-dg-cell *ngFor="let selectedValueProperty of selectedValueProperties">{{groupedProperty[selectedValueProperty.name]}}</clr-dg-cell>
+                <clr-dg-cell *ngFor='let selectedValueProperty of selectedValueProperties'>{{groupedProperty[selectedValueProperty.name]}}</clr-dg-cell>
             </clr-dg-row>
             <clr-dg-footer>{{selectedIfcClass.typeQuantity}} {{selectedIfcClass.typeName}}</clr-dg-footer>
         </clr-datagrid>
