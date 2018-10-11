@@ -41,6 +41,18 @@ export class TakeoffService {
             .catch(this.handleError);
     }
 
+    getProject(projectId: string): Observable<IProject> {
+        return this._http.get<IProject>(
+            this._bimsyncUrlV2 + 'projects/' + projectId,
+            {
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
     getModels(projectId: string): Observable<IModel[]> {
         return this._http.get<IModel[]>(
             this._bimsyncUrlV2 + 'projects/' + projectId + '/models?pageSize=1000',

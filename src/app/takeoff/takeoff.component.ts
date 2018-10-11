@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { TakeoffService } from "./takeoff.services";
 import {
     IProject,
@@ -18,8 +19,8 @@ import { retry } from "rxjs/operators";
     providers: [TakeoffService]
 })
 export class TakeoffComponent implements OnInit {
-    projects: IProject[] = [];
     selectedProject: IProject;
+    projectId: string;
     models: IModel[] = [];
     revisions: IRevision[] = [];
     selectedModel: IModel;
@@ -36,16 +37,19 @@ export class TakeoffComponent implements OnInit {
     listOfGroupedProperty: IGroupedProperty[] = [];
     objectKeys = Object.keys;
 
-    constructor(private _takeoffService: TakeoffService) { }
+    constructor(private _takeoffService: TakeoffService, private route: ActivatedRoute,) { }
 
     ngOnInit() {
-        this.GetProjects();
+        this.projectId = this.route.snapshot.paramMap.get('id');
+        this.GetProject();
+        
     }
 
-    GetProjects() {
-        this._takeoffService.getProjects().subscribe(
+    GetProject() {
+        this._takeoffService.getProject(this.projectId).subscribe(
             projects => {
-                this.projects = projects;
+                this.selectedProject = projects;
+                this.GetModels();
             },
             error => (this.errorMessage = <any>error)
         );

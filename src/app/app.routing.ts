@@ -19,7 +19,7 @@ export const ROUTES: Routes = [
     {path: 'projects', component: BimsyncProjectComponent },
     {path: 'documentation', component: DocumentationComponent},
     {path: 'share', component: SharingPageComponent},
-    {path: 'takeoff', component: TakeoffComponent},
+    { path: 'takeoff/:id',component: TakeoffComponent },
     {path: 'callback', component: BimsyncOauthComponent}
 ];
 

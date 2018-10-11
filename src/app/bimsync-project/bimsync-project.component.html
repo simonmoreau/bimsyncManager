@@ -75,6 +75,7 @@
                     <th>Name</th>
                     <th>Id</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -83,6 +84,11 @@
                         <a href="https://bimsync.com/project/{{project.id}}">{{project.name}}</a>
                     </td>
                     <td>{{project.id}}</td>
+                    <td>
+                        <button class="btn btn-link btn-icon btn-inline" href="#" [routerLink]="['/takeoff', project.id]" routerLinkActive="active">
+                            <clr-icon shape="line-chart" class="is-solid"></clr-icon>
+                        </button>
+                    </td>
                     <td>
                         <button class="btn btn-link btn-icon btn-inline" (click)="Share(project)">
                             <clr-icon shape="share" class="is-solid"></clr-icon>
