@@ -65,6 +65,7 @@ export interface IDisplayProperty {
     name: string;
     enable: boolean;
     icon: string;
+    groupingMode: GroupingMode;
     path: string[];
 }
 
@@ -73,13 +74,12 @@ export interface IDisplayPropertySet {
     properties: IDisplayProperty[];
 }
 
-export interface IGroupedProperty {
-    name: string;
-}
-
-export enum PropertyType {
-    PropertySet,
-    QuantitySet,
+export enum GroupingMode {
+    DontSummarize,
+    Count,
+    CountDistinct,
+    First,
+    Last
 }
 
 

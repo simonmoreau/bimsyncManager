@@ -8,9 +8,9 @@ import {
 } from "../bimsync-project/bimsync-project.models";
 import { ITypeSummary, IProduct, IPropertySet, IProperty,
     IQuantitySet, IDisplayProperty,
-    IDisplayPropertySet, IGroupedProperty } from "./takeoff.model";
+    IDisplayPropertySet, GroupingMode } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
-import { retry } from "rxjs/operators";
+
 
 @Component({
     selector: "app-takeoff",
@@ -33,16 +33,13 @@ export class TakeoffComponent implements OnInit {
     displayedPropertySets: IDisplayPropertySet[] = [];
     selectedValueProperties: IDisplayProperty[] = [];
     selectedFilterProperties: IDisplayProperty[] = [];
-    selectedRowProperty: IDisplayProperty;
-    listOfGroupedProperty: IGroupedProperty[] = [];
-    objectKeys = Object.keys;
+    listOfRows: any[] = [];
 
-    constructor(private _takeoffService: TakeoffService, private route: ActivatedRoute,) { }
+    constructor(private _takeoffService: TakeoffService, private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.projectId = this.route.snapshot.paramMap.get('id');
         this.GetProject();
-        
     }
 
     GetProject() {
@@ -155,7 +152,8 @@ export class TakeoffComponent implements OnInit {
             name: 'Name',
             enable: false,
             icon: 'text',
-            path: ['attributes', 'Name', 'value']
+            path: ['attributes', 'Name', 'value'],
+            groupingMode: GroupingMode.DontSummarize
         };
         if (this.GetPropertyValueFromPath(['attributes', 'Name', 'value'], product)) {
             displayedPropertyMainSet.properties.push(objectNameProperty);
@@ -165,7 +163,8 @@ export class TakeoffComponent implements OnInit {
             name: 'Type',
             enable: false,
             icon: 'text',
-            path: ['attributes', 'ObjectType', 'value']
+            path: ['attributes', 'ObjectType', 'value'],
+            groupingMode: GroupingMode.DontSummarize
         };
         if (this.GetPropertyValueFromPath(['attributes', 'ObjectType', 'value'], product)) {
             displayedPropertyMainSet.properties.push(objectTypeProperty);
@@ -175,7 +174,8 @@ export class TakeoffComponent implements OnInit {
             name: 'Entity',
             enable: false,
             icon: 'text',
-            path: ['ifcType']
+            path: ['ifcType'],
+            groupingMode: GroupingMode.DontSummarize
         };
         if (product.ifcType) { displayedPropertyMainSet.properties.push(objectClassProperty); }
 
@@ -191,7 +191,8 @@ export class TakeoffComponent implements OnInit {
                     name: propertyKey,
                     enable: false,
                     icon: icon,
-                    path: ['propertySets', propertySetKey, 'properties', propertyKey, 'nominalValue', 'value']
+                    path: ['propertySets', propertySetKey, 'properties', propertyKey, 'nominalValue', 'value'],
+                    groupingMode: GroupingMode.DontSummarize
                 };
                 displayedPropertySet.properties.push(displayProperty);
             });
@@ -209,7 +210,8 @@ export class TakeoffComponent implements OnInit {
                     name: quantityKey,
                     enable: false,
                     icon: icon,
-                    path: ['quantitySets', quantitySetKey, 'quantities', quantityKey, 'value', 'value']
+                    path: ['quantitySets', quantitySetKey, 'quantities', quantityKey, 'value', 'value'],
+                    groupingMode: GroupingMode.DontSummarize
                 };
                 displayedQunatitySet.properties.push(displayProperty);
             });
@@ -221,7 +223,6 @@ export class TakeoffComponent implements OnInit {
 
     onTreeSelectionChange(e: IDisplayProperty) {
         this.UpdateSelectedValueProperties(e);
-        this.selectedRowProperty = this.selectedValueProperties[0] ? this.selectedValueProperties[0] : null;
         this.GetGroupedPropertyCount();
     }
 
@@ -254,15 +255,6 @@ export class TakeoffComponent implements OnInit {
             }
         }
 
-        if (!this.selectedRowProperty) {
-            this.selectedRowProperty = {
-                name: 'Entity',
-                enable: false,
-                icon: 'text',
-                path: ['ifcType']
-            };
-        }
-
         this.GetGroupedPropertyCount();
 
     }
@@ -270,54 +262,62 @@ export class TakeoffComponent implements OnInit {
 
     GetGroupedPropertyCount(): any {
 
-        if (this.selectedRowProperty) {
-            let products = this.selectedProducts;
+        if (this.selectedValueProperties && this.selectedValueProperties.length !== 0) {
 
-            let groupedProperties = {};
+            this.listOfRows.length = 0;
 
-            for (let i = 0; i < products.length; i++) {
+            let columns: any = {};
+            this.selectedValueProperties.forEach(selectedValueProperty => {
+                columns[selectedValueProperty.name] = this.GetGroupedList(selectedValueProperty);
+            });
+            let rows = [];
 
-                let groupingPropertyValue = this.GetPropertyValueFromPath(this.selectedRowProperty.path, products[i]);
-
-                for (let j = 0; j < this.selectedValueProperties.length; j++) {
-                    let selectedValuePropertyValue = this.GetPropertyValueFromPath(this.selectedValueProperties[j].path, products[i]);
-
-                    let addedValue: number = 1;
-                    if (typeof selectedValuePropertyValue === "number") { addedValue = selectedValuePropertyValue; }
-
-                    if (groupedProperties[groupingPropertyValue]) {
-                        if (groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name]) {
-                            groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name]
-                                = groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] + addedValue;
-                        } else {
-                            groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] = addedValue;
-                        }
-                    } else {
-                        groupedProperties[groupingPropertyValue] = {};
-                        groupedProperties[groupingPropertyValue][this.selectedValueProperties[j].name] = addedValue;
-                    }
-                }
+            for (let i = 0; i < columns[this.selectedValueProperties[0].name].length; i++) {
+                let row: any = {};
+                this.selectedValueProperties.forEach(selectedValueProperty => {
+                    row[selectedValueProperty.name] = columns[selectedValueProperty.name][i];
+                });
+                rows.push(row);
             }
 
-            let tempListOfGroupedProperty: IGroupedProperty[] = [];
+            this.listOfRows = rows;
 
-            Object.keys(groupedProperties).forEach(function (groupedProperty) {
-
-                let newGroupedProperty: IGroupedProperty = {
-                    name: groupedProperty,
-                }
-
-                Object.keys(groupedProperties[groupedProperty]).forEach(function (valueProperty) {
-                    newGroupedProperty[valueProperty] = groupedProperties[groupedProperty][valueProperty];
-                });
-
-                tempListOfGroupedProperty.push(newGroupedProperty);
-            });
-
-            this.listOfGroupedProperty = tempListOfGroupedProperty;
         } else {
-            this.listOfGroupedProperty.length = 0;
+            this.listOfRows.length = 0;
         }
+    }
+
+    GetGroupedList(selectedProperty: IDisplayProperty): any {
+
+        function onlyUnique(value, index, self) {
+            return self.indexOf(value) === index;
+        }
+
+        let allPropertyValuesList = this.selectedProducts.map(product => {
+            return this.GetPropertyValueFromPath(selectedProperty.path, product);
+          });
+
+          switch (selectedProperty.groupingMode) {
+            case GroupingMode.DontSummarize: {
+                return allPropertyValuesList.filter(onlyUnique);
+            }
+            case GroupingMode.Count: {
+                return allPropertyValuesList.length;
+            }
+            case GroupingMode.CountDistinct: {
+                return allPropertyValuesList.filter(onlyUnique).length;
+            }
+            case GroupingMode.First: {
+                return allPropertyValuesList.filter(onlyUnique).sort()[0];
+            }
+            case GroupingMode.First: {
+                let filteredValues = allPropertyValuesList.filter(onlyUnique).sort();
+                return filteredValues[filteredValues.length];
+            }
+            default: {
+                return allPropertyValuesList.filter(onlyUnique);
+            }
+         }
     }
 
     GetPropertyValueFromPath(path: string[], object: any): any {
