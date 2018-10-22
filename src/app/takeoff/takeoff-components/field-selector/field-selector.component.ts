@@ -1,4 +1,5 @@
 import { Component, OnChanges, Input, EventEmitter, Output } from '@angular/core';
+import { IDisplayProperty, GroupingMode } from '../../takeoff.model';
 
 @Component({
   selector: 'app-field-selector',
@@ -7,21 +8,26 @@ import { Component, OnChanges, Input, EventEmitter, Output } from '@angular/core
 })
 export class FieldSelectorComponent implements OnChanges {
 
-  summarize:boolean = true;
-  first:boolean = false;
-  last:boolean = false;
+  summarize: boolean = true;
+  first: boolean = false;
+  last: boolean = false;
   countDistinct: boolean = false;
-  count:boolean = false;
+  count: boolean = false;
+  GroupingMode: GroupingMode;
 
-  @Input() propertyName: string;
-  @Output() propertyClicked: EventEmitter<string> =
-          new EventEmitter<string>();
+  @Input() displayedProperty: IDisplayProperty;
+  @Output() propertyClosed: EventEmitter<string> = new EventEmitter<string>();
+  @Output() propertyUpdated: EventEmitter<IDisplayProperty> = new EventEmitter<IDisplayProperty>();
 
   ngOnChanges(): void {
       // this.starWidth = this.rating * 86 / 5;
   }
 
+  onUpdateProperty(value: string): void {
+    
+  }
+
   onClosing(): void {
-      this.propertyClicked.emit(`The property ${this.propertyName} was clicked!`);
+      this.propertyClosed.emit(this.displayedProperty.name);
   }
 }

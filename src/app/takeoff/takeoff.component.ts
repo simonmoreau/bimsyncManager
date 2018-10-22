@@ -230,7 +230,7 @@ export class TakeoffComponent implements OnInit {
         this.selectedFilterProperties.push(e.dragData);
     }
 
-    onFilterLabelClick(e: IDisplayProperty) {
+    onFilterLabelClose(e: IDisplayProperty) {
         let index = this.selectedFilterProperties.indexOf(e, 0);
         if (index > -1) {
             this.selectedFilterProperties.splice(index, 1);
@@ -241,8 +241,19 @@ export class TakeoffComponent implements OnInit {
         e.dragData.enable = true;
     }
 
-    onValueLabelClick(e: IDisplayProperty) {
+    onValueLabelClose(e: IDisplayProperty) {
         e.enable = false;
+    }
+
+    onSelectedValueUpdate(property: IDisplayProperty) {
+        console.log(property);
+    }
+
+    UpdatePropertyInList(property: IDisplayProperty, list: IDisplayProperty[]) {
+        let index = list.indexOf(property, 0);
+        if (index > -1) {
+            list[index] = property;
+        }
     }
 
     UpdateSelectedValueProperties(selectedDisplayedProperty: IDisplayProperty) {

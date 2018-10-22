@@ -41,8 +41,9 @@
                             <td class='left'>
                                 <span *ngIf='!selectedValueProperties.length'>Drop properties here ...</span>
                                 <app-field-selector *ngFor='let selectedProperty of selectedValueProperties'
-                                    (propertyClicked)='onValueLabelClick(selectedProperty)' 
-                                    [propertyName]='selectedProperty.name'>
+                                    (propertyClosed)='onValueLabelClose(selectedProperty)'
+                                    (propertyUpdated)='onSelectedValueUpdate($event)'
+                                    [displayedProperty]='selectedProperty'>
                                 </app-field-selector>
                             </td>
                         </tr>
@@ -61,8 +62,9 @@
                             <td class='left'>
                                 <span *ngIf='!selectedFilterProperties.length'>Drop properties here ...</span>
                                 <app-field-selector *ngFor='let selectedProperty of selectedFilterProperties'
-                                (propertyClicked)='onFilterLabelClick(selectedProperty)' 
-                                [propertyName]='selectedProperty.name'>
+                                (propertyClosed)='onFilterLabelClose(selectedProperty)' 
+                                (propertyUpdated)='onSelectedValueUpdate($event)'
+                                [displayedProperty]='selectedProperty'>
                             </app-field-selector>
                             </td>
                         </tr>
