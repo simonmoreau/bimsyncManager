@@ -7,8 +7,8 @@ import {
     IRevision
 } from "../bimsync-project/bimsync-project.models";
 import { ITypeSummary, IProduct, IPropertySet, IProperty,
-    IQuantitySet, IDisplayProperty,
-    IDisplayPropertySet, GroupingMode } from "./takeoff.model";
+    IQuantitySet, DisplayProperty,
+    IDisplayPropertySet, GroupingMode, GroupingModeEnum } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
 
 
@@ -31,8 +31,8 @@ export class TakeoffComponent implements OnInit {
     selectedProducts: IProduct[] = [];
     selectedProductsLoading: boolean = false;
     displayedPropertySets: IDisplayPropertySet[] = [];
-    selectedValueProperties: IDisplayProperty[] = [];
-    selectedFilterProperties: IDisplayProperty[] = [];
+    selectedValueProperties: DisplayProperty[] = [];
+    selectedFilterProperties: DisplayProperty[] = [];
     listOfRows: any[] = [];
 
     constructor(private _takeoffService: TakeoffService, private route: ActivatedRoute) { }
@@ -148,35 +148,20 @@ export class TakeoffComponent implements OnInit {
 
         let displayedPropertyMainSet: IDisplayPropertySet = { name: 'Identification', properties: [] }
 
-        let objectNameProperty: IDisplayProperty = {
-            name: 'Name',
-            enable: false,
-            icon: 'text',
-            path: ['attributes', 'Name', 'value'],
-            groupingMode: GroupingMode.DontSummarize
-        };
+        let objectNameProperty: DisplayProperty = new DisplayProperty('Name', 'string', ['attributes', 'Name', 'value']);
+
         if (this.GetPropertyValueFromPath(['attributes', 'Name', 'value'], product)) {
             displayedPropertyMainSet.properties.push(objectNameProperty);
         }
 
-        let objectTypeProperty: IDisplayProperty = {
-            name: 'Type',
-            enable: false,
-            icon: 'text',
-            path: ['attributes', 'ObjectType', 'value'],
-            groupingMode: GroupingMode.DontSummarize
-        };
+        let objectTypeProperty: DisplayProperty = new DisplayProperty('Type', 'string', ['attributes', 'ObjectType', 'value']);
+
         if (this.GetPropertyValueFromPath(['attributes', 'ObjectType', 'value'], product)) {
             displayedPropertyMainSet.properties.push(objectTypeProperty);
         }
 
-        let objectClassProperty: IDisplayProperty = {
-            name: 'Entity',
-            enable: false,
-            icon: 'text',
-            path: ['ifcType'],
-            groupingMode: GroupingMode.DontSummarize
-        };
+        let objectClassProperty: DisplayProperty = new DisplayProperty('Entity', 'string', ['ifcType']);
+
         if (product.ifcType) { displayedPropertyMainSet.properties.push(objectClassProperty); }
 
         this.displayedPropertySets.push(displayedPropertyMainSet);
@@ -186,14 +171,11 @@ export class TakeoffComponent implements OnInit {
             let displayedPropertySet: IDisplayPropertySet = { name: propertySet.attributes.Name.value, properties: [] }
             Object.keys(propertySet.properties).forEach(propertyKey => {
                 let property: IProperty = propertySet.properties[propertyKey] as IProperty;
-                let icon = property.nominalValue.type === 'string' ? 'text' : 'slider';
-                let displayProperty: IDisplayProperty = {
-                    name: propertyKey,
-                    enable: false,
-                    icon: icon,
-                    path: ['propertySets', propertySetKey, 'properties', propertyKey, 'nominalValue', 'value'],
-                    groupingMode: GroupingMode.DontSummarize
-                };
+                let displayProperty: DisplayProperty = new DisplayProperty(
+                    propertyKey,
+                    property.nominalValue.type,
+                    ['propertySets', propertySetKey, 'properties', propertyKey, 'nominalValue', 'value']
+                );
                 displayedPropertySet.properties.push(displayProperty);
             });
             this.displayedPropertySets.push(displayedPropertySet);
@@ -202,26 +184,24 @@ export class TakeoffComponent implements OnInit {
 
         Object.keys(product.quantitySets).forEach(quantitySetKey => {
             let quantitySet = product.quantitySets[quantitySetKey] as IQuantitySet;
-            let displayedQunatitySet: IDisplayPropertySet = { name: quantitySet.attributes.Name.value, properties: [] }
+            let displayedQuantitySet: IDisplayPropertySet = { name: quantitySet.attributes.Name.value, properties: [] }
             Object.keys(quantitySet.quantities).forEach(quantityKey => {
                 let property: IProperty = quantitySet.quantities[quantityKey] as IProperty;
                 let icon = property.nominalValue.type === 'string' ? 'text' : 'slider';
-                let displayProperty: IDisplayProperty = {
-                    name: quantityKey,
-                    enable: false,
-                    icon: icon,
-                    path: ['quantitySets', quantitySetKey, 'quantities', quantityKey, 'value', 'value'],
-                    groupingMode: GroupingMode.DontSummarize
-                };
-                displayedQunatitySet.properties.push(displayProperty);
+                let displayProperty: DisplayProperty = new DisplayProperty(
+                    quantityKey,
+                    property.nominalValue.type,
+                    ['quantitySets', quantitySetKey, 'quantities', quantityKey, 'value', 'value']
+                );
+                displayedQuantitySet.properties.push(displayProperty);
             });
-            this.displayedPropertySets.push(displayedQunatitySet);
+            this.displayedPropertySets.push(displayedQuantitySet);
         });
 
         console.log(this.displayedPropertySets);
     }
 
-    onTreeSelectionChange(e: IDisplayProperty) {
+    onTreeSelectionChange(e: DisplayProperty) {
         this.UpdateSelectedValueProperties(e);
         this.GetGroupedPropertyCount();
     }
@@ -230,7 +210,7 @@ export class TakeoffComponent implements OnInit {
         this.selectedFilterProperties.push(e.dragData);
     }
 
-    onFilterLabelClose(e: IDisplayProperty) {
+    onFilterLabelClose(e: DisplayProperty) {
         let index = this.selectedFilterProperties.indexOf(e, 0);
         if (index > -1) {
             this.selectedFilterProperties.splice(index, 1);
@@ -241,22 +221,22 @@ export class TakeoffComponent implements OnInit {
         e.dragData.enable = true;
     }
 
-    onValueLabelClose(e: IDisplayProperty) {
+    onValueLabelClose(e: DisplayProperty) {
         e.enable = false;
     }
 
-    onSelectedValueUpdate(property: IDisplayProperty) {
+    onSelectedValueUpdate(property: DisplayProperty) {
         console.log(property);
     }
 
-    UpdatePropertyInList(property: IDisplayProperty, list: IDisplayProperty[]) {
+    UpdatePropertyInList(property: DisplayProperty, list: DisplayProperty[]) {
         let index = list.indexOf(property, 0);
         if (index > -1) {
             list[index] = property;
         }
     }
 
-    UpdateSelectedValueProperties(selectedDisplayedProperty: IDisplayProperty) {
+    UpdateSelectedValueProperties(selectedDisplayedProperty: DisplayProperty) {
         if (selectedDisplayedProperty.enable) {
             this.selectedValueProperties.push(selectedDisplayedProperty);
         } else {
@@ -298,7 +278,7 @@ export class TakeoffComponent implements OnInit {
         }
     }
 
-    GetGroupedList(selectedProperty: IDisplayProperty): any {
+    GetGroupedList(selectedProperty: DisplayProperty): any {
 
         function onlyUnique(value, index, self) {
             return self.indexOf(value) === index;
@@ -308,20 +288,20 @@ export class TakeoffComponent implements OnInit {
             return this.GetPropertyValueFromPath(selectedProperty.path, product);
           });
 
-          switch (selectedProperty.groupingMode) {
-            case GroupingMode.DontSummarize: {
+          switch (selectedProperty.groupingMode.mode) {
+            case GroupingModeEnum.DontSummarize: {
                 return allPropertyValuesList.filter(onlyUnique);
             }
-            case GroupingMode.Count: {
+            case GroupingModeEnum.Count: {
                 return allPropertyValuesList.length;
             }
-            case GroupingMode.CountDistinct: {
+            case GroupingModeEnum.CountDistinct: {
                 return allPropertyValuesList.filter(onlyUnique).length;
             }
-            case GroupingMode.First: {
+            case GroupingModeEnum.First: {
                 return allPropertyValuesList.filter(onlyUnique).sort()[0];
             }
-            case GroupingMode.First: {
+            case GroupingModeEnum.Last: {
                 let filteredValues = allPropertyValuesList.filter(onlyUnique).sort();
                 return filteredValues[filteredValues.length];
             }

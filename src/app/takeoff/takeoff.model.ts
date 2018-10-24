@@ -1,3 +1,5 @@
+import { throwError } from "rxjs";
+
 export interface ITypeSummary {
     typeName: string;
     typeQuantity: number;
@@ -60,26 +62,79 @@ export interface IQuantity {
     value: Value;
 }
 
-
-export interface IDisplayProperty {
-    name: string;
+export class DisplayProperty {
+    readonly name: string;
+    readonly type: string;
     enable: boolean;
-    icon: string;
+    readonly icon: string;
     groupingMode: GroupingMode;
-    path: string[];
+    readonly path: string[];
+
+    constructor(name: string, type: string, path: string[]) {
+        this.name = name;
+        this.type = type;
+        this.enable = false;
+        this.icon = this.GetIcon();
+        this.path = path;
+        this.groupingMode = new GroupingMode();
+    }
+
+    private GetIcon(): string {
+        return this.type === 'string' ? 'text' : 'slider';
+    }
 }
 
 export interface IDisplayPropertySet {
     name: string;
-    properties: IDisplayProperty[];
+    properties: DisplayProperty[];
 }
 
-export enum GroupingMode {
+export enum GroupingModeEnum {
     DontSummarize,
     Count,
     CountDistinct,
     First,
     Last
+}
+
+export class GroupingMode {
+
+    isEnabled: boolean;
+    mode: GroupingModeEnum;
+
+    private _modeName: string;
+
+    constructor() {
+        this.mode = GroupingModeEnum.DontSummarize;
+        this.isEnabled = true;
+    }
+
+    get modeName(): string {
+        return this.GetGroupingModeDisplay();
+    }
+
+    private GetGroupingModeDisplay(): string {
+        switch (this.mode) {
+            case GroupingModeEnum.DontSummarize: {
+                return "Don't Summarize";
+            }
+            case GroupingModeEnum.Count: {
+                return "Count";
+            }
+            case GroupingModeEnum.CountDistinct: {
+                return "Count (Distinct)";
+            }
+            case GroupingModeEnum.First: {
+                return "First";
+            }
+            case GroupingModeEnum.Last: {
+                return "Last";
+            }
+            default: {
+                return "Don't Summarize";
+            }
+         }
+    }
 }
 
 
