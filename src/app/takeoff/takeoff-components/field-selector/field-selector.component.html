@@ -9,20 +9,8 @@
         <button type='button' clrDropdownItem (click)=onClosing()>Remove field</button>
         <button type='button' clrDropdownItem>Rename</button>
         <div class='dropdown-divider'></div>
-        <button type='button' clrDropdownItem>
-          <clr-icon shape='check' *ngIf='summarize' class="is-info"></clr-icon> Don't summarize
-        </button>
-        <button type='button' clrDropdownItem>
-          <clr-icon shape='check' *ngIf='first' class="is-info"></clr-icon> First
-        </button>
-        <button type='button' clrDropdownItem>
-          <clr-icon shape='check' *ngIf='last' class="is-info"></clr-icon> Last
-        </button>
-        <button type='button' clrDropdownItem>
-          <clr-icon shape='check' *ngIf='countDistinct' class="is-info"></clr-icon> Count (Distinct)
-        </button>
-        <button type='button' clrDropdownItem>
-          <clr-icon shape='check' *ngIf='count' class="is-info"></clr-icon> Count
+        <button type='button' clrDropdownItem *ngFor='let groupingMode of displayedProperty.availableGroupingModes' (click)=onUpdateProperty(groupingMode)>
+          <clr-icon shape='check' *ngIf='groupingMode.isEnabled' class="is-info"></clr-icon> {{groupingMode.modeName}}
         </button>
       </clr-dropdown-menu>
     </clr-dropdown>

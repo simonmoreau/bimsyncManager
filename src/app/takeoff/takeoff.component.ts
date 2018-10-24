@@ -6,9 +6,11 @@ import {
     IModel,
     IRevision
 } from "../bimsync-project/bimsync-project.models";
-import { ITypeSummary, IProduct, IPropertySet, IProperty,
+import {
+    ITypeSummary, IProduct, IPropertySet, IProperty,
     IQuantitySet, DisplayProperty,
-    IDisplayPropertySet, GroupingMode, GroupingModeEnum } from "./takeoff.model";
+    IDisplayPropertySet, GroupingMode, GroupingModeEnum
+} from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
 
 
@@ -226,7 +228,8 @@ export class TakeoffComponent implements OnInit {
     }
 
     onSelectedValueUpdate(property: DisplayProperty) {
-        console.log(property);
+        this.UpdateSelectedValueProperties(property);
+        this.GetGroupedPropertyCount();
     }
 
     UpdatePropertyInList(property: DisplayProperty, list: DisplayProperty[]) {
@@ -238,7 +241,13 @@ export class TakeoffComponent implements OnInit {
 
     UpdateSelectedValueProperties(selectedDisplayedProperty: DisplayProperty) {
         if (selectedDisplayedProperty.enable) {
-            this.selectedValueProperties.push(selectedDisplayedProperty);
+            // Find index of specific object using findIndex method.
+            let index = this.selectedValueProperties.findIndex((obj => obj.name === selectedDisplayedProperty.name));
+            if (index > -1) {
+                this.selectedValueProperties[index] = selectedDisplayedProperty;
+            } else {
+                this.selectedValueProperties.push(selectedDisplayedProperty);
+            }
         } else {
             let index = this.selectedValueProperties.indexOf(selectedDisplayedProperty, 0);
             if (index > -1) {
@@ -278,7 +287,7 @@ export class TakeoffComponent implements OnInit {
         }
     }
 
-    GetGroupedList(selectedProperty: DisplayProperty): any {
+    GetGroupedList(selectedProperty: DisplayProperty): any[] {
 
         function onlyUnique(value, index, self) {
             return self.indexOf(value) === index;
@@ -286,29 +295,29 @@ export class TakeoffComponent implements OnInit {
 
         let allPropertyValuesList = this.selectedProducts.map(product => {
             return this.GetPropertyValueFromPath(selectedProperty.path, product);
-          });
+        });
 
-          switch (selectedProperty.groupingMode.mode) {
+        switch (selectedProperty.groupingMode.mode) {
             case GroupingModeEnum.DontSummarize: {
                 return allPropertyValuesList.filter(onlyUnique);
             }
             case GroupingModeEnum.Count: {
-                return allPropertyValuesList.length;
+                return [allPropertyValuesList.length];
             }
             case GroupingModeEnum.CountDistinct: {
-                return allPropertyValuesList.filter(onlyUnique).length;
+                return [allPropertyValuesList.filter(onlyUnique).length];
             }
             case GroupingModeEnum.First: {
-                return allPropertyValuesList.filter(onlyUnique).sort()[0];
+                return [allPropertyValuesList.filter(onlyUnique).sort()[0]];
             }
             case GroupingModeEnum.Last: {
                 let filteredValues = allPropertyValuesList.filter(onlyUnique).sort();
-                return filteredValues[filteredValues.length];
+                return [filteredValues[filteredValues.length - 1]];
             }
             default: {
                 return allPropertyValuesList.filter(onlyUnique);
             }
-         }
+        }
     }
 
     GetPropertyValueFromPath(path: string[], object: any): any {

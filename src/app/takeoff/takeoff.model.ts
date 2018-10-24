@@ -67,8 +67,10 @@ export class DisplayProperty {
     readonly type: string;
     enable: boolean;
     readonly icon: string;
-    groupingMode: GroupingMode;
+    readonly availableGroupingModes: GroupingMode[];
     readonly path: string[];
+
+    private _groupingMode: GroupingMode;
 
     constructor(name: string, type: string, path: string[]) {
         this.name = name;
@@ -76,11 +78,42 @@ export class DisplayProperty {
         this.enable = false;
         this.icon = this.GetIcon();
         this.path = path;
-        this.groupingMode = new GroupingMode();
+        this._groupingMode = new GroupingMode();
+        this.availableGroupingModes = this.GetAvailableGroupingModes();
+    }
+
+    get groupingMode(): GroupingMode {
+        return this._groupingMode;
+    }
+
+    set groupingMode(groupingMode: GroupingMode) {
+        this._groupingMode = groupingMode;
+        this.SetGroupingMode(groupingMode);
     }
 
     private GetIcon(): string {
         return this.type === 'string' ? 'text' : 'slider';
+    }
+
+    private GetAvailableGroupingModes(): GroupingMode[] {
+        let modes = [
+            new GroupingMode(GroupingModeEnum.DontSummarize),
+            new GroupingMode(GroupingModeEnum.Count),
+            new GroupingMode(GroupingModeEnum.CountDistinct),
+            new GroupingMode(GroupingModeEnum.First),
+            new GroupingMode(GroupingModeEnum.Last),
+        ]
+
+        modes[0].isEnabled = true;
+        return modes;
+    }
+
+    private SetGroupingMode(groupingMode: GroupingMode) {
+        let index = this.availableGroupingModes.indexOf(groupingMode, 0);
+        if (index > -1) {
+            this.availableGroupingModes.forEach(gM => {gM.isEnabled = false; });
+            this.availableGroupingModes[index].isEnabled = true;
+        }
     }
 }
 
@@ -104,9 +137,9 @@ export class GroupingMode {
 
     private _modeName: string;
 
-    constructor() {
-        this.mode = GroupingModeEnum.DontSummarize;
-        this.isEnabled = true;
+    constructor(groupingModeEnum?: GroupingModeEnum) {
+        this.mode = groupingModeEnum || GroupingModeEnum.DontSummarize;
+        this.isEnabled = false;
     }
 
     get modeName(): string {

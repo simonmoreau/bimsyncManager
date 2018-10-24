@@ -23,8 +23,9 @@ export class FieldSelectorComponent implements OnChanges {
       // this.starWidth = this.rating * 86 / 5;
   }
 
-  onUpdateProperty(value: string): void {
-
+  onUpdateProperty(value: GroupingMode): void {
+    this.displayedProperty.groupingMode = value;
+    this.propertyUpdated.emit(this.displayedProperty);
   }
 
   onClosing(): void {
