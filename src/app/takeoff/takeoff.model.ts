@@ -86,6 +86,10 @@ export class DisplayProperty {
         return this._groupingMode;
     }
 
+    get displayName(): string {
+        return this._groupingMode.modeText + this.name;
+    }
+
     set groupingMode(groupingMode: GroupingMode) {
         this._groupingMode = groupingMode;
         this.SetGroupingMode(groupingMode);
@@ -146,6 +150,10 @@ export class GroupingMode {
         return this.GetGroupingModeDisplay();
     }
 
+    get modeText(): string {
+        return this.GetGroupingModeText();
+    }
+
     private GetGroupingModeDisplay(): string {
         switch (this.mode) {
             case GroupingModeEnum.DontSummarize: {
@@ -165,6 +173,29 @@ export class GroupingMode {
             }
             default: {
                 return "Don't Summarize";
+            }
+         }
+    }
+
+    private GetGroupingModeText(): string {
+        switch (this.mode) {
+            case GroupingModeEnum.DontSummarize: {
+                return "";
+            }
+            case GroupingModeEnum.Count: {
+                return "Count of ";
+            }
+            case GroupingModeEnum.CountDistinct: {
+                return "Count of ";
+            }
+            case GroupingModeEnum.First: {
+                return "First ";
+            }
+            case GroupingModeEnum.Last: {
+                return "Last ";
+            }
+            default: {
+                return "";
             }
          }
     }
