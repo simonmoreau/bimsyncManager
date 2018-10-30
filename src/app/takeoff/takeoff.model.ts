@@ -96,7 +96,7 @@ export class DisplayProperty {
     }
 
     private GetIcon(): string {
-        return this.type === 'string' ? 'text' : 'slider';
+        return this.type === 'number' ? 'slider' : 'text';
     }
 
     private GetAvailableGroupingModes(): GroupingMode[] {
@@ -107,6 +107,23 @@ export class DisplayProperty {
             new GroupingMode(GroupingModeEnum.First),
             new GroupingMode(GroupingModeEnum.Last),
         ]
+
+        let numberModes = [
+            new GroupingMode(GroupingModeEnum.DontSummarize),
+            new GroupingMode(GroupingModeEnum.Sum),
+            new GroupingMode(GroupingModeEnum.Average),
+            new GroupingMode(GroupingModeEnum.Minimun),
+            new GroupingMode(GroupingModeEnum.Maximun),
+            new GroupingMode(GroupingModeEnum.CountDistinct),
+            new GroupingMode(GroupingModeEnum.Count),
+            new GroupingMode(GroupingModeEnum.StandardDeviation),
+            new GroupingMode(GroupingModeEnum.Variance),
+            new GroupingMode(GroupingModeEnum.Median)
+        ]
+
+        if (this.type === 'number') {
+            modes = numberModes;
+        }
 
         modes[0].isEnabled = true;
         return modes;
@@ -131,7 +148,14 @@ export enum GroupingModeEnum {
     Count,
     CountDistinct,
     First,
-    Last
+    Last,
+    Sum,
+    Average,
+    Minimun,
+    Maximun,
+    StandardDeviation,
+    Variance,
+    Median
 }
 
 export class GroupingMode {
@@ -171,6 +195,27 @@ export class GroupingMode {
             case GroupingModeEnum.Last: {
                 return "Last";
             }
+            case GroupingModeEnum.Sum: {
+                return "Sum";
+            }
+            case GroupingModeEnum.Average: {
+                return "Average";
+            }
+            case GroupingModeEnum.Minimun: {
+                return "Minimun";
+            }
+            case GroupingModeEnum.Maximun: {
+                return "Maximun";
+            }
+            case GroupingModeEnum.StandardDeviation: {
+                return "Standard Deviation";
+            }
+            case GroupingModeEnum.Variance: {
+                return "Variance";
+            }
+            case GroupingModeEnum.Median: {
+                return "Median";
+            }
             default: {
                 return "Don't Summarize";
             }
@@ -193,6 +238,27 @@ export class GroupingMode {
             }
             case GroupingModeEnum.Last: {
                 return "Last ";
+            }
+            case GroupingModeEnum.Sum: {
+                return "Sum of ";
+            }
+            case GroupingModeEnum.Average: {
+                return "Average of ";
+            }
+            case GroupingModeEnum.Minimun: {
+                return "Min of ";
+            }
+            case GroupingModeEnum.Maximun: {
+                return "Max of ";
+            }
+            case GroupingModeEnum.StandardDeviation: {
+                return "Standard deviation of ";
+            }
+            case GroupingModeEnum.Variance: {
+                return "Variance of ";
+            }
+            case GroupingModeEnum.Median: {
+                return "Median of ";
             }
             default: {
                 return "";
