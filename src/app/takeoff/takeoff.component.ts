@@ -151,19 +151,19 @@ export class TakeoffComponent implements OnInit {
 
         let displayedPropertyMainSet: IDisplayPropertySet = { name: 'Identification', properties: [] }
 
-        let objectNameProperty: DisplayProperty = new DisplayProperty('Name', 'string', ['attributes', 'Name', 'value']);
+        let objectNameProperty: DisplayProperty = new DisplayProperty('Name', 'string', "", ['attributes', 'Name', 'value']);
 
         if (this.GetPropertyValueFromPath(['attributes', 'Name', 'value'], product)) {
             displayedPropertyMainSet.properties.push(objectNameProperty);
         }
 
-        let objectTypeProperty: DisplayProperty = new DisplayProperty('Type', 'string', ['attributes', 'ObjectType', 'value']);
+        let objectTypeProperty: DisplayProperty = new DisplayProperty('Type', 'string', "", ['attributes', 'ObjectType', 'value']);
 
         if (this.GetPropertyValueFromPath(['attributes', 'ObjectType', 'value'], product)) {
             displayedPropertyMainSet.properties.push(objectTypeProperty);
         }
 
-        let objectClassProperty: DisplayProperty = new DisplayProperty('Entity', 'string', ['ifcType']);
+        let objectClassProperty: DisplayProperty = new DisplayProperty('Entity', 'string', "", ['ifcType']);
 
         if (product.ifcType) { displayedPropertyMainSet.properties.push(objectClassProperty); }
 
@@ -177,6 +177,7 @@ export class TakeoffComponent implements OnInit {
                 let displayProperty: DisplayProperty = new DisplayProperty(
                     propertyKey,
                     property.nominalValue.type,
+                    property.nominalValue.unit,
                     ['propertySets', propertySetKey, 'properties', propertyKey, 'nominalValue', 'value']
                 );
                 displayedPropertySet.properties.push(displayProperty);
@@ -189,11 +190,12 @@ export class TakeoffComponent implements OnInit {
             let quantitySet = product.quantitySets[quantitySetKey] as IQuantitySet;
             let displayedQuantitySet: IDisplayPropertySet = { name: quantitySet.attributes.Name.value, properties: [] }
             Object.keys(quantitySet.quantities).forEach(quantityKey => {
-                let property: IProperty = quantitySet.quantities[quantityKey] as IProperty;
-                let icon = property.nominalValue.type === 'string' ? 'text' : 'slider';
+                let quantity: IProperty = quantitySet.quantities[quantityKey] as IProperty;
+                let icon = quantity.nominalValue.type === 'string' ? 'text' : 'slider';
                 let displayProperty: DisplayProperty = new DisplayProperty(
                     quantityKey,
-                    property.nominalValue.type,
+                    quantity.nominalValue.type,
+                    quantity.nominalValue.unit,
                     ['quantitySets', quantitySetKey, 'quantities', quantityKey, 'value', 'value']
                 );
                 displayedQuantitySet.properties.push(displayProperty);

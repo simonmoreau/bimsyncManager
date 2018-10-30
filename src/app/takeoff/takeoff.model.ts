@@ -42,6 +42,7 @@ export interface NominalValue {
     type: string;
     ifcType: string;
     value: string;
+    unit: string;
 }
 
 export interface IProperty {
@@ -69,12 +70,14 @@ export class DisplayProperty {
     readonly icon: string;
     readonly availableGroupingModes: GroupingMode[];
     readonly path: string[];
+    readonly unit: string;
 
     private _groupingMode: GroupingMode;
 
-    constructor(name: string, type: string, path: string[]) {
+    constructor(name: string, type: string, unit: string, path: string[]) {
         this.name = name;
         this.type = type;
+        this.unit = unit;
         this.enable = false;
         this.icon = this.GetIcon();
         this.path = path;
@@ -87,7 +90,8 @@ export class DisplayProperty {
     }
 
     get displayName(): string {
-        return this._groupingMode.modeText + this.name;
+        const displayUnit = this.unit ? ' (' + this.unit + ')' : '';
+        return this._groupingMode.modeText + this.name + displayUnit;
     }
 
     set groupingMode(groupingMode: GroupingMode) {
