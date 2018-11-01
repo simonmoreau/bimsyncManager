@@ -271,7 +271,12 @@ export class TakeoffComponent implements OnInit {
 
             let columns: any = {};
             this.selectedValueProperties.forEach(selectedValueProperty => {
-                columns[selectedValueProperty.name] = this.GetGroupedList(selectedValueProperty);
+                let valuesArray = this.GetGroupedList(selectedValueProperty);
+                let index = valuesArray.indexOf(null);
+                if (index !== -1) {
+                    valuesArray[index] = 'null';
+                }
+                columns[selectedValueProperty.name] = valuesArray;
             });
             let rows = [];
 
