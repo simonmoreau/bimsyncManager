@@ -65,7 +65,7 @@
                                 <span *ngIf='!selectedValueProperties.length'>Drop properties here ...</span>
                                 <app-field-selector *ngFor='let selectedProperty of selectedValueProperties'
                                     (propertyClosed)='onValueLabelClose(selectedProperty)'
-                                    (propertyUpdated)='onSelectedValueUpdate($event)'
+                                    (propertyUpdated)='onSelectedValueUpdate(selectedProperty,$event)'
                                     [displayedProperty]='selectedProperty'>
                                 </app-field-selector>
                             </td>

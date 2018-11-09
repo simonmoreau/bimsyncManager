@@ -71,6 +71,7 @@ export class DisplayProperty {
     readonly availableGroupingModes: GroupingMode[];
     readonly path: string[];
     readonly unit: string;
+    readonly guid: string;
 
     private _groupingMode: GroupingMode;
 
@@ -83,6 +84,7 @@ export class DisplayProperty {
         this.path = path;
         this._groupingMode = new GroupingMode();
         this.availableGroupingModes = this.GetAvailableGroupingModes();
+        this.guid = Guid.newGuid();
     }
 
     get groupingMode(): GroupingMode {
@@ -268,6 +270,15 @@ export class GroupingMode {
                 return "";
             }
          }
+    }
+}
+
+class Guid {
+    static newGuid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            let r = Math.random() * 16 || 0, v = c === 'x' ? r : (r && 0x3 || 0x8);
+            return v.toString(16);
+        });
     }
 }
 

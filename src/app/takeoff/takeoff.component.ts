@@ -206,8 +206,12 @@ export class TakeoffComponent implements OnInit {
         console.log(this.displayedPropertySets);
     }
 
-    onTreeSelectionChange(e: DisplayProperty) {
-        this.UpdateSelectedValueProperties(e);
+    onTreeSelectionChange(displayProperty: DisplayProperty) {
+        if (!displayProperty.enable) {
+            this.selectedValueProperties = this.selectedValueProperties.filter(e => e.guid !== displayProperty.guid);
+        } else {
+            this.selectedValueProperties.push(Object.create(displayProperty));
+        }
         this.GetGroupedPropertyCount();
     }
 
@@ -223,44 +227,53 @@ export class TakeoffComponent implements OnInit {
     }
 
     onValuePropertyDrop(e: DropEvent) {
-        e.dragData.enable = true;
-    }
-
-    onValueLabelClose(e: DisplayProperty) {
-        e.enable = false;
-    }
-
-    onSelectedValueUpdate(property: DisplayProperty) {
-        this.UpdateSelectedValueProperties(property);
-        this.GetGroupedPropertyCount();
-    }
-
-    UpdatePropertyInList(property: DisplayProperty, list: DisplayProperty[]) {
-        let index = list.indexOf(property, 0);
-        if (index > -1) {
-            list[index] = property;
-        }
-    }
-
-    UpdateSelectedValueProperties(selectedDisplayedProperty: DisplayProperty) {
-        if (selectedDisplayedProperty.enable) {
-            // Find index of specific object using findIndex method.
-            let index = this.selectedValueProperties.findIndex((obj => obj.name === selectedDisplayedProperty.name));
-            if (index > -1) {
-                this.selectedValueProperties[index] = selectedDisplayedProperty;
-            } else {
-                this.selectedValueProperties.push(selectedDisplayedProperty);
-            }
+        if (e.dragData.enable) {
+            this.selectedValueProperties.push(Object.create(e.dragData));
+            this.GetGroupedPropertyCount();
         } else {
-            let index = this.selectedValueProperties.indexOf(selectedDisplayedProperty, 0);
-            if (index > -1) {
-                this.selectedValueProperties.splice(index, 1);
-            }
+            e.dragData.enable = true;
+        }
+    }
+
+    onValueLabelClose(property: DisplayProperty) {
+        // let  = this.filter(e => e.name !== displayProperty.name);
+        let displayedPropertiesList: DisplayProperty[] = [];
+        this.displayedPropertySets.map(s => displayedPropertiesList = displayedPropertiesList.concat(s.properties));
+        let selectedValueProperty: DisplayProperty[] = this.selectedValueProperties.filter(e => e.guid === property.guid);
+        if (selectedValueProperty.length === 1) {
+            displayedPropertiesList = displayedPropertiesList.filter(e => e.guid === property.guid);
+            displayedPropertiesList[0].enable = false
         }
 
+        let index = this.selectedValueProperties.indexOf(property, 0);
+        if (index > -1) {
+            this.selectedValueProperties.splice(index, 1);
+        }
         this.GetGroupedPropertyCount();
-
     }
+
+    onSelectedValueUpdate(property: DisplayProperty, updatedProperty: DisplayProperty) {
+        // let index = this.selectedValueProperties.indexOf(property, 0);
+        // if (index > -1) {
+        //     this.selectedValueProperties[index] = updatedProperty;
+        // }
+        // this.UpdateSelectedValueProperties(property);
+        this.GetGroupedPropertyCount();
+    }
+
+    // UpdateSelectedValueProperties(selectedDisplayedProperty: DisplayProperty) {
+    //     if (selectedDisplayedProperty.enable) {
+    //         this.selectedValueProperties.push(selectedDisplayedProperty);
+    //     } else {
+    //         let index = this.selectedValueProperties.indexOf(selectedDisplayedProperty, 0);
+    //         if (index > -1) {
+    //             this.selectedValueProperties.splice(index, 1);
+    //         }
+    //     }
+
+    //     this.GetGroupedPropertyCount();
+
+    // }
 
 
     GetGroupedPropertyCount(): any {
