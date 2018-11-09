@@ -253,27 +253,8 @@ export class TakeoffComponent implements OnInit {
     }
 
     onSelectedValueUpdate(property: DisplayProperty, updatedProperty: DisplayProperty) {
-        // let index = this.selectedValueProperties.indexOf(property, 0);
-        // if (index > -1) {
-        //     this.selectedValueProperties[index] = updatedProperty;
-        // }
-        // this.UpdateSelectedValueProperties(property);
         this.GetGroupedPropertyCount();
     }
-
-    // UpdateSelectedValueProperties(selectedDisplayedProperty: DisplayProperty) {
-    //     if (selectedDisplayedProperty.enable) {
-    //         this.selectedValueProperties.push(selectedDisplayedProperty);
-    //     } else {
-    //         let index = this.selectedValueProperties.indexOf(selectedDisplayedProperty, 0);
-    //         if (index > -1) {
-    //             this.selectedValueProperties.splice(index, 1);
-    //         }
-    //     }
-
-    //     this.GetGroupedPropertyCount();
-
-    // }
 
 
     GetGroupedPropertyCount(): any {
