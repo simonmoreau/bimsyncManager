@@ -138,7 +138,7 @@ export class DisplayProperty {
     private SetGroupingMode(groupingMode: GroupingMode) {
         let index = this.availableGroupingModes.indexOf(groupingMode, 0);
         if (index > -1) {
-            this.availableGroupingModes.forEach(gM => {gM.isEnabled = false; });
+            this.availableGroupingModes.forEach(gM => { gM.isEnabled = false; });
             this.availableGroupingModes[index].isEnabled = true;
         }
     }
@@ -225,7 +225,7 @@ export class GroupingMode {
             default: {
                 return "Don't Summarize";
             }
-         }
+        }
     }
 
     private GetGroupingModeText(): string {
@@ -269,16 +269,161 @@ export class GroupingMode {
             default: {
                 return "";
             }
-         }
+        }
     }
 }
 
 class Guid {
     static newGuid() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             let r = Math.random() * 16 || 0, v = c === 'x' ? r : (r && 0x3 || 0x8);
             return v.toString(16);
         });
+    }
+}
+
+export class ValueTree {
+    readonly value: any;
+    readonly property: DisplayProperty;
+    readonly selectedProperties: DisplayProperty[];
+    readonly filteredProducts: IProduct[];
+    readonly columnNumber: number;
+    readonly tree: ValueTree[];
+
+    constructor(value: any, columnNumber: number, selectedProperties: DisplayProperty[], products: IProduct[]) {
+        this.value = value;
+        this.property = selectedProperties[columnNumber];
+        this.columnNumber = columnNumber;
+        this.selectedProperties = selectedProperties;
+        this.filteredProducts = this.GetFilteredProducts(products);
+        this.tree = this.GetValueTree();
+    }
+
+    private GetFilteredProducts(products: IProduct[]): IProduct[] {
+        return products.filter(product =>
+            this.GetPropertyValueFromPath(this.property.path, product) === this.value
+        );
+    }
+
+    private GetPropertyValueFromPath(path: string[], object: any): any {
+        return path.reduce((acc, currValue) => (acc && acc[currValue]) ? acc[currValue] : null
+            , object)
+    }
+
+    private GetValueTree(): ValueTree[] {
+
+        let array: ValueTree[] = [];
+
+        if (this.columnNumber + 1 < this.selectedProperties.length) {
+            // Get the next values array
+            let filteredProductGroupedList: any[] = this.GetGroupedList(
+                this.selectedProperties[this.columnNumber + 1],
+                this.filteredProducts
+            );
+
+            filteredProductGroupedList.forEach(value => {
+                array.push(new ValueTree(
+                    value,
+                    this.columnNumber + 1,
+                    this.selectedProperties,
+                    this.filteredProducts
+                ));
+            });
+        }
+
+        return array;
+    }
+
+    get rows(): any {
+        let rows: any[] = [];
+
+        if (this.tree.length !== 0) {
+            this.tree.forEach(treeItem => {
+                treeItem.rows.forEach(row => {
+                    row[this.property.name] = this.value;
+                    rows.push(row);
+                });
+            });
+        } else {
+            let row: any = {};
+            row[this.property.name] = this.value;
+            rows.push(row);
+        }
+
+        return rows;
+    }
+
+    private GetGroupedList(selectedProperty: DisplayProperty, products: IProduct[]): any[] {
+
+        function onlyUnique(value, index, self) {
+            return self.indexOf(value) === index;
+        }
+
+        function average(data) {
+            const sum = data.reduce((a, b) => a + b, 0);
+            return sum / data.length;
+        }
+
+        function variance(array) {
+            const avg = average(array);
+            const squareDiffs = array.map((value) => (value - avg) * (value - avg));
+            return average(squareDiffs);
+        }
+
+        let allPropertyValuesList = products.map(product => {
+            return this.GetPropertyValueFromPath(selectedProperty.path, product);
+        });
+
+        switch (selectedProperty.groupingMode.mode) {
+            case GroupingModeEnum.DontSummarize: {
+                return allPropertyValuesList.filter(onlyUnique);
+            }
+            case GroupingModeEnum.Count: {
+                return [allPropertyValuesList.length];
+            }
+            case GroupingModeEnum.CountDistinct: {
+                return [allPropertyValuesList.filter(onlyUnique).length];
+            }
+            case GroupingModeEnum.First: {
+                return [allPropertyValuesList.filter(onlyUnique).sort()[0]];
+            }
+            case GroupingModeEnum.Last: {
+                let filteredValues = allPropertyValuesList.filter(onlyUnique).sort();
+                return [filteredValues[filteredValues.length - 1]];
+            }
+            case GroupingModeEnum.Sum: {
+                return [allPropertyValuesList.reduce((a, b) => a + b, 0)];
+            }
+            case GroupingModeEnum.Average: {
+                return [average(allPropertyValuesList)];
+            }
+            case GroupingModeEnum.Minimun: {
+                return [allPropertyValuesList.filter(onlyUnique).sort()[0]];
+            }
+            case GroupingModeEnum.Maximun: {
+                let filteredValues = allPropertyValuesList.filter(onlyUnique).sort();
+                return [filteredValues[filteredValues.length - 1]];
+            }
+            case GroupingModeEnum.StandardDeviation: {
+                return [Math.sqrt(variance(allPropertyValuesList))];
+            }
+            case GroupingModeEnum.Variance: {
+                return [variance(allPropertyValuesList)];
+            }
+            case GroupingModeEnum.Median: {
+                const arr = allPropertyValuesList.sort((a, b) => a - b);
+                let median = 0;
+                if (arr.length % 2 === 1) {
+                    median = arr[(arr.length + 1) / 2 - 1];
+                } else {
+                    median = (1 * arr[arr.length / 2 - 1] + 1 * arr[arr.length / 2]) / 2;
+                }
+                return [median]
+            }
+            default: {
+                return allPropertyValuesList.filter(onlyUnique);
+            }
+        }
     }
 }
 

@@ -9,10 +9,11 @@ import {
 import {
     ITypeSummary, IProduct, IPropertySet, IProperty,
     IQuantitySet, DisplayProperty,
-    IDisplayPropertySet, GroupingMode, GroupingModeEnum
+    IDisplayPropertySet, GroupingModeEnum, ValueTree
 } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
 import { isNumber } from "util";
+import { strictEqual } from "assert";
 
 
 @Component({
@@ -264,23 +265,36 @@ export class TakeoffComponent implements OnInit {
             this.listOfRows.length = 0;
 
             let columns: any = {};
-            this.selectedValueProperties.forEach(selectedValueProperty => {
-                let valuesArray = this.GetGroupedList(selectedValueProperty);
-                let index = valuesArray.indexOf(null);
-                if (index !== -1) {
-                    valuesArray[index] = 'null';
-                }
-                columns[selectedValueProperty.name] = valuesArray;
+
+            // Get the first column
+            let propertyArray = this.GetGroupedList(this.selectedValueProperties[0], this.selectedProducts);
+
+            // Create the tree
+            let tree: ValueTree[] = [];
+
+            propertyArray.forEach(value => {
+                tree.push(new ValueTree(
+                    value,
+                    0,
+                    this.selectedValueProperties,
+                    this.selectedProducts
+                ));
             });
+
+            // Create the rows
             let rows = [];
 
-            for (let i = 0; i < columns[this.selectedValueProperties[0].name].length; i++) {
-                let row: any = {};
-                this.selectedValueProperties.forEach(selectedValueProperty => {
-                    row[selectedValueProperty.name] = columns[selectedValueProperty.name][i];
-                });
-                rows.push(row);
-            }
+            tree.forEach(treeItem => {
+                rows = rows.concat(treeItem.rows);
+            });
+
+            // for (let i = 0; i < columns[this.selectedValueProperties[0].name].length; i++) {
+            //     let row: any = {};
+            //     this.selectedValueProperties.forEach(selectedValueProperty => {
+            //         row[selectedValueProperty.name] = columns[selectedValueProperty.name][i];
+            //     });
+            //     rows.push(row);
+            // }
 
             this.listOfRows = rows;
 
@@ -289,7 +303,7 @@ export class TakeoffComponent implements OnInit {
         }
     }
 
-    GetGroupedList(selectedProperty: DisplayProperty): any[] {
+    GetGroupedList(selectedProperty: DisplayProperty, products: IProduct[]): any[] {
 
         function onlyUnique(value, index, self) {
             return self.indexOf(value) === index;
@@ -306,7 +320,7 @@ export class TakeoffComponent implements OnInit {
             return average(squareDiffs);
         }
 
-        let allPropertyValuesList = this.selectedProducts.map(product => {
+        let allPropertyValuesList = products.map(product => {
             return this.GetPropertyValueFromPath(selectedProperty.path, product);
         });
 
