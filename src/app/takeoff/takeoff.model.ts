@@ -301,13 +301,8 @@ export class ValueTree {
 
     private GetFilteredProducts(products: IProduct[]): IProduct[] {
         return products.filter(product =>
-            this.GetPropertyValueFromPath(this.property.path, product) === this.value
+            GroupedList.GetPropertyValueFromPath(this.property.path, product) === this.value
         );
-    }
-
-    private GetPropertyValueFromPath(path: string[], object: any): any {
-        return path.reduce((acc, currValue) => (acc && acc[currValue]) ? acc[currValue] : null
-            , object)
     }
 
     private GetValueTree(): ValueTree[] {
@@ -354,6 +349,81 @@ export class ValueTree {
     }
 
     private GetGroupedList(selectedProperty: DisplayProperty, products: IProduct[]): any[] {
+
+        function onlyUnique(value, index, self) {
+            return self.indexOf(value) === index;
+        }
+
+        function average(data) {
+            const sum = data.reduce((a, b) => a + b, 0);
+            return sum / data.length;
+        }
+
+        function variance(array) {
+            const avg = average(array);
+            const squareDiffs = array.map((value) => (value - avg) * (value - avg));
+            return average(squareDiffs);
+        }
+
+        let allPropertyValuesList = products.map(product => {
+            return GroupedList.GetPropertyValueFromPath(selectedProperty.path, product);
+        });
+
+        switch (selectedProperty.groupingMode.mode) {
+            case GroupingModeEnum.DontSummarize: {
+                return allPropertyValuesList.filter(onlyUnique);
+            }
+            case GroupingModeEnum.Count: {
+                return [allPropertyValuesList.length];
+            }
+            case GroupingModeEnum.CountDistinct: {
+                return [allPropertyValuesList.filter(onlyUnique).length];
+            }
+            case GroupingModeEnum.First: {
+                return [allPropertyValuesList.filter(onlyUnique).sort()[0]];
+            }
+            case GroupingModeEnum.Last: {
+                let filteredValues = allPropertyValuesList.filter(onlyUnique).sort();
+                return [filteredValues[filteredValues.length - 1]];
+            }
+            case GroupingModeEnum.Sum: {
+                return [allPropertyValuesList.reduce((a, b) => a + b, 0)];
+            }
+            case GroupingModeEnum.Average: {
+                return [average(allPropertyValuesList)];
+            }
+            case GroupingModeEnum.Minimun: {
+                return [allPropertyValuesList.filter(onlyUnique).sort()[0]];
+            }
+            case GroupingModeEnum.Maximun: {
+                let filteredValues = allPropertyValuesList.filter(onlyUnique).sort();
+                return [filteredValues[filteredValues.length - 1]];
+            }
+            case GroupingModeEnum.StandardDeviation: {
+                return [Math.sqrt(variance(allPropertyValuesList))];
+            }
+            case GroupingModeEnum.Variance: {
+                return [variance(allPropertyValuesList)];
+            }
+            case GroupingModeEnum.Median: {
+                const arr = allPropertyValuesList.sort((a, b) => a - b);
+                let median = 0;
+                if (arr.length % 2 === 1) {
+                    median = arr[(arr.length + 1) / 2 - 1];
+                } else {
+                    median = (1 * arr[arr.length / 2 - 1] + 1 * arr[arr.length / 2]) / 2;
+                }
+                return [median]
+            }
+            default: {
+                return allPropertyValuesList.filter(onlyUnique);
+            }
+        }
+    }
+}
+
+export class GroupedList {
+    static GetGroupedList(selectedProperty: DisplayProperty, products: IProduct[]): any[] {
 
         function onlyUnique(value, index, self) {
             return self.indexOf(value) === index;
@@ -424,6 +494,11 @@ export class ValueTree {
                 return allPropertyValuesList.filter(onlyUnique);
             }
         }
+    }
+
+    static GetPropertyValueFromPath(path: string[], object: any): any {
+        return path.reduce((acc, currValue) => (acc && acc[currValue]) ? acc[currValue] : null
+            , object)
     }
 }
 
