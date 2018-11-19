@@ -260,7 +260,9 @@ export class TakeoffComponent implements OnInit {
     AddPropertyToColumns(displayProperty: DisplayProperty) {
         let clone: DisplayProperty = Object.create(displayProperty);
         clone.columnGuid = Guid.newGuid();
-        clone.groupingMode = new GroupingMode(GroupingModeEnum.DontSummarize);
+        // let groupingMode = new GroupingMode(GroupingModeEnum.DontSummarize);
+        // groupingMode.isEnabled = true;
+        // clone.groupingMode = groupingMode;
         this.selectedValueProperties.push(clone);
     }
 
