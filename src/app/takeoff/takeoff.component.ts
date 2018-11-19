@@ -38,6 +38,7 @@ export class TakeoffComponent implements OnInit {
     selectedValueProperties: DisplayProperty[] = [];
     selectedFilterProperties: DisplayProperty[] = [];
     listOfRows: any[] = [];
+    tableLoading: boolean = false;
 
     constructor(private _takeoffService: TakeoffService, private route: ActivatedRoute) { }
 
@@ -269,40 +270,46 @@ export class TakeoffComponent implements OnInit {
     GetGroupedPropertyCount(): any {
 
         if (this.selectedValueProperties && this.selectedValueProperties.length !== 0) {
-
-            this.listOfRows.length = 0;
-
-            // Get the first column
-            let propertyArray = Products.GetGroupedList(this.selectedValueProperties[0], this.selectedProducts);
-
-            // Create the tree
-            let tree: ValueTree[] = [];
-
-            propertyArray.forEach(value => {
-                tree.push(new ValueTree(
-                    value,
-                    0,
-                    this.selectedValueProperties,
-                    Products.GetFilteredProducts(
-                        this.selectedProducts,
-                        this.selectedValueProperties[0].path,
-                        value
-                        )
-                ));
+            this.tableLoading = true;
+            const promise = this.ProcessData();
+            promise.then(() => {
+                this.tableLoading = false;
             });
-
-            // Create the rows
-            let rows = [];
-
-            tree.forEach(treeItem => {
-                rows = rows.concat(treeItem.rows);
-            });
-
-            this.listOfRows = rows;
-
         } else {
             this.listOfRows.length = 0;
         }
+    }
+
+    async ProcessData(): Promise<void> {
+        this.listOfRows.length = 0;
+
+        // Get the first column
+        let propertyArray = Products.GetGroupedList(this.selectedValueProperties[0], this.selectedProducts);
+
+        // Create the tree
+        let tree: ValueTree[] = [];
+
+        propertyArray.forEach(value => {
+            tree.push(new ValueTree(
+                value,
+                0,
+                this.selectedValueProperties,
+                Products.GetFilteredProducts(
+                    this.selectedProducts,
+                    this.selectedValueProperties[0].path,
+                    value
+                )
+            ));
+        });
+
+        // Create the rows
+        let rows = [];
+
+        tree.forEach(treeItem => {
+            rows = rows.concat(treeItem.rows);
+        });
+
+        this.listOfRows = rows;
     }
 
     trackByFn(index, model) {

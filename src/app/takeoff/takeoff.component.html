@@ -108,6 +108,12 @@
         </table>
     </div>
     <div class='clr-col-8' style='overflow: auto'>
+        <div class="centered" *ngIf='tableLoading'>
+            <span class='spinner'>
+                Loading
+            </span>
+        </div>
+
         <clr-datagrid *ngIf='listOfRows && listOfRows.length'>
             <clr-dg-column [clrDgField]="selectedValueProperty.columnGuid" *ngFor='let selectedValueProperty of selectedValueProperties'>{{selectedValueProperty.displayName}}</clr-dg-column>
             <clr-dg-row *clrDgItems='let row of listOfRows'>
