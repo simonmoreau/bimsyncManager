@@ -72,6 +72,7 @@ export class DisplayProperty {
     readonly path: string[];
     readonly unit: string;
     readonly guid: string;
+    columnGuid: string;
 
     private _groupingMode: GroupingMode;
 
@@ -85,6 +86,7 @@ export class DisplayProperty {
         this._groupingMode = new GroupingMode();
         this.availableGroupingModes = this.GetAvailableGroupingModes();
         this.guid = Guid.newGuid();
+        this.columnGuid = Guid.newGuid();
     }
 
     get groupingMode(): GroupingMode {
@@ -273,7 +275,7 @@ export class GroupingMode {
     }
 }
 
-class Guid {
+export class Guid {
     static newGuid() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             let r = Math.random() * 16 || 0, v = c === 'x' ? r : (r && 0x3 || 0x8);
@@ -336,13 +338,13 @@ export class ValueTree {
         if (this.tree.length !== 0) {
             this.tree.forEach(treeItem => {
                 treeItem.rows.forEach(row => {
-                    row[this.property.name] = this.value;
+                    row[this.property.columnGuid] = this.value;
                     rows.push(row);
                 });
             });
         } else {
             let row: any = {};
-            row[this.property.name] = this.value;
+            row[this.property.columnGuid] = this.value;
             rows.push(row);
         }
 

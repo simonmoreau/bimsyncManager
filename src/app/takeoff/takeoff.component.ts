@@ -9,7 +9,7 @@ import {
 import {
     ITypeSummary, IProduct, IPropertySet, IProperty,
     IQuantitySet, DisplayProperty,
-    IDisplayPropertySet, Products, ValueTree
+    IDisplayPropertySet, Products, ValueTree, Guid
 } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
 import { isNumber } from "util";
@@ -211,7 +211,9 @@ export class TakeoffComponent implements OnInit {
         if (!displayProperty.enable) {
             this.selectedValueProperties = this.selectedValueProperties.filter(e => e.guid !== displayProperty.guid);
         } else {
-            this.selectedValueProperties.push(Object.create(displayProperty));
+            let clone: DisplayProperty = Object.create(displayProperty);
+            clone.columnGuid = Guid.newGuid();
+            this.selectedValueProperties.push(clone);
         }
         this.GetGroupedPropertyCount();
     }
