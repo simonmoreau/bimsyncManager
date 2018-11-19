@@ -109,8 +109,7 @@
     </div>
     <div class='clr-col-8' style='overflow: auto'>
         <clr-datagrid *ngIf='listOfRows && listOfRows.length'>
-            <clr-dg-column [clrDgField]="selectedValueProperty.name" *ngFor='let selectedValueProperty of selectedValueProperties'>{{selectedValueProperty.displayName}}</clr-dg-column>
-
+            <clr-dg-column [clrDgField]="selectedValueProperty.columnGuid" *ngFor='let selectedValueProperty of selectedValueProperties'>{{selectedValueProperty.displayName}}</clr-dg-column>
             <clr-dg-row *clrDgItems='let row of listOfRows'>
                 <clr-dg-cell *ngFor='let selectedValueProperty of selectedValueProperties'>{{row[selectedValueProperty.columnGuid]}}</clr-dg-cell>
             </clr-dg-row>
