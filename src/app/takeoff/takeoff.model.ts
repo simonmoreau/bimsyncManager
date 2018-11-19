@@ -72,6 +72,7 @@ export class DisplayProperty {
     readonly path: string[];
     readonly unit: string;
     readonly guid: string;
+    columnGuid: string;
 
     private _groupingMode: GroupingMode;
 
@@ -85,6 +86,7 @@ export class DisplayProperty {
         this._groupingMode = new GroupingMode();
         this.availableGroupingModes = this.GetAvailableGroupingModes();
         this.guid = Guid.newGuid();
+        this.columnGuid = Guid.newGuid();
     }
 
     get groupingMode(): GroupingMode {
@@ -273,12 +275,16 @@ export class GroupingMode {
     }
 }
 
-class Guid {
+export class Guid {
     static newGuid() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            let r = Math.random() * 16 || 0, v = c === 'x' ? r : (r && 0x3 || 0x8);
-            return v.toString(16);
-        });
+
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     }
 }
 
@@ -286,7 +292,7 @@ export class ValueTree {
     readonly value: any;
     readonly property: DisplayProperty;
     readonly selectedProperties: DisplayProperty[];
-    readonly filteredProducts: IProduct[];
+    readonly products: IProduct[];
     readonly columnNumber: number;
     readonly tree: ValueTree[];
 
@@ -295,38 +301,39 @@ export class ValueTree {
         this.property = selectedProperties[columnNumber];
         this.columnNumber = columnNumber;
         this.selectedProperties = selectedProperties;
-        this.filteredProducts = this.GetFilteredProducts(products);
+        this.products = products;
         this.tree = this.GetValueTree();
-    }
-
-    private GetFilteredProducts(products: IProduct[]): IProduct[] {
-        return products.filter(product =>
-            GroupedList.GetPropertyValueFromPath(this.property.path, product) === this.value
-        );
     }
 
     private GetValueTree(): ValueTree[] {
 
-        let array: ValueTree[] = [];
+        let nextColumntreeItems: ValueTree[] = [];
 
         if (this.columnNumber + 1 < this.selectedProperties.length) {
-            // Get the next values array
-            let filteredProductGroupedList: any[] = this.GetGroupedList(
+            // Get the array of values for the next column
+            let nextColumnArray: any[] = Products.GetGroupedList(
                 this.selectedProperties[this.columnNumber + 1],
-                this.filteredProducts
+                this.products
             );
 
-            filteredProductGroupedList.forEach(value => {
-                array.push(new ValueTree(
+            // Create a tree item for each value of the next column
+            nextColumnArray.forEach(value => {
+                let filteredProducts = Products.GetFilteredProducts(
+                    this.products,
+                    this.selectedProperties[this.columnNumber + 1].path,
+                    value
+                );
+
+                nextColumntreeItems.push(new ValueTree(
                     value,
                     this.columnNumber + 1,
                     this.selectedProperties,
-                    this.filteredProducts
+                    filteredProducts
                 ));
             });
         }
 
-        return array;
+        return nextColumntreeItems;
     }
 
     get rows(): any {
@@ -335,20 +342,22 @@ export class ValueTree {
         if (this.tree.length !== 0) {
             this.tree.forEach(treeItem => {
                 treeItem.rows.forEach(row => {
-                    row[this.property.name] = this.value;
+                    row[this.property.columnGuid] = this.value;
                     rows.push(row);
                 });
             });
         } else {
             let row: any = {};
-            row[this.property.name] = this.value;
+            row[this.property.columnGuid] = this.value;
             rows.push(row);
         }
 
         return rows;
     }
+}
 
-    private GetGroupedList(selectedProperty: DisplayProperty, products: IProduct[]): any[] {
+export class Products {
+    static GetGroupedList(selectedProperty: DisplayProperty, products: IProduct[]): any[] {
 
         function onlyUnique(value, index, self) {
             return self.indexOf(value) === index;
@@ -494,6 +503,12 @@ export class GroupedList {
                 return allPropertyValuesList.filter(onlyUnique);
             }
         }
+    }
+
+    static GetFilteredProducts(products: IProduct[], path: string[], value: any): IProduct[] {
+        return products.filter(product =>
+            this.GetPropertyValueFromPath(path, product) === value
+        );
     }
 
     static GetPropertyValueFromPath(path: string[], object: any): any {

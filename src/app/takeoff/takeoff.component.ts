@@ -9,7 +9,7 @@ import {
 import {
     ITypeSummary, IProduct, IPropertySet, IProperty,
     IQuantitySet, DisplayProperty,
-    IDisplayPropertySet, GroupedList, ValueTree
+    IDisplayPropertySet, Products, ValueTree, Guid, GroupingModeEnum, GroupingMode
 } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
 import { isNumber } from "util";
@@ -38,6 +38,7 @@ export class TakeoffComponent implements OnInit {
     selectedValueProperties: DisplayProperty[] = [];
     selectedFilterProperties: DisplayProperty[] = [];
     listOfRows: any[] = [];
+    tableLoading: boolean = false;
 
     constructor(private _takeoffService: TakeoffService, private route: ActivatedRoute) { }
 
@@ -154,13 +155,13 @@ export class TakeoffComponent implements OnInit {
 
         let objectNameProperty: DisplayProperty = new DisplayProperty('Name', 'string', "", ['attributes', 'Name', 'value']);
 
-        if (GroupedList.GetPropertyValueFromPath(['attributes', 'Name', 'value'], product)) {
+        if (Products.GetPropertyValueFromPath(['attributes', 'Name', 'value'], product)) {
             displayedPropertyMainSet.properties.push(objectNameProperty);
         }
 
         let objectTypeProperty: DisplayProperty = new DisplayProperty('Type', 'string', "", ['attributes', 'ObjectType', 'value']);
 
-        if (GroupedList.GetPropertyValueFromPath(['attributes', 'ObjectType', 'value'], product)) {
+        if (Products.GetPropertyValueFromPath(['attributes', 'ObjectType', 'value'], product)) {
             displayedPropertyMainSet.properties.push(objectTypeProperty);
         }
 
@@ -211,7 +212,7 @@ export class TakeoffComponent implements OnInit {
         if (!displayProperty.enable) {
             this.selectedValueProperties = this.selectedValueProperties.filter(e => e.guid !== displayProperty.guid);
         } else {
-            this.selectedValueProperties.push(Object.create(displayProperty));
+            this.AddPropertyToColumns(displayProperty);
         }
         this.GetGroupedPropertyCount();
     }
@@ -229,7 +230,7 @@ export class TakeoffComponent implements OnInit {
 
     onValuePropertyDrop(e: DropEvent) {
         if (e.dragData.enable) {
-            this.selectedValueProperties.push(Object.create(e.dragData));
+            this.AddPropertyToColumns(e.dragData);
             this.GetGroupedPropertyCount();
         } else {
             e.dragData.enable = true;
@@ -257,40 +258,58 @@ export class TakeoffComponent implements OnInit {
         this.GetGroupedPropertyCount();
     }
 
+    AddPropertyToColumns(displayProperty: DisplayProperty) {
+        let clone: DisplayProperty = Object.create(displayProperty);
+        clone.columnGuid = Guid.newGuid();
+        // let groupingMode = new GroupingMode(GroupingModeEnum.DontSummarize);
+        // groupingMode.isEnabled = true;
+        // clone.groupingMode = groupingMode;
+        this.selectedValueProperties.push(clone);
+    }
 
     GetGroupedPropertyCount(): any {
 
         if (this.selectedValueProperties && this.selectedValueProperties.length !== 0) {
-
-            this.listOfRows.length = 0;
-
-            // Get the first column
-            let propertyArray = GroupedList.GetGroupedList(this.selectedValueProperties[0], this.selectedProducts);
-
-            // Create the tree
-            let tree: ValueTree[] = [];
-
-            propertyArray.forEach(value => {
-                tree.push(new ValueTree(
-                    value,
-                    0,
-                    this.selectedValueProperties,
-                    this.selectedProducts
-                ));
+            this.tableLoading = true;
+            const promise = this.ProcessData();
+            promise.then(() => {
+                this.tableLoading = false;
             });
-
-            // Create the rows
-            let rows = [];
-
-            tree.forEach(treeItem => {
-                rows = rows.concat(treeItem.rows);
-            });
-
-            this.listOfRows = rows;
-
         } else {
             this.listOfRows.length = 0;
         }
+    }
+
+    async ProcessData(): Promise<void> {
+        this.listOfRows.length = 0;
+
+        // Get the first column
+        let propertyArray = Products.GetGroupedList(this.selectedValueProperties[0], this.selectedProducts);
+
+        // Create the tree
+        let tree: ValueTree[] = [];
+
+        propertyArray.forEach(value => {
+            tree.push(new ValueTree(
+                value,
+                0,
+                this.selectedValueProperties,
+                Products.GetFilteredProducts(
+                    this.selectedProducts,
+                    this.selectedValueProperties[0].path,
+                    value
+                )
+            ));
+        });
+
+        // Create the rows
+        let rows = [];
+
+        tree.forEach(treeItem => {
+            rows = rows.concat(treeItem.rows);
+        });
+
+        this.listOfRows = rows;
     }
 
     trackByFn(index, model) {
