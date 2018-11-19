@@ -7,7 +7,15 @@
       </button>
       <clr-dropdown-menu *clrIfOpen>
         <button type='button' clrDropdownItem (click)=onClosing()>Remove field</button>
-        <button type='button' clrDropdownItem>Rename</button>
+        <clr-dropdown style="margin-left: 0px;">
+          <button type='button' clrDropdownTrigger>Move</button>
+          <clr-dropdown-menu>
+              <button type="button" clrDropdownItem [disabled]="isFirst">Up</button>
+              <button type="button" clrDropdownItem [disabled]="isLast">Down</button>
+              <button type="button" clrDropdownItem [disabled]="isFirst">To Top</button>
+              <button type="button" clrDropdownItem [disabled]="isLast">To bottom</button>
+          </clr-dropdown-menu>
+      </clr-dropdown>
         <div class='dropdown-divider'></div>
         <button type='button' clrDropdownItem *ngFor='let groupingMode of displayedProperty.availableGroupingModes' (click)=onUpdateProperty(groupingMode)>
           <clr-icon shape='check' *ngIf='groupingMode.isEnabled' class="is-info"></clr-icon> {{groupingMode.modeName}}

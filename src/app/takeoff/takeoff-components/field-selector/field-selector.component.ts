@@ -1,4 +1,4 @@
-import { Component, OnChanges, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { DisplayProperty, GroupingMode } from '../../takeoff.model';
 
 @Component({
@@ -8,24 +8,30 @@ import { DisplayProperty, GroupingMode } from '../../takeoff.model';
 })
 export class FieldSelectorComponent implements OnChanges {
 
-  summarize: boolean = true;
-  first: boolean = false;
-  last: boolean = false;
-  countDistinct: boolean = false;
-  count: boolean = false;
   GroupingMode: GroupingMode;
+  isLast: boolean = false;
+  isFirst: boolean = false;
 
   @Input() displayedProperty: DisplayProperty;
+  @Input() selectedValueProperties: DisplayProperty[];
   @Output() propertyClosed: EventEmitter<string> = new EventEmitter<string>();
   @Output() propertyUpdated: EventEmitter<DisplayProperty> = new EventEmitter<DisplayProperty>();
 
-  ngOnChanges(): void {
-      // this.starWidth = this.rating * 86 / 5;
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes.selectedValueProperties.currentValue);
+    console.log(changes.selectedValueProperties.previousValue);
+    let index = this.selectedValueProperties.indexOf(this.displayedProperty);
+    if (index === 0) {this.isFirst = true; }
+    if (index === this.selectedValueProperties.length - 1 ) {this.isLast = true; }
   }
 
   onUpdateProperty(value: GroupingMode): void {
     this.displayedProperty.groupingMode = value;
     this.propertyUpdated.emit(this.displayedProperty);
+  }
+
+  onUpdatePropertyRank(): void {
+
   }
 
   onClosing(): void {
