@@ -9,7 +9,7 @@ import {
 import {
     ITypeSummary, IProduct, IPropertySet, IProperty,
     IQuantitySet, DisplayProperty,
-    IDisplayPropertySet, Products, ValueTree, Guid
+    IDisplayPropertySet, Products, ValueTree, Guid, GroupingModeEnum, GroupingMode
 } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
 import { isNumber } from "util";
@@ -211,9 +211,7 @@ export class TakeoffComponent implements OnInit {
         if (!displayProperty.enable) {
             this.selectedValueProperties = this.selectedValueProperties.filter(e => e.guid !== displayProperty.guid);
         } else {
-            let clone: DisplayProperty = Object.create(displayProperty);
-            clone.columnGuid = Guid.newGuid();
-            this.selectedValueProperties.push(clone);
+            this.AddPropertyToColumns(displayProperty);
         }
         this.GetGroupedPropertyCount();
     }
@@ -231,7 +229,7 @@ export class TakeoffComponent implements OnInit {
 
     onValuePropertyDrop(e: DropEvent) {
         if (e.dragData.enable) {
-            this.selectedValueProperties.push(Object.create(e.dragData));
+            this.AddPropertyToColumns(e.dragData);
             this.GetGroupedPropertyCount();
         } else {
             e.dragData.enable = true;
@@ -259,6 +257,12 @@ export class TakeoffComponent implements OnInit {
         this.GetGroupedPropertyCount();
     }
 
+    AddPropertyToColumns(displayProperty: DisplayProperty) {
+        let clone: DisplayProperty = Object.create(displayProperty);
+        clone.columnGuid = Guid.newGuid();
+        clone.groupingMode = new GroupingMode(GroupingModeEnum.DontSummarize);
+        this.selectedValueProperties.push(clone);
+    }
 
     GetGroupedPropertyCount(): any {
 
