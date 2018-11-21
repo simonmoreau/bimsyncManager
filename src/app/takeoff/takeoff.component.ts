@@ -60,6 +60,8 @@ export class TakeoffComponent implements OnInit {
     }
 
     GetModels() {
+        this.selectedValueProperties.length = 0;
+        this.listOfRows.length = 0;
         this._takeoffService.getModels(this.selectedProject.id).subscribe(
             models => {
                 this.models = models;
@@ -76,6 +78,8 @@ export class TakeoffComponent implements OnInit {
     }
 
     GetRevisions() {
+        this.selectedValueProperties.length = 0;
+        this.listOfRows.length = 0;
         this._takeoffService
             .getRevisions(this.selectedProject.id, this.selectedModel.id)
             .subscribe(
@@ -94,6 +98,8 @@ export class TakeoffComponent implements OnInit {
     }
 
     GetProductTypeSummary() {
+        this.selectedValueProperties.length = 0;
+        this.listOfRows.length = 0;
         this._takeoffService
             .getProductsTypeSummary(
                 this.selectedProject.id,
@@ -122,6 +128,8 @@ export class TakeoffComponent implements OnInit {
     }
 
     GetProducts() {
+        this.selectedValueProperties.length = 0;
+        this.listOfRows.length = 0;
         this.selectedProducts.length = 0;
         this.selectedProductsLoading = true;
         // It will loop on all requests
@@ -149,6 +157,8 @@ export class TakeoffComponent implements OnInit {
     }
 
     GetProductProperties(product: IProduct) {
+        this.selectedValueProperties.length = 0;
+        this.listOfRows.length = 0;
 
         this.displayedPropertySets.length = 0;
 

@@ -2,3 +2,50 @@
     position: absolute;
     right: 30%;
   }
+
+  .box {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+  }
+
+  .box .item {
+    flex: 0 1 auto;
+  }
+
+  .box .content {
+    flex: 1 1 auto;
+  }
+
+  .customTable {
+    border-collapse: separate;
+    border: 1px solid #ccc;
+    border-radius: .125rem;
+    background-color: #fff;
+    color: #565656;
+    margin: 0;
+    margin-top: 1rem;
+    max-width: 100%;
+    width: 100%;
+
+  }
+
+  .customTable .firstline {
+    border-radius: 0 calc(.125rem - 1px) 0 0;
+    color: #565656;
+    font-size: .458333rem;
+    font-weight: 600;
+    letter-spacing: .03em;
+    background-color: #fafafa;
+    vertical-align: bottom;
+    border-bottom: 1px solid #ccc;
+    border-top: 0 none;
+    line-height: .583333rem;
+    padding: 0.458333rem .5rem .458333rem .25rem;
+  }
+
+  .customTable .line {
+    border-radius: 0 0 calc(.125rem - 1px) 0;
+    line-height: .583333rem;
+    padding: 0.458333rem .5rem .458333rem .25rem;
+  }
