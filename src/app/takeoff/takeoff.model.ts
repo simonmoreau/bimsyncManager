@@ -73,6 +73,8 @@ export class DisplayProperty {
     readonly unit: string;
     readonly guid: string;
     columnGuid: string;
+    isFirst: boolean;
+    isLast: boolean;
 
     private _groupingMode: GroupingMode;
 
@@ -164,6 +166,13 @@ export enum GroupingModeEnum {
     StandardDeviation,
     Variance,
     Median
+}
+
+export enum SortEnum {
+    Up,
+    Down,
+    ToTop,
+    ToBottom
 }
 
 export class GroupingMode {

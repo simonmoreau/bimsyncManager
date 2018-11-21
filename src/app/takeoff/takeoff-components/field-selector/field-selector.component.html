@@ -10,10 +10,10 @@
         <clr-dropdown style="margin-left: 0px;">
           <button type='button' clrDropdownTrigger>Move</button>
           <clr-dropdown-menu>
-              <button type="button" clrDropdownItem [disabled]="isFirst">Up</button>
-              <button type="button" clrDropdownItem [disabled]="isLast">Down</button>
-              <button type="button" clrDropdownItem [disabled]="isFirst">To Top</button>
-              <button type="button" clrDropdownItem [disabled]="isLast">To bottom</button>
+              <button type="button" clrDropdownItem [disabled]="displayedProperty.isFirst" (click)=onUpdatePropertyRank(0)>Up</button>
+              <button type="button" clrDropdownItem [disabled]="displayedProperty.isLast" (click)=onUpdatePropertyRank(1)>Down</button>
+              <button type="button" clrDropdownItem [disabled]="displayedProperty.isFirst" (click)=onUpdatePropertyRank(2)>To Top</button>
+              <button type="button" clrDropdownItem [disabled]="displayedProperty.isLast" (click)=onUpdatePropertyRank(3)>To bottom</button>
           </clr-dropdown-menu>
       </clr-dropdown>
         <div class='dropdown-divider'></div>

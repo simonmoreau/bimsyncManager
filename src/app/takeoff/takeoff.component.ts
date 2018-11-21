@@ -9,11 +9,12 @@ import {
 import {
     ITypeSummary, IProduct, IPropertySet, IProperty,
     IQuantitySet, DisplayProperty,
-    IDisplayPropertySet, Products, ValueTree, Guid, GroupingModeEnum, GroupingMode
+    IDisplayPropertySet, Products, ValueTree, Guid, GroupingModeEnum, SortEnum
 } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
 import { isNumber } from "util";
 import { strictEqual } from "assert";
+import { Sort } from "@clr/angular/data/datagrid/providers/sort";
 
 
 @Component({
@@ -211,6 +212,7 @@ export class TakeoffComponent implements OnInit {
     onTreeSelectionChange(displayProperty: DisplayProperty) {
         if (!displayProperty.enable) {
             this.selectedValueProperties = this.selectedValueProperties.filter(e => e.guid !== displayProperty.guid);
+            this.RemovePropertyFromColumns(displayProperty);
         } else {
             this.AddPropertyToColumns(displayProperty);
         }
@@ -238,7 +240,8 @@ export class TakeoffComponent implements OnInit {
     }
 
     onValueLabelClose(property: DisplayProperty) {
-        // let  = this.filter(e => e.name !== displayProperty.name);
+
+        // Remove property from the tree
         let displayedPropertiesList: DisplayProperty[] = [];
         this.displayedPropertySets.map(s => displayedPropertiesList = displayedPropertiesList.concat(s.properties));
         let selectedValueProperty: DisplayProperty[] = this.selectedValueProperties.filter(e => e.guid === property.guid);
@@ -247,10 +250,9 @@ export class TakeoffComponent implements OnInit {
             displayedPropertiesList[0].enable = false
         }
 
-        let index = this.selectedValueProperties.indexOf(property, 0);
-        if (index > -1) {
-            this.selectedValueProperties.splice(index, 1);
-        }
+        // Remove property from the columns
+        this.RemovePropertyFromColumns(property);
+
         this.GetGroupedPropertyCount();
     }
 
@@ -261,10 +263,58 @@ export class TakeoffComponent implements OnInit {
     AddPropertyToColumns(displayProperty: DisplayProperty) {
         let clone: DisplayProperty = Object.create(displayProperty);
         clone.columnGuid = Guid.newGuid();
-        // let groupingMode = new GroupingMode(GroupingModeEnum.DontSummarize);
-        // groupingMode.isEnabled = true;
-        // clone.groupingMode = groupingMode;
         this.selectedValueProperties.push(clone);
+
+        this.UpdatePropertiesRank();
+    }
+
+    RemovePropertyFromColumns(displayProperty: DisplayProperty) {
+        let index = this.selectedValueProperties.indexOf(displayProperty, 0);
+        if (index > -1) {
+            this.selectedValueProperties.splice(index, 1);
+        }
+
+        this.UpdatePropertiesRank();
+    }
+
+    UpdatePropertiesRank() {
+        this.selectedValueProperties.forEach(property => {
+            property.isFirst = false;
+            property.isLast = false;
+        });
+
+        const lastindex = this.selectedValueProperties.length - 1;
+        this.selectedValueProperties[0].isFirst = true;
+        this.selectedValueProperties[lastindex].isLast = true;
+    }
+
+    onRankUpdated(property: DisplayProperty, rank: SortEnum) {
+        let index = this.selectedValueProperties.indexOf(property, 0);
+        if (index > -1) {
+            this.selectedValueProperties.splice(index, 1);
+
+            switch (+rank) {
+                case SortEnum.Up: {
+                    this.selectedValueProperties.splice(index - 1, 0, property);
+                    break;
+                }
+                case SortEnum.Down: {
+                    this.selectedValueProperties.splice(index + 1, 0, property);
+                    break;
+                }
+                case SortEnum.ToTop: {
+                    this.selectedValueProperties.splice(0, 0, property);
+                    break;
+                }
+                case SortEnum.ToBottom: {
+                    this.selectedValueProperties.push(property);
+                    break;
+                }
+            }
+        }
+
+        this.UpdatePropertiesRank();
+        this.GetGroupedPropertyCount();
     }
 
     GetGroupedPropertyCount(): any {

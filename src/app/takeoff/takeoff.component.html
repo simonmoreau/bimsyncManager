@@ -66,8 +66,9 @@
                                 <app-field-selector *ngFor='let selectedProperty of selectedValueProperties'
                                     (propertyClosed)='onValueLabelClose(selectedProperty)'
                                     (propertyUpdated)='onSelectedValueUpdate(selectedProperty,$event)'
+                                    (rankUpdated)='onRankUpdated(selectedProperty,$event)'
                                     [displayedProperty]='selectedProperty'
-                                    [selectedValueProperties]='selectedValueProperties'>
+                                    >
                                 </app-field-selector>
                             </td>
                         </tr>
