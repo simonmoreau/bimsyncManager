@@ -327,11 +327,15 @@ export class ValueTree {
 
             // Create a tree item for each value of the next column
             nextColumnArray.forEach(value => {
-                let filteredProducts = Products.GetFilteredProducts(
-                    this.products,
-                    this.selectedProperties[this.columnNumber + 1].path,
-                    value
-                );
+                let filteredProducts = this.products;
+                if (this.selectedProperties[this.columnNumber + 1].groupingMode.mode === GroupingModeEnum.DontSummarize) {
+                    filteredProducts = Products.GetFilteredProducts(
+                        this.products,
+                        this.selectedProperties[this.columnNumber + 1].path,
+                        value
+                    );
+                }
+
 
                 nextColumntreeItems.push(new ValueTree(
                     value,

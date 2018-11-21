@@ -340,15 +340,17 @@ export class TakeoffComponent implements OnInit {
         let tree: ValueTree[] = [];
 
         propertyArray.forEach(value => {
+            let filteredProducts = Products.GetFilteredProducts(
+                this.selectedProducts,
+                this.selectedValueProperties[0].path,
+                value
+            );
+
             tree.push(new ValueTree(
                 value,
                 0,
                 this.selectedValueProperties,
-                Products.GetFilteredProducts(
-                    this.selectedProducts,
-                    this.selectedValueProperties[0].path,
-                    value
-                )
+                filteredProducts
             ));
         });
 
