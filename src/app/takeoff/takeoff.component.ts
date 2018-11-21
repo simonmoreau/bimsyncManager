@@ -278,14 +278,18 @@ export class TakeoffComponent implements OnInit {
     }
 
     UpdatePropertiesRank() {
-        this.selectedValueProperties.forEach(property => {
-            property.isFirst = false;
-            property.isLast = false;
-        });
 
-        const lastindex = this.selectedValueProperties.length - 1;
-        this.selectedValueProperties[0].isFirst = true;
-        this.selectedValueProperties[lastindex].isLast = true;
+        if (this.selectedValueProperties && this.selectedValueProperties.length !== 0) {
+            this.selectedValueProperties.forEach(property => {
+                property.isFirst = false;
+                property.isLast = false;
+            });
+    
+            const lastindex = this.selectedValueProperties.length - 1;
+            this.selectedValueProperties[0].isFirst = true;
+            this.selectedValueProperties[lastindex].isLast = true;
+        }
+
     }
 
     onRankUpdated(property: DisplayProperty, rank: SortEnum) {
