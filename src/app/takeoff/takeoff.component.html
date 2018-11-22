@@ -76,6 +76,11 @@
                 <clr-dg-cell *ngFor='let selectedValueProperty of selectedValueProperties'>{{row[selectedValueProperty.columnGuid]}}</clr-dg-cell>
             </clr-dg-row>
             <clr-dg-footer>
+                <div class="left">
+                        <button class="btn btn-link btn-icon btn-inline" (click)="DownloadData()">
+                                <clr-icon shape="download" class="is-solid"></clr-icon>
+                            </button>
+                </div>
                 <clr-dg-pagination #pagination [clrDgPageSize]="15">
                     {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
                     of {{selectedIfcClass.typeQuantity}} {{selectedIfcClass.typeName}}

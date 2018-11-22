@@ -381,4 +381,8 @@ export class TakeoffComponent implements OnInit {
     trackByFn(index, model) {
         return model.id;
     }
+
+    DownloadData() {
+        console.log("download data as spreadsheet");
+    }
 }
