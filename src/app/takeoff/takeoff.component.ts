@@ -294,7 +294,7 @@ export class TakeoffComponent implements OnInit {
                 property.isFirst = false;
                 property.isLast = false;
             });
-    
+
             const lastindex = this.selectedValueProperties.length - 1;
             this.selectedValueProperties[0].isFirst = true;
             this.selectedValueProperties[lastindex].isLast = true;
@@ -383,6 +383,41 @@ export class TakeoffComponent implements OnInit {
     }
 
     DownloadData() {
-        console.log("download data as spreadsheet");
+
+        if (this.listOfRows.length !== 0) {
+
+            let csvContent = 'data:text/csv;charset=utf-8,';
+
+            // first row
+            let firstRow = '';
+            this.selectedValueProperties.forEach(selectedValueProperty => {
+                firstRow = firstRow + selectedValueProperty.displayName + ',';
+            })
+            csvContent += firstRow + '\r\n';
+
+            this.listOfRows.forEach(rowArray => {
+                let row = '';
+
+                Object.keys(rowArray).forEach(key => {
+                    row = row + rowArray[key] + ',';
+                });
+
+                csvContent += row + '\r\n';
+            });
+
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+
+            let options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            let dateString = new Date().toLocaleDateString("en-US", options)
+
+            link.setAttribute('download', dateString + '_' + this.selectedIfcClass.typeName + '.csv');
+            document.body.appendChild(link); // Required for FF
+
+            link.click(); // This will download the data file named "my_data.csv".
+        }
+
+        // console.log("download data as spreadsheet");
     }
 }
