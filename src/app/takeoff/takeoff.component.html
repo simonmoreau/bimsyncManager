@@ -40,15 +40,15 @@
                 </app-field-selector>
             </div>
         </div>
-        <div class='content customTable' style='overflow: auto' *ngIf='selectedIfcClass'>
-            <div class='firstline'>
+        <div class='content customTable box' *ngIf='selectedIfcClass'>
+            <div class='firstline item'>
                 Properties
             </div>
-            <div class='line' droppable (onDrop)='onValuePropertyDrop($event)' style='padding: 0; padding-left: 0.5rem;overflow: auto;'>
-                <span class='spinner' *ngIf='selectedProductsLoading'>
+            <div class='line content' droppable (onDrop)='onValuePropertyDrop($event)' style='padding: 0; padding-left: 0.5rem;overflow-y: auto;overflow-x: hidden'>
+                <span class='spinner centered' *ngIf='selectedProductsLoading'>
                     Loading
                 </span>
-                <div *ngIf='!selectedProductsLoading' class='left' style='overflow: auto;'>
+                <div *ngIf='!selectedProductsLoading'>
                     <clr-tree-node *ngFor='let displayedPropertySet of displayedPropertySets'>
                         {{displayedPropertySet.name}}
                         <ng-template [clrIfExpanded]='true'>
@@ -66,8 +66,8 @@
 
     </div>
     <div class='clr-col-8' style='overflow: auto'>
-        <div class="centered" *ngIf='tableLoading'>
-            <span class='spinner'>
+        <div *ngIf='tableLoading'>
+            <span class='spinner centered'>
                 Loading
             </span>
         </div>
