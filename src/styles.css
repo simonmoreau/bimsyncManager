@@ -9,7 +9,7 @@
     background:transparent;
   }
 
-  #context-menu.open > .dropdown-menu {
+  #context-menu > .dropdown-menu {
     visibility: inherit;
   }
 
