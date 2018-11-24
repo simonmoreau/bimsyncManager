@@ -19,6 +19,7 @@ import { SharingPageComponent } from './sharing-page/sharing-page.component';
 
 import * as $ from 'jquery';
 import { FieldSelectorComponent } from './takeoff/takeoff-components/field-selector/field-selector.component';
+import { Viewer3dComponent } from './viewer3d/viewer3d.component';
 
 window["$"] = $;
 window["jQuery"] = $;
@@ -33,7 +34,8 @@ window["jQuery"] = $;
         TakeoffComponent,
         ShareModalComponent,
         SharingPageComponent,
-        FieldSelectorComponent
+        FieldSelectorComponent,
+        Viewer3dComponent
     ],
     imports: [
         BrowserAnimationsModule,
