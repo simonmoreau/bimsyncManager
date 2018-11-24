@@ -65,27 +65,30 @@
         </div>
 
     </div>
-    <div class='clr-col-8'>
+    <div class='clr-col-8' style="position: relative">
+
         <span class='spinner centered' *ngIf='tableLoading'>
             Loading
         </span>
         <app-viewer3d></app-viewer3d>
-        <clr-datagrid *ngIf='listOfRows && listOfRows.length'>
-            <clr-dg-column [clrDgField]="selectedValueProperty.columnGuid" *ngFor='let selectedValueProperty of selectedValueProperties'>{{selectedValueProperty.displayName}}</clr-dg-column>
-            <clr-dg-row *clrDgItems='let row of listOfRows'>
-                <clr-dg-cell *ngFor='let selectedValueProperty of selectedValueProperties'>{{row[selectedValueProperty.columnGuid]}}</clr-dg-cell>
-            </clr-dg-row>
-            <clr-dg-footer>
-                <div class="left">
+        <div style="position: absolute;bottom: 0;left: 0.5rem; right: 0.5rem;">
+            <clr-datagrid *ngIf='listOfRows && listOfRows.length'>
+                <clr-dg-column [clrDgField]="selectedValueProperty.columnGuid" *ngFor='let selectedValueProperty of selectedValueProperties'>{{selectedValueProperty.displayName}}</clr-dg-column>
+                <clr-dg-row *clrDgItems='let row of listOfRows'>
+                    <clr-dg-cell *ngFor='let selectedValueProperty of selectedValueProperties'>{{row[selectedValueProperty.columnGuid]}}</clr-dg-cell>
+                </clr-dg-row>
+                <clr-dg-footer>
+                    <div class="left">
                         <button class="btn btn-link btn-icon btn-inline" (click)="DownloadData()">
-                                <clr-icon shape="download" class="is-solid"></clr-icon> Download
-                            </button>
-                </div>
-                <clr-dg-pagination #pagination [clrDgPageSize]="15">
-                    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
-                    of {{pagination.totalItems}}
-                </clr-dg-pagination>
-            </clr-dg-footer>
-        </clr-datagrid>
+                            <clr-icon shape="download" class="is-solid"></clr-icon> Download
+                        </button>
+                    </div>
+                    <clr-dg-pagination #pagination [clrDgPageSize]="8">
+                        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+                        of {{pagination.totalItems}}
+                    </clr-dg-pagination>
+                </clr-dg-footer>
+            </clr-datagrid>
+        </div>
     </div>
 </div>

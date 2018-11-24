@@ -20,7 +20,7 @@ export class Viewer3dComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
 
-    this.viewer3dUrl = 'https://api.bimsync.com/v2/projects/42fef6fd1d4a412a9e53712af9f61665/viewer3d/data?token=d6bb607c652b457c88a88e02bcdc92f1';
+    this.viewer3dUrl = 'https://api.bimsync.com/v2/projects/42fef6fd1d4a412a9e53712af9f61665/viewer3d/data?token=a10d149a8dca4cdebde6ba4a64d86f03';
     this.spaces = [];
 
     this.EnableViewer();
@@ -44,7 +44,7 @@ export class Viewer3dComponent implements OnInit, AfterViewInit {
         enableJoystick: true,
         enableTouch: true,
         enableKeyboard: true,
-        joystickHidden: false,
+        joystickHidden: true,
         joystickColor: "green",
         joystickPosition: "bottom-center",
         joystickBorderOffset: "0px",
@@ -63,7 +63,7 @@ export class Viewer3dComponent implements OnInit, AfterViewInit {
       $("#viewer-container").focus();
       $viewer.viewer("clippingPlaneWidgetViewport", {
         x: 0,
-        y: 0,
+        y: 320,
         width: 150,
         height: 150
       });
