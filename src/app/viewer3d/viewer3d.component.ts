@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, } from '@angular/core';
+import { Component, OnInit, Input, Output , EventEmitter} from '@angular/core';
 import * as $ from "jquery";
 
 declare var bimsync: any;
@@ -12,10 +12,10 @@ export class Viewer3dComponent implements OnInit {
 
   viewer3dUrl: string;
   spaces: number[];
-  modelId: string;
 
   @Input() viewerToken: string;
   @Input() projectId: string;
+  @Output() isLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor() { }
 
@@ -35,14 +35,11 @@ export class Viewer3dComponent implements OnInit {
   }
 
   EnableViewer(): any {
+    let context = this;
 
     let $viewer = $("#viewer-3d") as any;
     let url3D: string = this.viewer3dUrl;
     let spaceIds: number[] = this.spaces;
-
-    if (this.modelId) {
-      $viewer.viewer("unloadModel", this.modelId);
-    }
 
     bimsync.load(["viewer-ui"]);
 
@@ -85,7 +82,7 @@ export class Viewer3dComponent implements OnInit {
       console.log("Viewer loaded!");
 
       $viewer.viewer('modelInfo', function (modelInfos) {
-        this.modelId = modelInfos[0].id;
+        context.isLoaded.emit(true);
         console.log(modelInfos);
         // This will print model info for all loaded models
       });

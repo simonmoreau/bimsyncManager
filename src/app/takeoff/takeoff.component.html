@@ -67,12 +67,13 @@
     </div>
     <div class='clr-col-8' style="position: relative">
 
-        <span class='spinner centered' *ngIf='tableLoading'>
+        <span class='spinner centered' *ngIf='modelLoading'>
             Loading
         </span>
         <app-viewer3d *ngIf='viewer3dToken' 
         [viewerToken]='viewer3dToken'
         [projectId]='selectedProject.id'
+        (isLoaded)='onModelLoaded($event)'
         >
 
         </app-viewer3d>
