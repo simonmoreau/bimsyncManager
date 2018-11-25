@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import {
     IProject, IModel, IRevision,
     ISharedRevisions, ISharingCode,
-    IViewerRequestBody, IViewerURL
+    IViewerRequestBody, IViewerURL, IViewerToken
 } from '../bimsync-project/bimsync-project.models';
 import { AppService } from 'app/app.service';
 import { IProduct } from './takeoff.model';
@@ -89,22 +89,38 @@ export class TakeoffService {
             .catch(this.handleError);
     }
 
+    getViewer3dToken(projectId: string, revisionId: string): Observable<IViewerToken> {
+        let revisions: any = {revisions: [revisionId]};
+        let body: string = JSON.stringify(revisions);
+
+        return this._http.post<IViewerToken>(
+            this._bimsyncUrlV2 + 'projects/' + projectId + '/viewer3d/token',
+            body,
+            {
+                headers: new HttpHeaders()
+                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Content-Type', 'application/json')
+            })
+            .do(data => console.log('All: ' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
     getProducts(projectId: string, revisionId: string, ifcClass: string, productsNumber: number): Observable<IProduct[]> {
         let requestsNumber = Math.ceil(productsNumber / 1000);
         let requestsPages = Array.from(new Array(requestsNumber), (val, index) => index + 1);
 
         return from(requestsPages).pipe(
             mergeMap(pageNumber => <Observable<IProduct[]>>this._http.get<IProduct[]>(
-              this._bimsyncUrlV2 + 'projects/'
-              + projectId + '/ifc/products?pageSize=1000&page='
-              + pageNumber + '&revision=' + revisionId + '&ifcType=' + ifcClass,
-              {
-                  headers: new HttpHeaders()
-                      .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
-                      .set('Content-Type', 'application/json')
-              }))
-          )
-          .catch(this.handleError);
+                this._bimsyncUrlV2 + 'projects/'
+                + projectId + '/ifc/products?pageSize=1000&page='
+                + pageNumber + '&revision=' + revisionId + '&ifcType=' + ifcClass,
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                }))
+        )
+            .catch(this.handleError);
     }
 
     getAllRevisions(projectId: string): Observable<IRevision[]> {

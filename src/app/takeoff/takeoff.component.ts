@@ -40,6 +40,7 @@ export class TakeoffComponent implements OnInit {
     selectedFilterProperties: DisplayProperty[] = [];
     listOfRows: any[] = [];
     tableLoading: boolean = false;
+    viewer3dToken: string;
 
     constructor(private _takeoffService: TakeoffService, private route: ActivatedRoute) { }
 
@@ -100,6 +101,16 @@ export class TakeoffComponent implements OnInit {
     GetProductTypeSummary() {
         this.selectedValueProperties.length = 0;
         this.listOfRows.length = 0;
+        this.viewer3dToken = null;
+
+        this._takeoffService.getViewer3dToken(
+            this.selectedProject.id,
+            this.selectedRevision.id
+        )
+        .subscribe(token => {
+            this.viewer3dToken = token.token;
+        });
+
         this._takeoffService
             .getProductsTypeSummary(
                 this.selectedProject.id,

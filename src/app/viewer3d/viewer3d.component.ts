@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, } from '@angular/core';
 import * as $ from "jquery";
 
 declare var bimsync: any;
@@ -8,19 +8,26 @@ declare var bimsync: any;
   templateUrl: './viewer3d.component.html',
   styleUrls: ['./viewer3d.component.scss']
 })
-export class Viewer3dComponent implements OnInit, AfterViewInit {
+export class Viewer3dComponent implements OnInit {
 
   viewer3dUrl: string;
   spaces: number[];
+  modelId: string;
+
+  @Input() viewerToken: string;
+  @Input() projectId: string;
 
   constructor() { }
 
   ngOnInit() {
+    this.ViewModel();
   }
 
-  ngAfterViewInit() {
+  ViewModel() {
+    let baseUrl = 'https://api.bimsync.com/v2/projects/' + this.projectId + '/viewer3d/data?token=';
 
-    this.viewer3dUrl = 'https://api.bimsync.com/v2/projects/42fef6fd1d4a412a9e53712af9f61665/viewer3d/data?token=a10d149a8dca4cdebde6ba4a64d86f03';
+    // this.viewerToken = 'e8a5ea616cec4a99972f5ab3321ecfc5';
+    this.viewer3dUrl = baseUrl + this.viewerToken;
     this.spaces = [];
 
     this.EnableViewer();
@@ -28,9 +35,14 @@ export class Viewer3dComponent implements OnInit, AfterViewInit {
   }
 
   EnableViewer(): any {
+
     let $viewer = $("#viewer-3d") as any;
     let url3D: string = this.viewer3dUrl;
     let spaceIds: number[] = this.spaces;
+
+    if (this.modelId) {
+      $viewer.viewer("unloadModel", this.modelId);
+    }
 
     bimsync.load(["viewer-ui"]);
 
@@ -68,11 +80,12 @@ export class Viewer3dComponent implements OnInit, AfterViewInit {
         height: 150
       });
 
-      $viewer.viewerUI("setSpaces", spaceIds);
+      // $viewer.viewerUI("setSpaces", spaceIds);
 
       console.log("Viewer loaded!");
 
       $viewer.viewer('modelInfo', function (modelInfos) {
+        this.modelId = modelInfos[0].id;
         console.log(modelInfos);
         // This will print model info for all loaded models
       });
