@@ -11,11 +11,12 @@ declare var bimsync: any;
 export class Viewer3dComponent implements OnInit {
 
   viewer3dUrl: string;
-  spaces: number[];
   isLoaded: boolean;
   aModelAsAlreadyBeenloaded: boolean;
+  spacesVisibility: boolean = false;
 
   @Input() viewerToken: string;
+  @Input() spaceIds: number[];
   @Input() projectId: string;
 
   constructor() { }
@@ -23,6 +24,7 @@ export class Viewer3dComponent implements OnInit {
   ngOnInit() {
     this.isLoaded = false;
     this.aModelAsAlreadyBeenloaded = false;
+    this.spacesVisibility = true;
     this.ViewModel();
   }
 
@@ -31,7 +33,6 @@ export class Viewer3dComponent implements OnInit {
 
     // this.viewerToken = 'e8a5ea616cec4a99972f5ab3321ecfc5';
     this.viewer3dUrl = baseUrl + this.viewerToken;
-    this.spaces = [];
 
     this.EnableViewer();
   }
@@ -41,7 +42,6 @@ export class Viewer3dComponent implements OnInit {
 
     let $viewer = $("#viewer-3d") as any;
     let url3D: string = this.viewer3dUrl;
-    let spaceIds: number[] = this.spaces;
 
     bimsync.load(["viewer-ui"]);
 
@@ -71,7 +71,7 @@ export class Viewer3dComponent implements OnInit {
         });
 
         $viewer.viewer("loadUrl", url3D);
-        
+
         context.aModelAsAlreadyBeenloaded = true;
       }
     });
@@ -87,7 +87,7 @@ export class Viewer3dComponent implements OnInit {
         height: 150
       });
 
-      // $viewer.viewerUI("setSpaces", spaceIds);
+      $viewer.viewerUI("setSpaces", context.spaceIds);
 
       context.isLoaded = true;
 
@@ -96,7 +96,6 @@ export class Viewer3dComponent implements OnInit {
         console.log(modelInfos);
       });
     });
-
   }
 
   FocusModel() {
@@ -104,7 +103,13 @@ export class Viewer3dComponent implements OnInit {
     $viewer.viewer('viewpoint', 'home');
 
     $viewer.viewer('viewpoint', null, function (viewpoint) {
-        console.log(viewpoint);
+      console.log(viewpoint);
     });
-}
+  }
+
+  ToogleSpaceVisibility() {
+    let $viewer = $("#viewer-3d") as any;
+    $viewer.viewerUI("setSpacesVisible", this.spacesVisibility);
+    this.spacesVisibility = !this.spacesVisibility;
+  }
 }

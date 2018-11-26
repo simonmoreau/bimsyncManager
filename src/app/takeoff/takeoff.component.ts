@@ -12,9 +12,7 @@ import {
     IDisplayPropertySet, Products, ValueTree, Guid, GroupingModeEnum, SortEnum
 } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
-import { isNumber } from "util";
-import { strictEqual } from "assert";
-import { Sort } from "@clr/angular/data/datagrid/providers/sort";
+import {Observable} from 'rxjs/Rx';
 
 
 @Component({
@@ -42,6 +40,7 @@ export class TakeoffComponent implements OnInit {
     tableLoading: boolean = false;
     modelLoading: boolean = true;
     viewer3dToken: string;
+    spaces: number[] = [];
 
     constructor(private _takeoffService: TakeoffService, private route: ActivatedRoute) { }
 
@@ -103,14 +102,8 @@ export class TakeoffComponent implements OnInit {
         this.selectedValueProperties.length = 0;
         this.listOfRows.length = 0;
         this.viewer3dToken = null;
-
-        this._takeoffService.getViewer3dToken(
-            this.selectedProject.id,
-            this.selectedRevision.id
-        )
-        .subscribe(token => {
-            this.viewer3dToken = token.token;
-        });
+// spaces
+        let viewerToken = this._takeoffService.getViewer3dToken(this.selectedProject.id,this.selectedRevision.id);
 
         this._takeoffService
             .getProductsTypeSummary(
@@ -133,6 +126,29 @@ export class TakeoffComponent implements OnInit {
                     })[0];
 
                     this.GetProducts();
+
+                    let spaceClass = this.ifcClasses.filter(function (x) {
+                        return x.typeName === "IfcSpace";
+                    })[0];
+
+                    let spacesProductsObs = this._takeoffService.getProducts(
+                        this.selectedProject.id,
+                        this.selectedRevision.id,
+                        spaceClass.typeName,
+                        spaceClass.typeQuantity
+                    );
+
+                    //Use the two observables to launch the viewer
+                    Observable.forkJoin([viewerToken, spacesProductsObs]).subscribe(results => {
+                        // results[0] is our viewerToken
+                        // results[1] is our spacesProducts
+                        
+                        let spacesProducts: IProduct[] = results[1];
+                        spacesProducts.forEach(product => {
+                            this.spaces.push(product.objectId);
+                        });
+                        this.viewer3dToken = results[0].token;
+                      });
                 },
                 error => (this.errorMessage = <any>error)
             );

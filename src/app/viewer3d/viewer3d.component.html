@@ -1,7 +1,12 @@
 <span class='spinner centered' *ngIf='!isLoaded'>
   Loading
 </span>
-<div *ngIf='isLoaded' >
+<div *ngIf='isLoaded'>
+  <div class="button-container" style="left: 0px">
+    <button type="button" class="btn" [ngClass]="{'btn-primary': !spacesVisibility}" (click)="ToogleSpaceVisibility()">
+      <clr-icon shape="block" size="24"></clr-icon>
+    </button>
+  </div>
   <div class="button-container" style="right: 0px">
     <button type="button" class="btn" (click)="FocusModel()">
       <clr-icon shape="home" size="24"></clr-icon>
@@ -12,6 +17,3 @@
   <div id="viewer-3d" tabindex="-1">
   </div>
 </div>
-
-
-
