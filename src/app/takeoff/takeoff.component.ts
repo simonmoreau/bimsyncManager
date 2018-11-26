@@ -228,8 +228,6 @@ export class TakeoffComponent implements OnInit {
             });
             this.displayedPropertySets.push(displayedQuantitySet);
         });
-
-        console.log(this.displayedPropertySets);
     }
 
     onTreeSelectionChange(displayProperty: DisplayProperty) {

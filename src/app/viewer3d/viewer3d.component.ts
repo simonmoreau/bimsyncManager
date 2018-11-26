@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output , EventEmitter} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as $ from "jquery";
 
 declare var bimsync: any;
@@ -12,6 +12,7 @@ export class Viewer3dComponent implements OnInit {
 
   viewer3dUrl: string;
   spaces: number[];
+  isModelAlreadyLoaded: boolean;
 
   @Input() viewerToken: string;
   @Input() projectId: string;
@@ -20,6 +21,7 @@ export class Viewer3dComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.isModelAlreadyLoaded = false;
     this.ViewModel();
   }
 
@@ -44,32 +46,41 @@ export class Viewer3dComponent implements OnInit {
     bimsync.load(["viewer-ui"]);
 
     bimsync.setOnLoadCallback(function () {
-      $viewer.viewer({
-        translucentOpacity: 0.2,
-        enableTouch: true,
-        enableClippingPlaneWidget: true
-      });
-      $viewer.viewerUI({
-        enableJoystick: true,
-        enableTouch: true,
-        enableKeyboard: true,
-        joystickHidden: true,
-        joystickColor: "green",
-        joystickPosition: "bottom-center",
-        joystickBorderOffset: "0px",
-        enableContextMenu: true,
-        viewer2dId: "viewer-2d",
-        enableViewer2dIntegration: true,
-        showViewer2dStoreySelect: true,
-        showViewer2dLockedNavigationToggle: true,
-        set2dLockedNavigationMode: false
-      });
 
-      $viewer.viewer("loadUrl", url3D);
+      if (!context.isModelAlreadyLoaded) {
+        $viewer.viewer({
+          translucentOpacity: 0.2,
+          enableTouch: true,
+          enableClippingPlaneWidget: true
+        });
+
+        $viewer.viewerUI({
+          enableJoystick: true,
+          enableTouch: true,
+          enableKeyboard: true,
+          joystickHidden: true,
+          joystickColor: "green",
+          joystickPosition: "bottom-center",
+          joystickBorderOffset: "0px",
+          enableContextMenu: true,
+          viewer2dId: "viewer-2d",
+          enableViewer2dIntegration: true,
+          showViewer2dStoreySelect: true,
+          showViewer2dLockedNavigationToggle: true,
+          set2dLockedNavigationMode: false
+        });
+
+        $viewer.viewer("loadUrl", url3D);
+
+        context.isModelAlreadyLoaded = true;
+      }
+
     });
 
     $viewer.bind("viewer.load", function (event) {
+
       $("#viewer-container").focus();
+
       $viewer.viewer("clippingPlaneWidgetViewport", {
         x: 0,
         y: 320,
@@ -79,12 +90,10 @@ export class Viewer3dComponent implements OnInit {
 
       // $viewer.viewerUI("setSpaces", spaceIds);
 
-      console.log("Viewer loaded!");
-
       $viewer.viewer('modelInfo', function (modelInfos) {
         context.isLoaded.emit(true);
-        console.log(modelInfos);
         // This will print model info for all loaded models
+        console.log(modelInfos);
       });
     });
 
