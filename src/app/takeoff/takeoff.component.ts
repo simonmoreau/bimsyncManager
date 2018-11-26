@@ -12,7 +12,7 @@ import {
     IDisplayPropertySet, Products, ValueTree, Guid, GroupingModeEnum, SortEnum
 } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
-import {Observable} from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 
 
 @Component({
@@ -102,8 +102,8 @@ export class TakeoffComponent implements OnInit {
         this.selectedValueProperties.length = 0;
         this.listOfRows.length = 0;
         this.viewer3dToken = null;
-// spaces
-        let viewerToken = this._takeoffService.getViewer3dToken(this.selectedProject.id,this.selectedRevision.id);
+
+        let viewerToken = this._takeoffService.getViewer3dToken(this.selectedProject.id, this.selectedRevision.id);
 
         this._takeoffService
             .getProductsTypeSummary(
@@ -131,24 +131,34 @@ export class TakeoffComponent implements OnInit {
                         return x.typeName === "IfcSpace";
                     })[0];
 
-                    let spacesProductsObs = this._takeoffService.getProducts(
-                        this.selectedProject.id,
-                        this.selectedRevision.id,
-                        spaceClass.typeName,
-                        spaceClass.typeQuantity
-                    );
+                    let spacesProductsObs = new Observable<IProduct[]>();
+
+                    if (spaceClass) {
+                        spacesProductsObs = this._takeoffService.getProducts(
+                            this.selectedProject.id,
+                            this.selectedRevision.id,
+                            spaceClass.typeName,
+                            spaceClass.typeQuantity
+                        );
+                    }
+                    else {
+                        spacesProductsObs = Observable.of(null);
+                    }
 
                     //Use the two observables to launch the viewer
                     Observable.forkJoin([viewerToken, spacesProductsObs]).subscribe(results => {
                         // results[0] is our viewerToken
                         // results[1] is our spacesProducts
-                        
                         let spacesProducts: IProduct[] = results[1];
-                        spacesProducts.forEach(product => {
-                            this.spaces.push(product.objectId);
-                        });
+                        if (spacesProducts) {
+                            spacesProducts.forEach(product => {
+                                this.spaces.push(product.objectId);
+                            });
+                        }
+
                         this.viewer3dToken = results[0].token;
-                      });
+                        console.log(this.viewer3dToken);
+                    });
                 },
                 error => (this.errorMessage = <any>error)
             );
