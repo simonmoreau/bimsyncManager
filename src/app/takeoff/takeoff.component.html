@@ -77,8 +77,10 @@
         <div style="position: absolute;bottom: 0;left: 0.5rem; right: 0.5rem;">
             <clr-datagrid *ngIf='listOfRows && listOfRows.length'>
                 <clr-dg-column [clrDgField]="selectedValueProperty.columnGuid" *ngFor='let selectedValueProperty of selectedValueProperties'>{{selectedValueProperty.displayName}}</clr-dg-column>
+                <clr-dg-column>Color</clr-dg-column>
                 <clr-dg-row *clrDgItems='let row of listOfRows'>
                     <clr-dg-cell *ngFor='let selectedValueProperty of selectedValueProperties'>{{row[selectedValueProperty.columnGuid]}}</clr-dg-cell>
+                    <clr-dg-cell><span class="color-square" [style.backgroundColor]="row.color"></span></clr-dg-cell>
                 </clr-dg-row>
                 <clr-dg-footer>
                     <div class="left">

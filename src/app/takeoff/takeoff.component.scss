@@ -61,3 +61,12 @@
 .left {
   text-align: left;
 }
+
+.color-square {
+  display: inline-block;
+  vertical-align: text-bottom;
+  height: 0.7rem;
+  width: 0.7rem;
+  border: 1px solid #565656;
+  border-radius: 0.15rem;
+}

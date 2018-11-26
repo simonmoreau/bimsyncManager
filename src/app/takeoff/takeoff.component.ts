@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { TakeoffService } from "./takeoff.services";
+import { Color } from "./takeoff.color";
 import {
     IProject,
     IModel,
@@ -140,12 +141,11 @@ export class TakeoffComponent implements OnInit {
                             spaceClass.typeName,
                             spaceClass.typeQuantity
                         );
-                    }
-                    else {
+                    } else {
                         spacesProductsObs = Observable.of(null);
                     }
 
-                    //Use the two observables to launch the viewer
+                    // Use the two observables to launch the viewer
                     Observable.forkJoin([viewerToken, spacesProductsObs]).subscribe(results => {
                         // results[0] is our viewerToken
                         // results[1] is our spacesProducts
@@ -413,6 +413,14 @@ export class TakeoffComponent implements OnInit {
 
         tree.forEach(treeItem => {
             rows = rows.concat(treeItem.rows);
+        });
+
+        let i = 0;
+        let max = rows.length;
+        rows.forEach(row => {
+            let color: Color = new Color(0, max, i );
+            row['color'] = color.GetColorFromRange();
+            i++;
         });
 
         this.listOfRows = rows;
