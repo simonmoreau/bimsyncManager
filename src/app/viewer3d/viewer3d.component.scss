@@ -2,6 +2,21 @@
     height: 100%;
     width: 100%; }
   
-  .viewer-container #viewer-3d {
+.viewer-container #viewer-3d {
     height: 100%;
     width: 100%; }
+
+.button-container {
+      position: absolute;
+    }
+    
+.button-container .btn {
+      margin: 0px;
+      margin-right: 1rem;
+    }
+
+.spinner.centered {
+  position: absolute;
+  margin-top: 20%;
+  left: calc(50% - 36px);
+}

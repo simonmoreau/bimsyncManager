@@ -103,7 +103,6 @@ export class TakeoffComponent implements OnInit {
         this.selectedValueProperties.length = 0;
         this.listOfRows.length = 0;
         this.viewer3dToken = null;
-        this.modelLoading = true;
 
         this._takeoffService.getViewer3dToken(
             this.selectedProject.id,

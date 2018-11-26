@@ -1,4 +1,17 @@
+<span class='spinner centered' *ngIf='!isLoaded'>
+  Loading
+</span>
+<div *ngIf='isLoaded' >
+  <div class="button-container" style="right: 0px">
+    <button type="button" class="btn" (click)="FocusModel()">
+      <clr-icon shape="home" size="24"></clr-icon>
+    </button>
+  </div>
+</div>
 <div class="viewer-container">
   <div id="viewer-3d" tabindex="-1">
   </div>
 </div>
+
+
+

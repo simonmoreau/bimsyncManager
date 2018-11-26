@@ -12,16 +12,17 @@ export class Viewer3dComponent implements OnInit {
 
   viewer3dUrl: string;
   spaces: number[];
-  isModelAlreadyLoaded: boolean;
+  isLoaded: boolean;
+  aModelAsAlreadyBeenloaded: boolean;
 
   @Input() viewerToken: string;
   @Input() projectId: string;
-  @Output() isLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor() { }
 
   ngOnInit() {
-    this.isModelAlreadyLoaded = false;
+    this.isLoaded = false;
+    this.aModelAsAlreadyBeenloaded = false;
     this.ViewModel();
   }
 
@@ -33,7 +34,6 @@ export class Viewer3dComponent implements OnInit {
     this.spaces = [];
 
     this.EnableViewer();
-
   }
 
   EnableViewer(): any {
@@ -47,7 +47,7 @@ export class Viewer3dComponent implements OnInit {
 
     bimsync.setOnLoadCallback(function () {
 
-      if (!context.isModelAlreadyLoaded) {
+      if (!context.aModelAsAlreadyBeenloaded) {
         $viewer.viewer({
           translucentOpacity: 0.2,
           enableTouch: true,
@@ -71,10 +71,9 @@ export class Viewer3dComponent implements OnInit {
         });
 
         $viewer.viewer("loadUrl", url3D);
-
-        context.isModelAlreadyLoaded = true;
+        
+        context.aModelAsAlreadyBeenloaded = true;
       }
-
     });
 
     $viewer.bind("viewer.load", function (event) {
@@ -90,12 +89,22 @@ export class Viewer3dComponent implements OnInit {
 
       // $viewer.viewerUI("setSpaces", spaceIds);
 
+      context.isLoaded = true;
+
       $viewer.viewer('modelInfo', function (modelInfos) {
-        context.isLoaded.emit(true);
         // This will print model info for all loaded models
         console.log(modelInfos);
       });
     });
 
   }
+
+  FocusModel() {
+    let $viewer = $("#viewer-3d") as any;
+    $viewer.viewer('viewpoint', 'home');
+
+    $viewer.viewer('viewpoint', null, function (viewpoint) {
+        console.log(viewpoint);
+    });
+}
 }
