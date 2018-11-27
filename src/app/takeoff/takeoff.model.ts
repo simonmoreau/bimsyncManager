@@ -63,6 +63,11 @@ export interface IQuantity {
     value: Value;
 }
 
+export interface IHighlightedElements {
+    ids: number[];
+    color: string;
+}
+
 export class DisplayProperty {
     readonly name: string;
     readonly type: string;

@@ -10,7 +10,7 @@ import {
 import {
     ITypeSummary, IProduct, IPropertySet, IProperty,
     IQuantitySet, DisplayProperty,
-    IDisplayPropertySet, Products, ValueTree, Guid, GroupingModeEnum, SortEnum
+    IDisplayPropertySet, Products, ValueTree, Guid, IHighlightedElements, SortEnum
 } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
 import { Observable } from 'rxjs/Rx';
@@ -42,6 +42,7 @@ export class TakeoffComponent implements OnInit {
     modelLoading: boolean = true;
     viewer3dToken: string;
     spaces: number[] = [];
+    highlightedElements: IHighlightedElements[] = [];
 
     constructor(private _takeoffService: TakeoffService, private route: ActivatedRoute) { }
 
@@ -64,6 +65,8 @@ export class TakeoffComponent implements OnInit {
     GetModels() {
         this.selectedValueProperties.length = 0;
         this.listOfRows.length = 0;
+        this.highlightedElements = [];
+
         this._takeoffService.getModels(this.selectedProject.id).subscribe(
             models => {
                 this.models = models;
@@ -82,6 +85,8 @@ export class TakeoffComponent implements OnInit {
     GetRevisions() {
         this.selectedValueProperties.length = 0;
         this.listOfRows.length = 0;
+        this.highlightedElements = [];
+
         this._takeoffService
             .getRevisions(this.selectedProject.id, this.selectedModel.id)
             .subscribe(
@@ -102,6 +107,7 @@ export class TakeoffComponent implements OnInit {
     GetProductTypeSummary() {
         this.selectedValueProperties.length = 0;
         this.listOfRows.length = 0;
+        this.highlightedElements = [];
         this.viewer3dToken = null;
 
         let viewerToken = this._takeoffService.getViewer3dToken(this.selectedProject.id, this.selectedRevision.id);
@@ -170,6 +176,8 @@ export class TakeoffComponent implements OnInit {
         this.listOfRows.length = 0;
         this.selectedProducts.length = 0;
         this.selectedProductsLoading = true;
+        this.highlightedElements = [];
+
         // It will loop on all requests
         this._takeoffService
             .getProducts(
@@ -197,6 +205,7 @@ export class TakeoffComponent implements OnInit {
     GetProductProperties(product: IProduct) {
         this.selectedValueProperties.length = 0;
         this.listOfRows.length = 0;
+        this.highlightedElements = [];
 
         this.displayedPropertySets.length = 0;
 
@@ -373,6 +382,9 @@ export class TakeoffComponent implements OnInit {
 
     GetGroupedPropertyCount(): any {
 
+        this.listOfRows.length = 0;
+        this.highlightedElements = [];
+
         if (this.selectedValueProperties && this.selectedValueProperties.length !== 0) {
             this.tableLoading = true;
             const promise = this.ProcessData();
@@ -385,7 +397,7 @@ export class TakeoffComponent implements OnInit {
     }
 
     async ProcessData(): Promise<void> {
-        this.listOfRows.length = 0;
+
 
         // Get the first column
         let propertyArray = Products.GetGroupedList(this.selectedValueProperties[0], this.selectedProducts);
@@ -409,21 +421,32 @@ export class TakeoffComponent implements OnInit {
         });
 
         // Create the rows
-        let rows = [];
-
-        tree.forEach(treeItem => {
-            rows = rows.concat(treeItem.rows);
-        });
+        let tableRows = [];
+        let hightlighted = [];
 
         let i = 0;
-        let max = rows.length;
-        rows.forEach(row => {
-            let color: Color = new Color(0, max, i );
-            row['color'] = color.GetColorFromRange();
-            i++;
+        let max = tree.reduce((a, b) => a + b.rows.length, 0);
+
+        tree.forEach(treeItem => {
+            treeItem.rows.forEach(row => {
+
+
+                let color: Color = new Color(0, max, i );
+                row['color'] = color.GetColorFromRange();
+
+                let highlightedElement : IHighlightedElements = {
+                    color: row['color'],
+                    ids: treeItem.products.map(product => {return product.objectId})
+                }
+
+                hightlighted.push(highlightedElement);
+                tableRows.push(row);
+                i++;
+            });
         });
 
-        this.listOfRows = rows;
+        this.highlightedElements = hightlighted;
+        this.listOfRows = tableRows;
     }
 
     trackByFn(index, model) {

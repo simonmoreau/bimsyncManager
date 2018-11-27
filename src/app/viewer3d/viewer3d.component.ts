@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { IHighlightedElements } from '../takeoff/takeoff.model';
 import * as $ from "jquery";
 
 declare var bimsync: any;
@@ -8,7 +9,7 @@ declare var bimsync: any;
   templateUrl: './viewer3d.component.html',
   styleUrls: ['./viewer3d.component.scss']
 })
-export class Viewer3dComponent implements OnInit {
+export class Viewer3dComponent implements OnInit, OnChanges {
 
   viewer3dUrl: string;
   isLoaded: boolean;
@@ -18,6 +19,7 @@ export class Viewer3dComponent implements OnInit {
   @Input() viewerToken: string;
   @Input() spaceIds: number[];
   @Input() projectId: string;
+  @Input() highlightedElements: IHighlightedElements[];
 
   constructor() { }
 
@@ -26,6 +28,21 @@ export class Viewer3dComponent implements OnInit {
     this.aModelAsAlreadyBeenloaded = false;
     this.spacesVisibility = true;
     this.ViewModel();
+  }
+
+  ngOnChanges() {
+
+    if (this.isLoaded) {
+      let $viewer = $("#viewer-3d") as any;
+
+      if (this.highlightedElements.length != 0) {
+        this.highlightedElements.forEach(highlightedElement => {
+          $viewer.viewer('color', highlightedElement.color, highlightedElement.ids);
+        });
+      } else {
+        $viewer.viewer('resetColors');
+      }
+    }
   }
 
   ViewModel() {
@@ -82,7 +99,7 @@ export class Viewer3dComponent implements OnInit {
 
       $viewer.viewer("clippingPlaneWidgetViewport", {
         x: 0,
-        y: 320,
+        y: 350,
         width: 150,
         height: 150
       });
