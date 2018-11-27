@@ -15,6 +15,8 @@ export class Viewer3dComponent implements OnInit, OnChanges {
   isLoaded: boolean;
   aModelAsAlreadyBeenloaded: boolean;
   spacesVisibility: boolean = false;
+  otherHidden: boolean = false;
+  otherDimmed: boolean = false;
 
   @Input() viewerToken: string;
   @Input() spaceIds: number[];
@@ -26,7 +28,6 @@ export class Viewer3dComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.isLoaded = false;
     this.aModelAsAlreadyBeenloaded = false;
-    this.spacesVisibility = true;
     this.ViewModel();
   }
 
@@ -35,13 +36,16 @@ export class Viewer3dComponent implements OnInit, OnChanges {
     if (this.isLoaded) {
       let $viewer = $("#viewer-3d") as any;
 
-      if (this.highlightedElements.length != 0) {
+      if (this.highlightedElements.length !== 0) {
         this.highlightedElements.forEach(highlightedElement => {
           $viewer.viewer('color', highlightedElement.color, highlightedElement.ids);
         });
       } else {
         $viewer.viewer('resetColors');
       }
+
+      this.ToogleOthersVisibility();
+      this.ToogleOtherTransparency();
     }
   }
 
@@ -127,6 +131,51 @@ export class Viewer3dComponent implements OnInit, OnChanges {
   ToogleSpaceVisibility() {
     let $viewer = $("#viewer-3d") as any;
     $viewer.viewerUI("setSpacesVisible", this.spacesVisibility);
-    this.spacesVisibility = !this.spacesVisibility;
+    // this.spacesVisibility = !this.spacesVisibility;
+    console.log(this.spacesVisibility);
+  }
+
+  ToogleOthersVisibility() {
+    let $viewer = $("#viewer-3d") as any;
+
+    if (this.otherHidden) {
+      // hide other
+      $viewer.viewer("hideAll");
+
+      if (this.highlightedElements.length !== 0) {
+        this.highlightedElements.forEach(highlightedElement => {
+          $viewer.viewer("show", highlightedElement.ids);
+        });
+      } else {
+        $viewer.viewer("hideAll");
+      }
+      console.log(this.spacesVisibility);
+    } else {
+      $viewer.viewer("showAll");
+    }
+
+    this.ToogleSpaceVisibility();
+  }
+
+  ToogleOtherTransparency() {
+    let $viewer = $("#viewer-3d") as any;
+
+    if (this.otherDimmed) {
+      // hide other
+      $viewer.viewer("translucentAll");
+
+      if (this.highlightedElements.length !== 0) {
+        this.highlightedElements.forEach(highlightedElement => {
+          $viewer.viewer("show", highlightedElement.ids);
+        });
+      } else {
+        $viewer.viewer("translucentAll");
+      }
+      console.log(this.spacesVisibility);
+    } else {
+      $viewer.viewer("showAll");
+    }
+
+    this.ToogleSpaceVisibility();
   }
 }

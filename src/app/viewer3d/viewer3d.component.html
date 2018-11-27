@@ -1,19 +1,31 @@
 <span class='spinner centered' *ngIf='!isLoaded'>
   Loading
 </span>
-<div *ngIf='isLoaded'>
-  <div class="button-container" style="left: 0px">
-    <button type="button" class="btn" [ngClass]="{'btn-primary': !spacesVisibility}" (click)="ToogleSpaceVisibility()">
-      <clr-icon shape="block" size="24"></clr-icon>
+<div *ngIf='isLoaded' style="position: absolute">
+  <div class="btn-group">
+    <clr-checkbox type="checkbox" class="btn btn-icon" [(ngModel)]="spacesVisibility" (ngModelChange)="ToogleSpaceVisibility()"
+      title="Show/Hide Spaces">
+      <clr-icon shape="block"></clr-icon>
+    </clr-checkbox>
+  </div>
+  <div class="btn-group btn-icon">
+    <button class="btn" (click)="FocusModel()" title="Center Model">
+      <clr-icon shape="resize"></clr-icon>
+      <span class="clr-icon-title">Center Model</span>
     </button>
   </div>
-  <div class="button-container" style="right: 0px">
-    <button type="button" class="btn" (click)="FocusModel()">
-      <clr-icon shape="home" size="24"></clr-icon>
-    </button>
+  <div class="btn-group">
+    <clr-checkbox type="checkbox" class="btn btn-icon" title="Show/Hide Other Elements" [(ngModel)]="otherHidden"
+      (ngModelChange)="ToogleOthersVisibility()">
+      <clr-icon shape="eye" class="is-solid"></clr-icon>
+    </clr-checkbox>
+    <clr-checkbox type="checkbox" class="btn btn-icon" title="Make Other Elements Transparent" [(ngModel)]="otherDimmed"
+    (ngModelChange)="ToogleOtherTransparency()">
+      <clr-icon shape="eye" ></clr-icon>
+    </clr-checkbox>
   </div>
+
 </div>
 <div class="viewer-container">
-  <div id="viewer-3d" tabindex="-1">
-  </div>
+  <div id="viewer-3d" tabindex="-1"></div>
 </div>

@@ -434,7 +434,7 @@ export class TakeoffComponent implements OnInit {
                 let color: Color = new Color(0, max, i );
                 row['color'] = color.GetColorFromRange();
 
-                let highlightedElement : IHighlightedElements = {
+                let highlightedElement: IHighlightedElements = {
                     color: row['color'],
                     ids: treeItem.products.map(product => {return product.objectId})
                 }
