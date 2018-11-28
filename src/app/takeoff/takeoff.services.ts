@@ -34,7 +34,7 @@ export class TakeoffService {
             this._bimsyncUrlV2 + 'projects?pageSize=1000',
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -46,7 +46,7 @@ export class TakeoffService {
             this._bimsyncUrlV2 + 'projects/' + projectId,
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -58,7 +58,7 @@ export class TakeoffService {
             this._bimsyncUrlV2 + 'projects/' + projectId + '/models?pageSize=1000',
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -70,7 +70,7 @@ export class TakeoffService {
             this._bimsyncUrlV2 + 'projects/' + projectId + '/revisions?pageSize=1000&model=' + modelId,
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -82,7 +82,7 @@ export class TakeoffService {
             this._bimsyncUrlV2 + 'projects/' + projectId + '/ifc/products/ifctypes?revision=' + revisionId,
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -98,7 +98,7 @@ export class TakeoffService {
             body,
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))
@@ -116,7 +116,7 @@ export class TakeoffService {
                 + pageNumber + '&revision=' + revisionId + '&ifcType=' + ifcClass,
                 {
                     headers: new HttpHeaders()
-                        .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                        .set('Authorization', 'Bearer ' + this._appService.GetToken())
                         .set('Content-Type', 'application/json')
                 }))
         )
@@ -128,7 +128,7 @@ export class TakeoffService {
             this._bimsyncUrlV2 + 'projects/' + projectId + '/revisions?pageSize=1000',
             {
                 headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().AccessToken.access_token)
+                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
                     .set('Content-Type', 'application/json')
             })
             .do(data => console.log('All: ' + JSON.stringify(data)))

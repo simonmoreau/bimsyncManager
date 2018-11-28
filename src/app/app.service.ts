@@ -16,7 +16,7 @@ export class AppService {
   errorMessage: string;
   private _projectsUrl = 'https://binsyncfunction.azurewebsites.net/api';
   // _url: string = 'https://bimsyncmanager.firebaseapp.com';
-   _url: string = 'http://localhost:4200';
+  _url: string = 'http://localhost:4200';
   _callbackUrl: string = this._url + '/callback';
   // _client_id = '6E63g0C2zVOwlNm';
   _client_id = 'hl94XJLXaQe3ogX';
@@ -51,6 +51,17 @@ export class AppService {
     return this._user;
   }
 
+  GetToken(): string {
+    if (this._user != null) {
+      let now = new Date();
+      let refresh = new Date(this._user.RefreshDate)
+      if (refresh < now) {
+        this.RefreshToken();
+      }
+    }
+    return this._user.AccessToken.access_token;
+  }
+
   CreateUser(authorization_code: string) {
     this.createUserRequest(authorization_code)
       .subscribe(user => {
@@ -64,13 +75,20 @@ export class AppService {
   }
 
   RefreshToken() {
+    let updatedUser: IUser;
+
     this.RefreshTokenRequest()
-      .subscribe(user => {
+    .subscribe(user => {
         this._user = user;
         // Save to local storage
         localStorage.setItem('user', JSON.stringify(user));
+        console.log('we have a token ! Do' )
       },
-        error => this.errorMessage = <any>error);
+        error => this.errorMessage = <any>error,
+        () => {
+          console.log('we have a token ! Finaly')
+        }
+      );
   }
 
   CreateBCFToken(authorization_code: string) {

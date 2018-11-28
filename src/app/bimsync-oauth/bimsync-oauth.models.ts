@@ -15,7 +15,7 @@ export interface IbimsyncUser {
 }
 
 export interface IAccessToken {
-    access_token: Date;
+    access_token: string;
     refresh_token: string;
     token_type: string;
     expires_in: string;
