@@ -120,6 +120,11 @@ export class TakeoffComponent implements OnInit {
             .subscribe(
                 summaryData => {
                     this.ifcClasses.length = 0;
+
+                    //Merge walls in summary
+                    summaryData['IfcWall'] = summaryData['IfcWall'] + summaryData['IfcWallStandardCase'];
+                    delete summaryData['IfcWallStandardCase'];
+
                     Object.keys(summaryData).forEach(key => {
                         let summary: ITypeSummary = {
                             typeName: key,
@@ -128,6 +133,9 @@ export class TakeoffComponent implements OnInit {
 
                         this.ifcClasses.push(summary);
                     });
+
+
+
                     this.selectedIfcClass = this.ifcClasses.filter(function (x) {
                         return x.typeName === "IfcProject";
                     })[0];
