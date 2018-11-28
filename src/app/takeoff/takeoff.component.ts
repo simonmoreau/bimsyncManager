@@ -10,7 +10,7 @@ import {
 import {
     ITypeSummary, IProduct, IPropertySet, IProperty,
     IQuantitySet, DisplayProperty,
-    IDisplayPropertySet, Products, ValueTree, Guid, IHighlightedElements, SortEnum
+    IDisplayPropertySet, Products, ValueTree, Guid, IHighlightedElements, SortEnum, IQuantity
 } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
 import { Observable } from 'rxjs/Rx';
@@ -250,12 +250,12 @@ export class TakeoffComponent implements OnInit {
             let quantitySet = product.quantitySets[quantitySetKey] as IQuantitySet;
             let displayedQuantitySet: IDisplayPropertySet = { name: quantitySet.attributes.Name.value, properties: [] }
             Object.keys(quantitySet.quantities).forEach(quantityKey => {
-                let quantity: IProperty = quantitySet.quantities[quantityKey] as IProperty;
-                let icon = quantity.nominalValue.type === 'string' ? 'text' : 'slider';
+                let quantity: IQuantity = quantitySet.quantities[quantityKey] as IQuantity;
+                let icon = quantity.value.type === 'string' ? 'text' : 'slider';
                 let displayProperty: DisplayProperty = new DisplayProperty(
                     quantityKey,
-                    quantity.nominalValue.type,
-                    quantity.nominalValue.unit,
+                    quantity.value.type,
+                    quantity.value.unit,
                     ['quantitySets', quantitySetKey, 'quantities', quantityKey, 'value', 'value']
                 );
                 displayedQuantitySet.properties.push(displayProperty);
