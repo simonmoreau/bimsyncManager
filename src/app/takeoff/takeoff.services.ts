@@ -123,6 +123,19 @@ export class TakeoffService {
             .catch(this.handleError);
     }
 
+    getProduct(projectId: string, productId: number): Observable<IProduct> {
+
+            return this._http.get<IProduct>(
+                this._bimsyncUrlV2 + 'projects/' + projectId + '/ifc/products/' + productId,
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + this._appService.GetToken())
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+    }
+
     getAllRevisions(projectId: string): Observable<IRevision[]> {
         return this._http.get<IRevision[]>(
             this._bimsyncUrlV2 + 'projects/' + projectId + '/revisions?pageSize=1000',
