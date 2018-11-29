@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { IHighlightedElements, IProduct } from '../takeoff/takeoff.model';
-import { TakeoffService } from '../takeoff/takeoff.services';
 import * as $ from "jquery";
 
 declare var bimsync: any;
@@ -9,7 +8,6 @@ declare var bimsync: any;
   selector: 'app-viewer3d',
   templateUrl: './viewer3d.component.html',
   styleUrls: ['./viewer3d.component.scss'],
-  providers: [TakeoffService]
 })
 export class Viewer3dComponent implements OnInit, OnChanges {
 
@@ -20,14 +18,14 @@ export class Viewer3dComponent implements OnInit, OnChanges {
   otherHidden: boolean = false;
   otherDimmed: boolean = false;
   displayProperties: boolean = false;
-  selectedProduct: IProduct;
+  selectedProductId: number;
 
   @Input() viewerToken: string;
   @Input() spaceIds: number[];
   @Input() projectId: string;
   @Input() highlightedElements: IHighlightedElements[];
 
-  constructor(private _takeoffService: TakeoffService) { }
+  constructor() { }
 
   ngOnInit() {
     this.isLoaded = false;
@@ -126,15 +124,10 @@ export class Viewer3dComponent implements OnInit, OnChanges {
 
       console.log(selected);
       if (selected.length !== 0) {
-
-        context._takeoffService
-          .getProduct(context.projectId, selected[0])
-          .subscribe(product => {
-            context.selectedProduct = product;
-            console.log(product);
-          });
+        context.selectedProductId = selected[0];
+      } else {
+        context.selectedProductId = null;
       }
-
     });
   }
 

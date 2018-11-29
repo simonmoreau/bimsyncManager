@@ -27,6 +27,11 @@
       <clr-icon shape="list" ></clr-icon>
     </clr-checkbox>
   </div>
+  <app-property-panel *ngIf="selectedProductId"
+  [projectId]='projectId'
+  [productId]='selectedProductId'
+  >
+</app-property-panel>
 
 </div>
 <div class="viewer-container">
