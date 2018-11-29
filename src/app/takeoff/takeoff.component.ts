@@ -121,7 +121,7 @@ export class TakeoffComponent implements OnInit {
                 summaryData => {
                     this.ifcClasses.length = 0;
 
-                    //Merge walls in summary
+                    // Merge walls in summary
                     if (summaryData['IfcWall'] != null) {
                         summaryData['IfcWall'] = summaryData['IfcWall'] + summaryData['IfcWallStandardCase'];
                         delete summaryData['IfcWallStandardCase'];
@@ -136,12 +136,10 @@ export class TakeoffComponent implements OnInit {
                         this.ifcClasses.push(summary);
                     });
 
-                    //Sort ifcClasees
+                    // Sort ifcClasees
                     this.ifcClasses = this.ifcClasses.sort((a, b): number => {
-                        if (a.typeName < b.typeName)
-                            return -1;
-                        if (a.typeName > b.typeName)
-                            return 1;
+                        if (a.typeName < b.typeName) {return -1; }
+                        if (a.typeName > b.typeName) {return 1; }
                         return 0;
                     });
 
