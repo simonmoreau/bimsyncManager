@@ -80,10 +80,11 @@ export class DisplayProperty {
     columnGuid: string;
     isFirst: boolean;
     isLast: boolean;
+    propertyValue: any;
 
     private _groupingMode: GroupingMode;
 
-    constructor(name: string, type: string, unit: string, path: string[]) {
+    constructor(name: string, type: string, unit: string, path: string[], product: IProduct) {
         this.name = name;
         this.type = type;
         this.unit = unit;
@@ -94,6 +95,7 @@ export class DisplayProperty {
         this.availableGroupingModes = this.GetAvailableGroupingModes();
         this.guid = Guid.newGuid();
         this.columnGuid = Guid.newGuid();
+        this.propertyValue = Products.GetPropertyValueFromPath(path, product);
     }
 
     get groupingMode(): GroupingMode {
@@ -457,6 +459,69 @@ export class Products {
     static GetPropertyValueFromPath(path: string[], object: any): any {
         return path.reduce((acc, currValue) => (acc && acc[currValue]) ? acc[currValue] : null
             , object)
+    }
+
+    static GetProductProperties(product: IProduct): IDisplayPropertySet[] {
+
+        let displayedPropertySets: IDisplayPropertySet[] = [];
+
+        let displayedPropertyMainSet: IDisplayPropertySet = { name: 'Identification', properties: [] }
+
+        let objectNameProperty: DisplayProperty = new DisplayProperty('Name', 'string', "", ['attributes', 'Name', 'value'], product);
+
+        if (Products.GetPropertyValueFromPath(['attributes', 'Name', 'value'], product)) {
+            displayedPropertyMainSet.properties.push(objectNameProperty);
+        }
+
+        let objectTypeProperty: DisplayProperty = new DisplayProperty('Type', 'string', "", ['attributes', 'ObjectType', 'value'], product);
+
+        if (Products.GetPropertyValueFromPath(['attributes', 'ObjectType', 'value'], product)) {
+            displayedPropertyMainSet.properties.push(objectTypeProperty);
+        }
+
+        let objectClassProperty: DisplayProperty = new DisplayProperty('Entity', 'string', "", ['ifcType'], product);
+
+        if (product.ifcType) { displayedPropertyMainSet.properties.push(objectClassProperty); }
+
+        displayedPropertySets.push(displayedPropertyMainSet);
+
+        Object.keys(product.propertySets).forEach(propertySetKey => {
+            let propertySet = product.propertySets[propertySetKey] as IPropertySet;
+            let displayedPropertySet: IDisplayPropertySet = { name: propertySet.attributes.Name.value, properties: [] }
+            Object.keys(propertySet.properties).forEach(propertyKey => {
+                let property: IProperty = propertySet.properties[propertyKey] as IProperty;
+                let displayProperty: DisplayProperty = new DisplayProperty(
+                    propertyKey,
+                    property.nominalValue.type,
+                    property.nominalValue.unit,
+                    ['propertySets', propertySetKey, 'properties', propertyKey, 'nominalValue', 'value'],
+                    product
+                );
+                displayedPropertySet.properties.push(displayProperty);
+            });
+            displayedPropertySets.push(displayedPropertySet);
+        });
+
+
+        Object.keys(product.quantitySets).forEach(quantitySetKey => {
+            let quantitySet = product.quantitySets[quantitySetKey] as IQuantitySet;
+            let displayedQuantitySet: IDisplayPropertySet = { name: quantitySet.attributes.Name.value, properties: [] }
+            Object.keys(quantitySet.quantities).forEach(quantityKey => {
+                let quantity: IQuantity = quantitySet.quantities[quantityKey] as IQuantity;
+                let icon = quantity.value.type === 'string' ? 'text' : 'slider';
+                let displayProperty: DisplayProperty = new DisplayProperty(
+                    quantityKey,
+                    quantity.value.type,
+                    quantity.value.unit,
+                    ['quantitySets', quantitySetKey, 'quantities', quantityKey, 'value', 'value'],
+                    product
+                );
+                displayedQuantitySet.properties.push(displayProperty);
+            });
+            displayedPropertySets.push(displayedQuantitySet);
+        });
+
+        return displayedPropertySets;
     }
 }
 

@@ -223,59 +223,7 @@ export class TakeoffComponent implements OnInit {
 
         this.displayedPropertySets.length = 0;
 
-        let displayedPropertyMainSet: IDisplayPropertySet = { name: 'Identification', properties: [] }
-
-        let objectNameProperty: DisplayProperty = new DisplayProperty('Name', 'string', "", ['attributes', 'Name', 'value']);
-
-        if (Products.GetPropertyValueFromPath(['attributes', 'Name', 'value'], product)) {
-            displayedPropertyMainSet.properties.push(objectNameProperty);
-        }
-
-        let objectTypeProperty: DisplayProperty = new DisplayProperty('Type', 'string', "", ['attributes', 'ObjectType', 'value']);
-
-        if (Products.GetPropertyValueFromPath(['attributes', 'ObjectType', 'value'], product)) {
-            displayedPropertyMainSet.properties.push(objectTypeProperty);
-        }
-
-        let objectClassProperty: DisplayProperty = new DisplayProperty('Entity', 'string', "", ['ifcType']);
-
-        if (product.ifcType) { displayedPropertyMainSet.properties.push(objectClassProperty); }
-
-        this.displayedPropertySets.push(displayedPropertyMainSet);
-
-        Object.keys(product.propertySets).forEach(propertySetKey => {
-            let propertySet = product.propertySets[propertySetKey] as IPropertySet;
-            let displayedPropertySet: IDisplayPropertySet = { name: propertySet.attributes.Name.value, properties: [] }
-            Object.keys(propertySet.properties).forEach(propertyKey => {
-                let property: IProperty = propertySet.properties[propertyKey] as IProperty;
-                let displayProperty: DisplayProperty = new DisplayProperty(
-                    propertyKey,
-                    property.nominalValue.type,
-                    property.nominalValue.unit,
-                    ['propertySets', propertySetKey, 'properties', propertyKey, 'nominalValue', 'value']
-                );
-                displayedPropertySet.properties.push(displayProperty);
-            });
-            this.displayedPropertySets.push(displayedPropertySet);
-        });
-
-
-        Object.keys(product.quantitySets).forEach(quantitySetKey => {
-            let quantitySet = product.quantitySets[quantitySetKey] as IQuantitySet;
-            let displayedQuantitySet: IDisplayPropertySet = { name: quantitySet.attributes.Name.value, properties: [] }
-            Object.keys(quantitySet.quantities).forEach(quantityKey => {
-                let quantity: IQuantity = quantitySet.quantities[quantityKey] as IQuantity;
-                let icon = quantity.value.type === 'string' ? 'text' : 'slider';
-                let displayProperty: DisplayProperty = new DisplayProperty(
-                    quantityKey,
-                    quantity.value.type,
-                    quantity.value.unit,
-                    ['quantitySets', quantitySetKey, 'quantities', quantityKey, 'value', 'value']
-                );
-                displayedQuantitySet.properties.push(displayProperty);
-            });
-            this.displayedPropertySets.push(displayedQuantitySet);
-        });
+        this.displayedPropertySets = Products.GetProductProperties(product);
     }
 
     onTreeSelectionChange(displayProperty: DisplayProperty) {
