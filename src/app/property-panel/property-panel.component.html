@@ -1,14 +1,8 @@
-<p *ngIf="selectedProduct">
-  {{selectedProduct.objectId}}
-</p>
-<clr-tree-node *ngFor='let displayedPropertySet of displayedPropertySets'>
-  {{displayedPropertySet.name}}
-  <ng-template [clrIfExpanded]='true'>
-      <clr-tree-node draggable *ngFor='let displayedProperty of displayedPropertySet.properties'
-          [(clrSelected)]='displayedProperty.enable' (clrSelectedChange)='onTreeSelectionChange(displayedProperty)'
-          [dragData]='displayedProperty'>
-          <clr-icon class='is-highlight' [attr.shape]='displayedProperty.icon'></clr-icon>
-          {{displayedProperty.name}} - {{displayedProperty.propertyValue}}
-      </clr-tree-node>
-  </ng-template>
-</clr-tree-node>
+<div class='customTable' *ngFor='let displayedPropertySet of displayedPropertySets'>
+    <div class='firstline'>
+        {{displayedPropertySet.name}}
+    </div>
+    <div class='line' *ngFor='let displayedProperty of displayedPropertySet.properties'>
+        <span >{{displayedProperty.name}} - {{displayedProperty.propertyValue}}</span>
+    </div>
+</div>
