@@ -28,4 +28,15 @@
     border-radius: 0 0 calc(.125rem - 1px) 0;
     line-height: .583333rem;
     padding: 0.458333rem .5rem .458333rem .25rem;
+    font-size: .541667rem;
+    letter-spacing: normal;
+    font-weight: 400;
+  }
+
+  .property {
+    max-width: 13rem;
+  }
+
+  .property table {
+    margin-top: 0.5rem;
   }

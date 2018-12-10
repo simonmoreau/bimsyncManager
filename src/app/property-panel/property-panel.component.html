@@ -1,8 +1,15 @@
-<div class='customTable' *ngFor='let displayedPropertySet of displayedPropertySets'>
-    <div class='firstline'>
-        {{displayedPropertySet.name}}
-    </div>
-    <div class='line' *ngFor='let displayedProperty of displayedPropertySet.properties'>
-        <span >{{displayedProperty.name}} - {{displayedProperty.propertyValue}}</span>
-    </div>
+<div class='property' *ngFor='let displayedPropertySet of displayedPropertySets'>
+    <table class='table'>
+        <thead>
+            <tr>
+                <th class='left' colspan='2'>{{displayedPropertySet.name}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor='let displayedProperty of displayedPropertySet.properties'>
+                <td class='left'>{{displayedProperty.name}}</td>
+                <td class='left'>{{displayedProperty.displayedValue}}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>

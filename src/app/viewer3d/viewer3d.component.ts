@@ -17,7 +17,7 @@ export class Viewer3dComponent implements OnInit, OnChanges {
   spacesVisibility: boolean = false;
   otherHidden: boolean = false;
   otherDimmed: boolean = false;
-  displayProperties: boolean = false;
+  displayProperties: boolean = true;
   selectedProductId: number;
 
   @Input() viewerToken: string;

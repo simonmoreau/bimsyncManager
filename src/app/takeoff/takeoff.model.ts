@@ -102,6 +102,20 @@ export class DisplayProperty {
         return this._groupingMode;
     }
 
+    get displayedValue(): string {
+        let value = this.propertyValue;
+        if (value == null) {
+            return 'Pouestt';
+        }
+        if (typeof this.propertyValue === 'number') {
+            value = Math.round(this.propertyValue * 100) / 100;
+        }
+        if (this.unit) {
+            value = value + ' ' + this.unit;
+        }
+        return value.toString();
+    }
+
     get displayName(): string {
         const displayUnit = this.unit ? ' (' + this.unit + ')' : '';
         return this._groupingMode.modeText + this.name + displayUnit;
@@ -457,7 +471,13 @@ export class Products {
     }
 
     static GetPropertyValueFromPath(path: string[], object: any): any {
-        return path.reduce((acc, currValue) => (acc && acc[currValue]) ? acc[currValue] : null
+        return path.reduce((acc, currValue) => {
+            if (acc && acc[currValue] !== null) {
+                return acc[currValue];
+            } else {
+                return null;
+            }
+        }
             , object)
     }
 
