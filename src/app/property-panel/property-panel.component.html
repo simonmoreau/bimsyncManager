@@ -1,15 +1,11 @@
-<div class='property' *ngFor='let displayedPropertySet of displayedPropertySets'>
-    <table class='table'>
-        <thead>
-            <tr>
-                <th class='left' colspan='2'>{{displayedPropertySet.name}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor='let displayedProperty of displayedPropertySet.properties'>
-                <td class='left'>{{displayedProperty.name}}</td>
-                <td class='left'>{{displayedProperty.displayedValue}}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<clr-stack-view>
+    <clr-stack-block [clrSbExpanded]="true" *ngFor="let displayedPropertySet of displayedPropertySets">
+        <clr-stack-label> </clr-stack-label>
+        <clr-stack-content>{{displayedPropertySet.name}}</clr-stack-content>
+        <clr-stack-block *ngFor="let displayedProperty of displayedPropertySet.properties">
+            <clr-stack-label>{{displayedProperty.name}}</clr-stack-label>
+            <clr-stack-content>{{displayedProperty.displayedValue}}</clr-stack-content>
+        </clr-stack-block>
+    </clr-stack-block>
+</clr-stack-view>
+
