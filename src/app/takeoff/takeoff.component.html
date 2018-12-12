@@ -1,33 +1,46 @@
 <div class='clr-row' style='height: 100%;'>
     <div class='clr-col-4 box'>
-        <h4>{{selectedProject.name}}</h4>
-        <div *ngIf='models && models.length'>
-            <label for='selects_2'>Models</label>
-            <div class='select'>
-                <select id='selects_2' (change)='GetRevisions()' [(ngModel)]='selectedModel'>
-                    <option *ngFor='let model of models; let i = index; trackBy: trackByFn' [ngValue]='model'>{{model.name}}</option>
-                </select>
-            </div>
-        </div>
-
-        <div *ngIf='revisions && revisions.length'>
-            <label for='selects_3'>Revisions</label>
-            <div class='select'>
-                <select id='selects_3' (change)='GetProductTypeSummary()' [(ngModel)]='selectedRevision'>
-                    <option *ngFor='let revision of revisions; let i = index; trackBy: trackByFn' [ngValue]='revision'>{{revision.version}}</option>
-                </select>
-            </div>
-        </div>
-
-        <div *ngIf='ifcClasses && ifcClasses.length'>
-            <label for='selects_4'>Categories</label>
-            <div class='select'>
-                <select id='selects_4' (change)='GetProducts()' [(ngModel)]='selectedIfcClass'>
-                    <option *ngFor='let ifcClass of ifcClasses; let i = index; trackBy: trackByFn' [ngValue]='ifcClass'>{{ifcClass.typeName}}
-                        ({{ifcClass.typeQuantity}})</option>
-                </select>
-            </div>
-        </div>
+        <table class="table" style="margin-top:0" *ngIf='selectedProject'>
+            <thead>
+                <tr>
+                    <th class="left" colspan='2'>{{selectedProject.name}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf='models && models.length'>
+                    <td class="left padded"><label for='selects_2'>Model</label></td>
+                    <td class="left">
+                        <div class='select'>
+                            <select id='selects_2' (change)='GetRevisions()' [(ngModel)]='selectedModel'>
+                                <option *ngFor='let model of models; let i = index; trackBy: trackByFn' [ngValue]='model'>{{model.name}}</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf='revisions && revisions.length'>
+                    <td class="left padded"><label for='selects_3'>Revision</label></td>
+                    <td class="left">
+                        <div class='select'>
+                            <select id='selects_3' (change)='GetProductTypeSummary()' [(ngModel)]='selectedRevision'>
+                                <option *ngFor='let revision of revisions; let i = index; trackBy: trackByFn' [ngValue]='revision'>{{revision.version}}</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf='ifcClasses && ifcClasses.length'>
+                    <td class="left padded"><label for='selects_4'>Category</label></td>
+                    <td class="left">
+                        <div class='select'>
+                            <select id='selects_4' (change)='GetProducts()' [(ngModel)]='selectedIfcClass'>
+                                <option *ngFor='let ifcClass of ifcClasses; let i = index; trackBy: trackByFn'
+                                    [ngValue]='ifcClass'>{{ifcClass.typeName}}
+                                    ({{ifcClass.typeQuantity}})</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         <div class='item customTable' *ngIf='selectedIfcClass'>
             <div class='firstline'>
                 Values
@@ -67,12 +80,8 @@
     </div>
     <div class='clr-col-8' style="position: relative">
 
-        <app-viewer3d *ngIf='viewer3dToken'
-        [viewerToken]='viewer3dToken'
-        [projectId]='selectedProject.id'
-        [spaceIds]='spaces'
-        [highlightedElements]='highlightedElements'
-        >
+        <app-viewer3d *ngIf='viewer3dToken' [viewerToken]='viewer3dToken' [projectId]='selectedProject.id' [spaceIds]='spaces'
+            [highlightedElements]='highlightedElements'>
 
         </app-viewer3d>
         <div style="position: absolute;bottom: 0;left: 0.5rem; right: 0.5rem;">
