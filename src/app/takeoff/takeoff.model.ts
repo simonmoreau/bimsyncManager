@@ -105,7 +105,7 @@ export class DisplayProperty {
     get displayedValue(): string {
         let value = this.propertyValue;
         if (value == null) {
-            return 'Pouestt';
+            return 'null';
         }
         if (typeof this.propertyValue === 'number') {
             value = Math.round(this.propertyValue * 100) / 100;
@@ -499,6 +499,18 @@ export class Products {
             displayedPropertyMainSet.properties.push(objectTypeProperty);
         }
 
+        let globalIdProperty: DisplayProperty = new DisplayProperty('GUID', 'string', "", ['attributes', 'GlobalId', 'value'], product);
+
+        if (Products.GetPropertyValueFromPath(['attributes', 'GlobalId', 'value'], product)) {
+            displayedPropertyMainSet.properties.push(globalIdProperty);
+        }
+
+        let tagProperty: DisplayProperty = new DisplayProperty('Tag', 'string', "", ['attributes', 'Tag', 'value'], product);
+
+        if (Products.GetPropertyValueFromPath(['attributes', 'Tag', 'value'], product)) {
+            displayedPropertyMainSet.properties.push(tagProperty);
+        }
+
         let objectClassProperty: DisplayProperty = new DisplayProperty('Entity', 'string', "", ['ifcType'], product);
 
         if (product.ifcType) { displayedPropertyMainSet.properties.push(objectClassProperty); }
@@ -512,8 +524,8 @@ export class Products {
                 let property: IProperty = propertySet.properties[propertyKey] as IProperty;
                 let displayProperty: DisplayProperty = new DisplayProperty(
                     propertyKey,
-                    property.nominalValue.type,
-                    property.nominalValue.unit,
+                    property.nominalValue ? property.nominalValue.type : 'string',
+                    property.nominalValue ? property.nominalValue.unit : 'string',
                     ['propertySets', propertySetKey, 'properties', propertyKey, 'nominalValue', 'value'],
                     product
                 );
