@@ -415,6 +415,7 @@ export class TakeoffComponent implements OnInit {
             this.selectedValueProperties.forEach(selectedValueProperty => {
                 firstRow = firstRow + selectedValueProperty.displayName + ',';
             })
+            firstRow = firstRow + 'Color'
             csvContent += firstRow + '\r\n';
 
             this.listOfRows.forEach(rowArray => {

@@ -391,6 +391,11 @@ export class ValueTree {
 }
 
 export class Products {
+
+    private static round(num: any): number {
+        return Math.round(num * 100) / 100;
+    }
+
     static GetGroupedList(selectedProperty: DisplayProperty, products: IProduct[]): any[] {
 
         function onlyUnique(value, index, self) {
@@ -430,10 +435,10 @@ export class Products {
                 return [filteredValues[filteredValues.length - 1]];
             }
             case GroupingModeEnum.Sum: {
-                return [allPropertyValuesList.reduce((a, b) => a + b, 0)];
+                return [this.round(allPropertyValuesList.reduce((a, b) => a + b, 0))];
             }
             case GroupingModeEnum.Average: {
-                return [average(allPropertyValuesList)];
+                return [this.round(average(allPropertyValuesList))];
             }
             case GroupingModeEnum.Minimun: {
                 return [allPropertyValuesList.filter(onlyUnique).sort()[0]];
@@ -443,10 +448,10 @@ export class Products {
                 return [filteredValues[filteredValues.length - 1]];
             }
             case GroupingModeEnum.StandardDeviation: {
-                return [Math.sqrt(variance(allPropertyValuesList))];
+                return [this.round(Math.sqrt(variance(allPropertyValuesList)))];
             }
             case GroupingModeEnum.Variance: {
-                return [variance(allPropertyValuesList)];
+                return [this.round(variance(allPropertyValuesList))];
             }
             case GroupingModeEnum.Median: {
                 const arr = allPropertyValuesList.sort((a, b) => a - b);
@@ -456,7 +461,7 @@ export class Products {
                 } else {
                     median = (1 * arr[arr.length / 2 - 1] + 1 * arr[arr.length / 2]) / 2;
                 }
-                return [median]
+                return [this.round(median)]
             }
             default: {
                 return allPropertyValuesList.filter(onlyUnique);
