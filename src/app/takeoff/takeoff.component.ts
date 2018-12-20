@@ -428,17 +428,17 @@ export class TakeoffComponent implements OnInit {
                 csvContent += row + '\r\n';
             });
 
-            let encodedUri = encodeURI(csvContent);
-            let link = document.createElement('a');
-            link.setAttribute('href', encodedUri);
-
             let options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            let dateString = new Date().toLocaleDateString("en-US", options)
+            let dateString = new Date().toLocaleDateString("en-US", options);
+            let filename = dateString + '_' + this.selectedIfcClass.typeName + '.csv';
 
-            link.setAttribute('download', dateString + '_' + this.selectedIfcClass.typeName + '.csv');
+            let content = new Blob([csvContent], { type: 'text/csv'});
+            let link = document.createElement("a");
+            link.download = filename;
+            link.href = window.URL.createObjectURL(content);
             document.body.appendChild(link); // Required for FF
 
-            link.click(); // This will download the data file named "my_data.csv".
+            link.click();
         }
 
         // console.log("download data as spreadsheet");

@@ -1,46 +1,49 @@
 <div class='clr-row' style='height: 100%;'>
     <div class='clr-col-4 box'>
-        <table class="table" style="margin-top:0" *ngIf='selectedProject'>
-            <thead>
-                <tr>
-                    <th class="left" colspan='2'>{{selectedProject.name}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngIf='models && models.length'>
-                    <td class="left padded"><label for='selects_2'>Model</label></td>
-                    <td class="left">
-                        <div class='select'>
-                            <select id='selects_2' (change)='GetRevisions()' [(ngModel)]='selectedModel'>
-                                <option *ngFor='let model of models; let i = index; trackBy: trackByFn' [ngValue]='model'>{{model.name}}</option>
-                            </select>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf='revisions && revisions.length'>
-                    <td class="left padded"><label for='selects_3'>Revision</label></td>
-                    <td class="left">
-                        <div class='select'>
-                            <select id='selects_3' (change)='GetProductTypeSummary()' [(ngModel)]='selectedRevision'>
-                                <option *ngFor='let revision of revisions; let i = index; trackBy: trackByFn' [ngValue]='revision'>{{revision.version}}</option>
-                            </select>
-                        </div>
-                    </td>
-                </tr>
-                <tr *ngIf='ifcClasses && ifcClasses.length'>
-                    <td class="left padded"><label for='selects_4'>Category</label></td>
-                    <td class="left">
-                        <div class='select'>
-                            <select id='selects_4' (change)='GetProducts()' [(ngModel)]='selectedIfcClass'>
-                                <option *ngFor='let ifcClass of ifcClasses; let i = index; trackBy: trackByFn'
-                                    [ngValue]='ifcClass'>{{ifcClass.typeName}}
-                                    ({{ifcClass.typeQuantity}})</option>
-                            </select>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div>
+                <table class="table" style="margin-top:0" *ngIf='selectedProject'>
+                        <thead>
+                            <tr>
+                                <th class="left" colspan='2'>{{selectedProject.name}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf='models && models.length'>
+                                <td class="left padded"><label for='selects_2'>Model</label></td>
+                                <td class="left">
+                                    <div class='select'>
+                                        <select id='selects_2' (change)='GetRevisions()' [(ngModel)]='selectedModel'>
+                                            <option *ngFor='let model of models; let i = index; trackBy: trackByFn' [ngValue]='model'>{{model.name}}</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf='revisions && revisions.length'>
+                                <td class="left padded"><label for='selects_3'>Revision</label></td>
+                                <td class="left">
+                                    <div class='select'>
+                                        <select id='selects_3' (change)='GetProductTypeSummary()' [(ngModel)]='selectedRevision'>
+                                            <option *ngFor='let revision of revisions; let i = index; trackBy: trackByFn' [ngValue]='revision'>{{revision.version}}</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf='ifcClasses && ifcClasses.length'>
+                                <td class="left padded"><label for='selects_4'>Category</label></td>
+                                <td class="left">
+                                    <div class='select'>
+                                        <select id='selects_4' (change)='GetProducts()' [(ngModel)]='selectedIfcClass'>
+                                            <option *ngFor='let ifcClass of ifcClasses; let i = index; trackBy: trackByFn'
+                                                [ngValue]='ifcClass'>{{ifcClass.typeName}}
+                                                ({{ifcClass.typeQuantity}})</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+        </div>
+
         <div class='item customTable' *ngIf='selectedIfcClass'>
             <div class='firstline'>
                 Values
@@ -53,7 +56,7 @@
                 </app-field-selector>
             </div>
         </div>
-        <div class='content customTable box' *ngIf='selectedIfcClass'>
+        <div class='content customTable box' *ngIf='selectedIfcClass' style="min-height: 0px;">
             <div class='firstline item'>
                 Properties
             </div>
