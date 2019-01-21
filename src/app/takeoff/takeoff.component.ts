@@ -345,19 +345,15 @@ export class TakeoffComponent implements OnInit {
 
             propertyArray.forEach(value => {
                 let filteredProducts = this.selectedProducts;
-                if (this.selectedValueProperties[0].groupingMode.mode === GroupingModeEnum.DontSummarize) {
+                if (this.selectedValueProperties[0].groupingMode.mode === GroupingModeEnum.DontSummarize ||
+                    this.selectedValueProperties[0].groupingMode.mode === GroupingModeEnum.First ||
+                    this.selectedValueProperties[0].groupingMode.mode === GroupingModeEnum.Last) {
                     filteredProducts = Products.GetFilteredProducts(
                         this.selectedProducts,
                         this.selectedValueProperties[0].path,
                         value
                     );
                 }
-
-                let filteredProducts2 = Products.GetFilteredProducts(
-                    this.selectedProducts,
-                    this.selectedValueProperties[0].path,
-                    value
-                );
 
                 tree.push(new ValueTree(
                     value,

@@ -39,6 +39,7 @@ export class Viewer3dComponent implements OnInit, OnChanges {
       let $viewer = $("#viewer-3d") as any;
 
       if (this.highlightedElements.length !== 0) {
+        $viewer.viewer('resetColors');
         this.highlightedElements.forEach(highlightedElement => {
           $viewer.viewer('color', highlightedElement.color, highlightedElement.ids);
         });

@@ -349,6 +349,8 @@ export class ValueTree {
             // Create a tree item for each value of the next column
             nextColumnArray.forEach(value => {
                 let filteredProducts = this.products;
+
+                // if we don't summarize the products, we keep all of them
                 if (this.selectedProperties[this.columnNumber + 1].groupingMode.mode === GroupingModeEnum.DontSummarize) {
                     filteredProducts = Products.GetFilteredProducts(
                         this.products,
