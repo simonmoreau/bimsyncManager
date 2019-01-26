@@ -1,0 +1,41 @@
+.btn-label {
+    padding: 0;
+}
+
+.dropdown .btn-drop {
+    border-color: transparent;
+    background-color: transparent;
+    color: #0077b7;
+    vertical-align: middle;
+}
+
+.dropdown {
+    margin-right: 0;
+    margin-left: auto;
+}
+
+.btn-drop clr-icon {
+    height: .6rem;
+    width: .6rem;
+}
+
+.with-margin {
+    margin-left: 0.4rem;
+}
+
+.field {
+    margin: .25rem .25rem 0 0;
+    width: 100%;
+    font-size: .458333rem;
+    font-weight: 400;
+    letter-spacing: .03em;
+    line-height: .458333rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 .5rem 1px;
+    border-radius: .5rem;
+    border: 1px solid #737373;
+    height: .875rem;
+    white-space: nowrap;
+    color: #565656;
+}
