@@ -11,6 +11,7 @@ With bimsync Manager, you can :
 
 * Create a new bimsync project based on a .json template. This allows you to automatically invite members and create issue boards and models
 * Link your bimsync® account to Power BI and create dashboards for visualizing project data
+* Share your bimsync® models on an easy-to-use web interface
 * Extract and display quantities from your models with the quantity take-off system
 
 A free bimsync® trial is available for new users on the [bimsync® website](https://bimsync.com/).
