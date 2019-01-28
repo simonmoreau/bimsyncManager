@@ -122,7 +122,7 @@ export class TakeoffComponent implements OnInit {
                     this.ifcClasses.length = 0;
 
                     // Merge walls in summary
-                    if (summaryData['IfcWall'] != null) {
+                    if (summaryData['IfcWall'] != null && summaryData['IfcWallStandardCase'] != null) {
                         summaryData['IfcWall'] = summaryData['IfcWall'] + summaryData['IfcWallStandardCase'];
                         delete summaryData['IfcWallStandardCase'];
                     }
