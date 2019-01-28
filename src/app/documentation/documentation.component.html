@@ -8,7 +8,7 @@
           </div>
           <div class="card-block">
             <div class="card-text">
-              <p>Use this code to connect Power BI to your bimsync® Account:
+              <p>Use this code to connect Power BI to your Bimsync® Account:
                 <b>{{appService._user.PowerBISecret}}</b>
               </p>
             </div>
@@ -19,7 +19,7 @@
 
     <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
       <h1 id="started">Getting started</h1>
-      <p>To use bimsync® Manager, you must be connected to bimsync® using your usual credentials.</p>
+      <p>To use Bimsync® Manager, you must be connected to Bimsync® using your usual credentials.</p>
       <p>Click on "Connect" or "Getting Started"</p>
 
       <div class="card">
@@ -28,7 +28,7 @@
         </div>
       </div>
 
-      <p>Then grant the application the permission to access to your bimsync® account.</p>
+      <p>Then grant the application the permission to access to your Bimsync® account.</p>
 
       <div class="card">
         <div class="card-img">
@@ -36,8 +36,8 @@
         </div>
       </div>
 
-      <p>You can now see the list of your bimsync® projects.</p>
-      <p>Furthermore, to allow bimsync® Manager to create issue boards on your project, you must authorized it first. Just click
+      <p>You can now see the list of your Bimsync® projects.</p>
+      <p>Furthermore, to allow Bimsync® Manager to create issue boards on your project, you must authorized it first. Just click
         on "Authorise".</p>
 
       <div class="card">
@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <p>Then grant again the application the permission to access to your bimsync® account.</p>
+      <p>Then grant again the application the permission to access to your Bimsync® account.</p>
 
       <div class="card">
         <div class="card-img">
@@ -54,11 +54,11 @@
         </div>
       </div>
 
-      <h1 id="createNewProject">Create a new bimsync® project</h1>
+      <h1 id="createNewProject">Create a new Bimsync® project</h1>
       <h2>Template</h2>
-      <p>bimsync® Manager allows you to to create a new bimsnc project based on a template. This template is a .json configuration
+      <p>Bimsync® Manager allows you to to create a new bimsnc project based on a template. This template is a .json configuration
         text, where you describe how you want to create your project.</p>
-      <p>To create a new bimsync® project with bimsync® Manager:</p>
+      <p>To create a new Bimsync® project with Bimsync® Manager:</p>
       <ul>
         <li>Click on "Create Project</li>
       </ul>
@@ -89,7 +89,7 @@
       <h2 id="projectDescription">projectDescription</h2>
       <p>This is the description of your project. This property is optional.</p>
       <h2 id="Users">Users</h2>
-      <p>A list of members to be added to the new projet. This list is optionnal. The user must already be a registered bimsync
+      <p>A list of members to be added to the new projet. This list is optionnal. The user must already be a registered Bimsync
         user, you can't invite new users.</p>
       <p>Each user must have the following format:</p>
       <pre>
@@ -120,9 +120,9 @@
       <h3>Name</h3>
       <p>This is the name of your new board</p>
       <h3>Statuses</h3>
-      <p>A list of statuses to be added to your board. This list is optionnal. If you add any new status, bimsync® Manager will
-        delete all existing ones and create yours. If you don't add any status, bimsync® Manager will keep the existing ones
-        (Open and Closed). Furthermore, you must always have a status with the open type. If you don't add any, bimsync® Manager
+      <p>A list of statuses to be added to your board. This list is optionnal. If you add any new status, Bimsync® Manager will
+        delete all existing ones and create yours. If you don't add any status, Bimsync® Manager will keep the existing ones
+        (Open and Closed). Furthermore, you must always have a status with the open type. If you don't add any, Bimsync® Manager
         will keep the existing one.</p>
       <p>Statuses follow this schema:</p>
       <pre>
@@ -131,12 +131,12 @@
       <ul>
         <li>Name: The name of the status</li>
         <li>Color: The
-          <a href="http://www.color-hex.com/">Hex colour</a> for the status. The following color code are used by bimsync:</li>
+          <a href="http://www.color-hex.com/">Hex colour</a> for the status. The following color code are used by Bimsync:</li>
         <li>Type: the type of the status. It can be "open", "candidate" or "closed".</li>
       </ul>
       <h3>Types</h3>
-      <p>A list of types to be added to your board. This list is optionnal. If you add any new type, bimsync® Manager will delete
-        all existing ones and create yours. If you don't add any type, bimsync® Manager will keep the existing ones (Error,
+      <p>A list of types to be added to your board. This list is optionnal. If you add any new type, Bimsync® Manager will delete
+        all existing ones and create yours. If you don't add any type, Bimsync® Manager will keep the existing ones (Error,
         Warning, Info and Unknown).</p>
       <p>Types follow this schema:</p>
       <pre>
@@ -148,7 +148,7 @@
           <a href="http://www.color-hex.com/">Hex colour</a> for the type.</li>
       </ul>
       <!--       <h2>Color</h2>
-      <p>The following color codes are used by bimsync:</p> -->
+      <p>The following color codes are used by Bimsync:</p> -->
 
       <h2 id="Example">Example</h2>
       <p>Here is an example of a complete configuration file:</p>
@@ -156,10 +156,10 @@
           <code ng-non-bindable clr-code-highlight="language-json">{{example}}</code>
         </pre>
       <h1>Power BI dashboard</h1>
-      <p>bimsync® Manager allows you to connect your bimsync® account to Power BI.</p>
+      <p>Bimsync® Manager allows you to connect your Bimsync® account to Power BI.</p>
       <h2 id="SetUp">Set Up</h2>
       <p>Download one of the Power BI template below and open it.</p>
-      <p>To connect the Power BI template to you bimsync® account, click on "Edit Parameter" and add your Power BI secret code.
+      <p>To connect the Power BI template to you Bimsync® account, click on "Edit Parameter" and add your Power BI secret code.
         This code is available at the top of this page when your are connected.</p>
       <div class="card">
         <div class="card-img">
@@ -211,8 +211,8 @@
 
 
       <p>The Project Dashboard template allows you to extract data from a specific project. This enable data extraction from
-        any models. To use this dashboard, you must add your bimsync® project Id to the Power BI parameters.</p>
-        <p>You can find your bimsync® project Id in the project list of bimsync® Manager:</p>
+        any models. To use this dashboard, you must add your Bimsync® project Id to the Power BI parameters.</p>
+        <p>You can find your Bimsync® project Id in the project list of Bimsync® Manager:</p>
         <div class="card">
           <div class="card-img">
             <img alt="grant" src="../images/bimsync/07_getGuid.png">
@@ -252,13 +252,13 @@
       <p>The Global Dashboard template come with four sample pages, displaying generic information about your projects.
         <br />To find more, and extract meanifull relationship from your projects, the template contain the following tables:</p>
       <ul>
-        <li>Members: A list of relation between a project and a bimsync® user</li>
+        <li>Members: A list of relation between a project and a Bimsync® user</li>
         <li>Models: All models, by project</li>
-        <li>OwnerHistory: The owner history of all the IFC models uploaded on bimsync</li>
-        <li>Projects: A list of all your bimsync® projects</li>
+        <li>OwnerHistory: The owner history of all the IFC models uploaded on Bimsync</li>
+        <li>Projects: A list of all your Bimsync® projects</li>
         <li>RefreshDate: A simple table to get the date of the last refresh</li>
         <li>Revision: All revisions, by model and project</li>
-        <li>Users: A list of all bimsync® users you are aware of</li>
+        <li>Users: A list of all Bimsync® users you are aware of</li>
       </ul>
       <p>These tables are linked together with Power BI relations.</p>
       <p>These templates are also set up to be uploaded on Power BI Online, where you can refresh them periodically without

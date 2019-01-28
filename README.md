@@ -1,20 +1,20 @@
-![bimsync](logo.png)
+![Bimsync](logo.png)
 
-bimsync Manager
+Bimsync Manager
 ============
 
-bimsync Manager is a web application to create and manage your bimsync® projects.
+Bimsync Manager is a web application to create and manage your Bimsync® projects.
 
 ## Key Features
 
-With bimsync Manager, you can :
+With Bimsync Manager, you can :
 
-* Create a new bimsync project based on a .json template. This allows you to automatically invite members and create issue boards and models
-* Link your bimsync® account to Power BI and create dashboards for visualizing project data
-* Share your bimsync® models on an easy-to-use web interface
+* Create a new Bimsync project based on a .json template. This allows you to automatically invite members and create issue boards and models
+* Link your Bimsync® account to Power BI and create dashboards for visualizing project data
+* Share your Bimsync® models on an easy-to-use web interface
 * Extract and display quantities from your models with the quantity take-off system
 
-A free bimsync® trial is available for new users on the [bimsync® website](https://bimsync.com/).
+A free Bimsync® trial is available for new users on the [Bimsync® website](https://bimsync.com/).
 
 This web application is developed by a third party and is **_not_** endorsed by Catenda®.
 
