@@ -1,16 +1,16 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { TakeoffService } from "./takeoff.services";
+import { BimsyncProjectService } from '../bimsync-project/bimsync-project.services';
 import { Color } from "./takeoff.color";
 import {
     IProject,
     IModel,
-    IRevision
+    IRevision,
+    ITypeSummary, IProduct, IPropertySet, IProperty, IQuantitySet, IQuantity
 } from "../bimsync-project/bimsync-project.models";
-import {
-    ITypeSummary, IProduct, IPropertySet, IProperty,
-    IQuantitySet, DisplayProperty, GroupingModeEnum,
-    IDisplayPropertySet, Products, ValueTree, Guid, IHighlightedElements, SortEnum, IQuantity
+import {DisplayProperty, GroupingModeEnum,
+    IDisplayPropertySet, Products, ValueTree, Guid, IHighlightedElements, SortEnum,
 } from "./takeoff.model";
 import { DropEvent } from 'ng-drag-drop';
 import { Observable } from 'rxjs/Rx';
@@ -20,7 +20,7 @@ import { Observable } from 'rxjs/Rx';
     selector: "app-takeoff",
     templateUrl: "./takeoff.component.html",
     styleUrls: ["./takeoff.component.scss"],
-    providers: [TakeoffService]
+    providers: [TakeoffService, BimsyncProjectService]
 })
 export class TakeoffComponent implements OnInit {
     selectedProject: IProject;
@@ -44,7 +44,7 @@ export class TakeoffComponent implements OnInit {
     spaces: number[] = [];
     highlightedElements: IHighlightedElements[] = [];
 
-    constructor(private _takeoffService: TakeoffService, private route: ActivatedRoute) { }
+    constructor(private _takeoffService: TakeoffService, private _bimsyncService: BimsyncProjectService, private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.projectId = this.route.snapshot.paramMap.get('id');
@@ -52,7 +52,7 @@ export class TakeoffComponent implements OnInit {
     }
 
     GetProject() {
-        this._takeoffService.getProject(this.projectId).subscribe(
+        this._bimsyncService.getProject(this.projectId).subscribe(
             projects => {
                 this.selectedProject = projects;
                 this.GetModels();
@@ -67,7 +67,7 @@ export class TakeoffComponent implements OnInit {
         this.listOfRows = [];
         this.highlightedElements = [];
 
-        this._takeoffService.getModels(this.selectedProject.id).subscribe(
+        this._bimsyncService.getModels(this.selectedProject.id).subscribe(
             models => {
                 this.models = models;
                 if (this.models != null && this.models.length !== 0) {
@@ -87,7 +87,7 @@ export class TakeoffComponent implements OnInit {
         this.listOfRows = [];
         this.highlightedElements = [];
 
-        this._takeoffService
+        this._bimsyncService
             .getRevisions(this.selectedProject.id, this.selectedModel.id)
             .subscribe(
                 revisions => {
@@ -110,9 +110,9 @@ export class TakeoffComponent implements OnInit {
         this.highlightedElements = [];
         this.viewer3dToken = null;
 
-        let viewerToken = this._takeoffService.getViewer3dToken(this.selectedProject.id, this.selectedRevision.id);
+        let viewerToken = this._bimsyncService.getViewer3dToken(this.selectedProject.id, this.selectedRevision.id);
 
-        this._takeoffService
+        this._bimsyncService
             .getProductsTypeSummary(
                 this.selectedProject.id,
                 this.selectedRevision.id
@@ -156,7 +156,7 @@ export class TakeoffComponent implements OnInit {
                     let spacesProductsObs = new Observable<IProduct[]>();
 
                     if (spaceClass) {
-                        spacesProductsObs = this._takeoffService.getProducts(
+                        spacesProductsObs = this._bimsyncService.getProducts(
                             this.selectedProject.id,
                             this.selectedRevision.id,
                             spaceClass.typeName,
@@ -194,7 +194,7 @@ export class TakeoffComponent implements OnInit {
         this.highlightedElements = [];
 
         // It will loop on all requests
-        this._takeoffService
+        this._bimsyncService
             .getProducts(
                 this.selectedProject.id,
                 this.selectedRevision.id,

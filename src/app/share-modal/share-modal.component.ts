@@ -1,19 +1,18 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { TakeoffService } from '../takeoff/takeoff.services';
-import { IProject, IModel, IRevisionId, IViewerRequestBody, ISharedRevisions, IRevision } from '../bimsync-project/bimsync-project.models';
+import { BimsyncProjectService } from '../bimsync-project/bimsync-project.services';
+import { IProject, IModel, ISharedRevisions, IRevision } from '../bimsync-project/bimsync-project.models';
 import { ClrLoadingState } from '@clr/angular';
 import { AppService } from 'app/app.service';
 
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
-import { TrustedHtmlString } from '../../../node_modules/@angular/core/src/sanitization/bypass';
 
 @Component({
   selector: 'app-share-modal',
   templateUrl: './share-modal.component.html',
   styleUrls: ['./share-modal.component.scss'],
-  providers: [TakeoffService]
+  providers: [TakeoffService, BimsyncProjectService]
 })
 
 export class ShareModalComponent implements OnInit {
@@ -36,7 +35,7 @@ export class ShareModalComponent implements OnInit {
   publishBtnState: ClrLoadingState = ClrLoadingState.DEFAULT;
   appService: AppService;
 
-  constructor(private _takeoffService: TakeoffService, private _appService: AppService) {
+  constructor(private _takeoffService: TakeoffService, private _bimsyncService: BimsyncProjectService, private _appService: AppService) {
     this.appService = _appService;
   }
 
@@ -117,11 +116,11 @@ export class ShareModalComponent implements OnInit {
 
   GetAllRevisions() {
     this.models = new Array() as Array<IModel>;
-    this._takeoffService.getModels(this.selectedProject.id)
+    this._bimsyncService.getModels(this.selectedProject.id)
       .subscribe(models => {
         this.models = models;
 
-        this._takeoffService.getAllRevisions(this.selectedProject.id)
+        this._bimsyncService.getAllRevisions(this.selectedProject.id)
           .subscribe(revisions => {
             revisions.forEach(revision => {
               let index: number = this.models.indexOf(this.models.find(m => m.id === revision.model.id));

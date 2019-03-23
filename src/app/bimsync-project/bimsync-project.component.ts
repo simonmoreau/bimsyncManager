@@ -1,15 +1,14 @@
 import { Component, OnInit , ViewChild} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-
 
 import { IProject, IBimsyncBoard } from './bimsync-project.models';
 import { IUser } from '../bimsync-oauth/bimsync-oauth.models';
+
 import { BimsyncProjectService } from './bimsync-project.services';
-import { ICreator, IMember, IModel, IBoard, IStatus, IType } from 'app/bimsync-project/creator.models';
+
+import { ICreatedProject, ICreatedMember, ICreatedModel,
+  ICreatedBoard, ICreatedStatus, ICreatedType } from 'app/bimsync-project/creator.models';
 import { AppService } from 'app/app.service';
-import * as data from './bimsyncProject.json';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 import { ShareModalComponent } from '../share-modal/share-modal.component';
 
 @Component({
@@ -60,14 +59,14 @@ export class BimsyncProjectComponent implements OnInit {
     let creators = JSON.parse(this.jsonConfig);
     console.log(creators);
 
-    let creatorArray: ICreator[] = creators;
+    let creatorArray: ICreatedProject[] = creators;
 
     for (let i = 0; i < creatorArray.length; i++) {
       this.CreateProject(creatorArray[i]);
     }
   }
 
-  CreateProject(creator: ICreator) {
+  CreateProject(creator: ICreatedProject) {
 
     console.log(creator);
     // Create the project
@@ -92,7 +91,7 @@ export class BimsyncProjectComponent implements OnInit {
       error => this.errorMessage = <any>error);
   }
 
-  AssingUsers(users: IMember[], projectId: string) {
+  AssingUsers(users: ICreatedMember[], projectId: string) {
     for (let user of users) {
       // Assign a new user
       this._bimsyncProjectService.AddUser(projectId, user.id, user.role)
@@ -103,7 +102,7 @@ export class BimsyncProjectComponent implements OnInit {
     }
   }
 
-  CreateModels(models: IModel[], projectId: string) {
+  CreateModels(models: ICreatedModel[], projectId: string) {
     for (let model of models) {
       // Create a new model
       this._bimsyncProjectService.AddModel(projectId, model.name)
@@ -114,9 +113,9 @@ export class BimsyncProjectComponent implements OnInit {
     }
   }
 
-  CreateBoards(creator: ICreator, projectId: string) {
+  CreateBoards(creator: ICreatedProject, projectId: string) {
 
-    let boards: IBoard[] = creator.boards;
+    let boards: ICreatedBoard[] = creator.boards;
 
     for (let board of boards) {
       // Create a new board
@@ -139,8 +138,8 @@ export class BimsyncProjectComponent implements OnInit {
     }
   }
 
-  CreateExtensionStatuses(bimsyncBoard: IBimsyncBoard, board: IBoard) {
-    let statuses: IStatus[] = board.statuses;
+  CreateExtensionStatuses(bimsyncBoard: IBimsyncBoard, board: ICreatedBoard) {
+    let statuses: ICreatedStatus[] = board.statuses;
     let existingStatusesNames: string[] = ["Closed", "Open"];
 
     for (let status of statuses) {
@@ -179,8 +178,8 @@ export class BimsyncProjectComponent implements OnInit {
     }
   }
 
-  CreateExtensionTypes(bimsyncBoard: IBimsyncBoard, board: IBoard) {
-    let types: IType[] = board.types;
+  CreateExtensionTypes(bimsyncBoard: IBimsyncBoard, board: ICreatedBoard) {
+    let types: ICreatedType[] = board.types;
     let existingTypesNames: string[] = ["Error", "Warning", "Info", "Unknown"];
 
     for (let type of types) {

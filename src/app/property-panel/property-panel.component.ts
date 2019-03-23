@@ -1,13 +1,13 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { IProduct } from '../takeoff/takeoff.model';
-import { TakeoffService } from '../takeoff/takeoff.services';
 import { IDisplayPropertySet, Products } from "../takeoff/takeoff.model";
+import { BimsyncProjectService } from '../bimsync-project/bimsync-project.services';
+import { IProduct } from '../bimsync-project/bimsync-project.models';
 
 @Component({
   selector: 'app-property-panel',
   templateUrl: './property-panel.component.html',
   styleUrls: ['./property-panel.component.scss'],
-  providers: [TakeoffService]
+  providers: [BimsyncProjectService]
 })
 export class PropertyPanelComponent implements OnInit, OnChanges {
 
@@ -16,7 +16,7 @@ export class PropertyPanelComponent implements OnInit, OnChanges {
   selectedProduct: IProduct;
   displayedPropertySets: IDisplayPropertySet[]
 
-  constructor(private _takeoffService: TakeoffService) { }
+  constructor(private _bimsyncService: BimsyncProjectService) { }
 
   ngOnInit() {
 
@@ -24,7 +24,7 @@ export class PropertyPanelComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     if (this.productId !== null) {
-      this._takeoffService
+      this._bimsyncService
         .getProduct(this.projectId, this.productId)
         .subscribe(product => {
           this.selectedProduct = product;

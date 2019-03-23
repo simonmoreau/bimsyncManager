@@ -1,33 +1,33 @@
-export interface ICreator {
-    projectName: string;
-    projectDescription?: string;
-    users?: IMember[];
-    models?: IModel[];
-    boards?: IBoard[];
-  }
-  
-  export interface IBoard {
-    name: string;
-    statuses?: IStatus[];
-    types?: IType[];
-  }
-  
-  export interface IType {
-    name: string;
-    color: string;
-  }
-  
-  export interface IStatus {
-    name: string;
-    color: string;
-    type: string;
-  }
-  
-  export interface IModel {
-    name: string;
-  }
-  
-  export interface IMember {
-    id: string;
-    role: string;
-  }
+export interface ICreatedProject {
+  projectName: string;
+  projectDescription?: string;
+  users?: ICreatedMember[];
+  models?: ICreatedModel[];
+  boards?: ICreatedBoard[];
+}
+
+export interface ICreatedBoard {
+  name: string;
+  statuses?: ICreatedStatus[];
+  types?: ICreatedType[];
+}
+
+export interface ICreatedType {
+  name: string;
+  color: string;
+}
+
+export interface ICreatedStatus {
+  name: string;
+  color: string;
+  type: string;
+}
+
+export interface ICreatedModel {
+  name: string;
+}
+
+export interface ICreatedMember {
+  id: string;
+  role: string;
+}
