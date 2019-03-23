@@ -34,6 +34,6 @@ export interface ICreatedMember {
 }
 
 export interface ICreatedFolder {
-  id: string;
   name: string;
+  folders: ICreatedFolder[];
 }

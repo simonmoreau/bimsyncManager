@@ -61,7 +61,18 @@
         ],
         "folders": [
             {
-                "name":"Design Phase"
+                "name":"Design Phase",
+                "folders":[
+                    {
+                        "name":"Architect"
+                    },
+                    {
+                        "name":"Structure"
+                    },
+                    {
+                        "name":"MEP"
+                    }
+                ]
             },
             {
                 "name":"Detailing"

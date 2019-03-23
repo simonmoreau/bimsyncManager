@@ -5,7 +5,7 @@ import { mergeMap } from 'rxjs/operators';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 
-import { IProject, IBimsyncBoard, ILibrary } from './bimsync-project.models';
+import { IProject, IBimsyncBoard, ILibrary, ILibraryItem } from './bimsync-project.models';
 import { IUser } from '../bimsync-oauth/bimsync-oauth.models';
 
 import { BimsyncProjectService } from './bimsync-project.services';
@@ -102,48 +102,65 @@ export class BimsyncProjectComponent implements OnInit {
 
         if (creator.folders) {
           // Create folders
-          this.CreateFolders(creator.folders,project.id);
+          this.CreateFolders(creator.folders, project.id);
         }
       },
         error => this.errorMessage = <any>error);
   }
 
   AssingUsers(users: ICreatedMember[], projectId: string) {
-    for (let user of users) {
-      // Assign a new user
-      this._bimsyncProjectService.AddUser(projectId, user.id, user.role)
+      // Assign new users
+      Observable.from(users).mergeMap(user => {
+        return this._bimsyncProjectService.AddUser(projectId, user.id, user.role)
+      })
         .subscribe(member => {
           console.log(member.role);
         },
           error => this.errorMessage = <any>error);
-    }
   }
 
   CreateModels(models: ICreatedModel[], projectId: string) {
-    for (let model of models) {
-      // Create a new model
-      this._bimsyncProjectService.AddModel(projectId, model.name)
-        .subscribe(m => {
-          console.log(m.name);
-        },
-          error => this.errorMessage = <any>error);
-    }
+      // Create new models
+      Observable.from(models).mergeMap(model => {
+        return this._bimsyncProjectService.AddModel(projectId, model.name)
+        })
+          .subscribe(m => {
+            console.log(m.name);
+          },
+            error => this.errorMessage = <any>error);
   }
 
 
   CreateFolders(folders: ICreatedFolder[], projectId: string) {
 
     this.GetDocumentLibrary(projectId)
-    .flatMap(library => {
-      for (let folder of folders) {
-        // Create a new folders
-        return this._bimsyncProjectService.AddFolder(projectId, folder.name, null, library.id)
-      }
-    })
-    .subscribe(m => {
-      console.log(m.name);
-    },
-      error => this.errorMessage = <any>error);
+      .flatMap(library => {
+        let parentId = null;
+        return Observable.from(folders).mergeMap(subfolder => {
+          return this.CreateAFolder(subfolder, projectId, parentId, library);
+        })
+      })
+      .subscribe(m => {
+        console.log(m.name);
+      },
+        error => this.errorMessage = <any>error);
+  }
+
+  CreateAFolder(folder: ICreatedFolder, projectId: string, parentId: string, library: ILibrary): Observable<ILibraryItem> {
+    return this._bimsyncProjectService.AddFolder(projectId, folder.name, parentId, library.id)
+      .flatMap(createdFolder => {
+        if (folder.folders) {
+          return Observable.from(folder.folders).mergeMap(subfolder => {
+            return this.CreateAFolder(subfolder, projectId, createdFolder.id, library);
+          });
+        } else {
+          return new Observable<ILibraryItem>((observer) => {
+            // observable execution
+            observer.next(createdFolder)
+            observer.complete()
+          })
+        }
+      });
   }
 
   GetDocumentLibrary(projectId: string): Observable<ILibrary> {

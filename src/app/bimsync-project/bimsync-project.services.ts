@@ -220,9 +220,9 @@ export class BimsyncProjectService {
         });
     }
 
-    AddFolder(ProjectId: string, FolderName: string, ParentId: string, LibraryId: string): Observable<any> {
+    AddFolder(ProjectId: string, FolderName: string, ParentId: string, LibraryId: string): Observable<ILibraryItem> {
         return this._appService.GetUser().flatMap(user => {
-            return this._http.post<any>(
+            return this._http.post<ILibraryItem>(
                 this._apiUrl + 'projects/' + ProjectId + '/libraries/' + LibraryId + '/items', // /projects/:id/libraries/:library/items
                 {
                     name: FolderName,
