@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { IHighlightedElements, IProduct } from '../takeoff/takeoff.model';
+import { IHighlightedElements } from '../takeoff/takeoff.model';
+import {} from '../bimsync-project/bimsync-project.models';
 import * as $ from "jquery";
 
 declare var bimsync: any;
