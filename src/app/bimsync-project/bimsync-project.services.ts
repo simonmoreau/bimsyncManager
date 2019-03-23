@@ -1,7 +1,8 @@
 // Imports
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IProject, IRevision, IMember, IBimsyncBoard, IViewerToken, IProduct, IModel } from '../bimsync-project/bimsync-project.models';
+import { IProject, IRevision, IMember, IBimsyncBoard, IViewerToken, IProduct, IModel,
+    ILibrary, ILibraryItem } from '../bimsync-project/bimsync-project.models';
 import { AppService } from 'app/app.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -218,6 +219,42 @@ export class BimsyncProjectService {
                 .catch(this.handleError);
         });
     }
+
+    AddFolder(ProjectId: string, FolderName: string, ParentId: string, LibraryId: string): Observable<any> {
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.post<any>(
+                this._apiUrl + 'projects/' + ProjectId + '/libraries/' + LibraryId + '/items', // /projects/:id/libraries/:library/items
+                {
+                    name: FolderName,
+                    parentId: ParentId,
+                    document: {
+                        type: "folder"
+                    }
+                },
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
+    }
+
+    getLibraries(projectId: string): Observable<ILibrary[]> {
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.get<ILibrary[]>(
+                this._apiUrl + 'projects/' + projectId + '/libraries?pageSize=1000',
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
+    }
+
 
     AddBoard(ProjectId: string, BoardName: string): Observable<IBimsyncBoard> {
         return this._appService.GetUser().flatMap(user => {

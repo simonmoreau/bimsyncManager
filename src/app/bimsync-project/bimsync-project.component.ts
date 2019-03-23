@@ -1,13 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { from } from 'rxjs/observable/from';
+import { mergeMap } from 'rxjs/operators';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/do';
 
-import { IProject, IBimsyncBoard } from './bimsync-project.models';
+import { IProject, IBimsyncBoard, ILibrary } from './bimsync-project.models';
 import { IUser } from '../bimsync-oauth/bimsync-oauth.models';
 
 import { BimsyncProjectService } from './bimsync-project.services';
 
 import {
   ICreatedProject, ICreatedMember, ICreatedModel,
-  ICreatedBoard, ICreatedStatus, ICreatedType
+  ICreatedBoard, ICreatedStatus, ICreatedType, ICreatedFolder
 } from 'app/bimsync-project/creator.models';
 import { AppService } from 'app/app.service';
 
@@ -94,6 +99,11 @@ export class BimsyncProjectComponent implements OnInit {
           // Create boards
           this.CreateBoards(creator, project.id);
         }
+
+        if (creator.folders) {
+          // Create folders
+          this.CreateFolders(creator.folders,project.id);
+        }
       },
         error => this.errorMessage = <any>error);
   }
@@ -118,6 +128,31 @@ export class BimsyncProjectComponent implements OnInit {
         },
           error => this.errorMessage = <any>error);
     }
+  }
+
+
+  CreateFolders(folders: ICreatedFolder[], projectId: string) {
+
+    this.GetDocumentLibrary(projectId)
+    .flatMap(library => {
+      for (let folder of folders) {
+        // Create a new folders
+        return this._bimsyncProjectService.AddFolder(projectId, folder.name, null, library.id)
+      }
+    })
+    .subscribe(m => {
+      console.log(m.name);
+    },
+      error => this.errorMessage = <any>error);
+  }
+
+  GetDocumentLibrary(projectId: string): Observable<ILibrary> {
+    // Get the Document library id
+    return this._bimsyncProjectService.getLibraries(projectId)
+      .map(libraries => {
+        let documentLibrary = libraries.filter(library => library.name === "Documents");
+        return (documentLibrary.length > 0) ? documentLibrary[0] : null;
+      })
   }
 
   CreateBoards(creator: ICreatedProject, projectId: string) {

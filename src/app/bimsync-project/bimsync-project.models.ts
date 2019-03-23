@@ -24,6 +24,18 @@ export interface IRevision {
     version: string;
 }
 
+export interface ILibrary {
+    id: string;
+    name: string;
+}
+
+export interface ILibraryItem {
+    id: string;
+    name: string;
+    parentId: string;
+    document: any;
+}
+
 export interface IMember {
     role: string;
     user: IbimsyncUser;

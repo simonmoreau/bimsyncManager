@@ -1,0 +1,71 @@
+[
+    {
+        "projectName": "A terst project",
+        "projectDescription": "A description for the test project",
+        "users": [
+            {
+                "id": "240bdd822ccc4abc84ee25f80c8242e7",
+                "role": "administrator"
+            }
+        ],
+        "models": [
+            {
+                "name": "Architecte"
+            },
+            {
+                "name": "Structure"
+            },
+            {
+                "name": "MEP"
+            }
+        ],
+        "boards": [
+            {
+                "name": "Design",
+                "statuses": [
+                    {
+                        "name": "Open",
+                        "color": "#dd7e6b",
+                        "type": "open"
+                    },
+                    {
+                        "name": "Current",
+                        "color": "#e69138",
+                        "type": "candidate"
+                    },
+                    {
+                        "name": "Closed",
+                        "color": "#6aa84f",
+                        "type": "closed"
+                    }
+                ],
+                "types": [
+                    {
+                        "name": "Error",
+                        "color": "#cc0000"
+                    },
+                    {
+                        "name": "Warning",
+                        "color": "#e69138"
+                    },
+                    {
+                        "name": "Information",
+                        "color": "#3d85c6"
+                    },
+                    {
+                        "name": "Unknown",
+                        "color": "#d0e0e3"
+                    }
+                ]
+            }
+        ],
+        "folders": [
+            {
+                "name":"Design Phase"
+            },
+            {
+                "name":"Detailing"
+            }
+        ]
+    }
+]

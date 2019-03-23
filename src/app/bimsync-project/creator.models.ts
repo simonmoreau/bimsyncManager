@@ -4,6 +4,7 @@ export interface ICreatedProject {
   users?: ICreatedMember[];
   models?: ICreatedModel[];
   boards?: ICreatedBoard[];
+  folders?: ICreatedFolder[];
 }
 
 export interface ICreatedBoard {
@@ -30,4 +31,9 @@ export interface ICreatedModel {
 export interface ICreatedMember {
   id: string;
   role: string;
+}
+
+export interface ICreatedFolder {
+  id: string;
+  name: string;
 }

@@ -62,21 +62,6 @@ export class AppService {
     }
   }
 
-  // RefreshToken() {
-  //   let updatedUser: IUser;
-
-  //   this.RefreshTokenRequest()
-  //     .subscribe(user => {
-
-  //       console.log('we have a token ! Do')
-  //     },
-  //       error => this.errorMessage = <any>error,
-  //       () => {
-  //         console.log('we have a token ! Finaly')
-  //       }
-  //     );
-  // }
-
   private RefreshTokenRequest(): Observable<IUser> {
     return this._http.get<IUser>(
       this._projectsUrl + '/manager/users/' + this._user.PowerBISecret,
