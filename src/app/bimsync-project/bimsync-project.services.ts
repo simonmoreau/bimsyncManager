@@ -9,6 +9,7 @@ import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
+import { IUser } from 'app/bimsync-oauth/bimsync-oauth.models';
 
 @Injectable()
 export class BimsyncProjectService {
@@ -25,206 +26,234 @@ export class BimsyncProjectService {
     }
 
     getProjects(): Observable<IProject[]> {
-        return this._http.get<IProject[]>(
-            this._apiUrl + 'projects?pageSize=1000',
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.get<IProject[]>(
+                this._apiUrl + 'projects?pageSize=1000',
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     getProject(projectId: string): Observable<IProject> {
-        return this._http.get<IProject>(
-            this._apiUrl + 'projects/' + projectId,
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.get<IProject>(
+                this._apiUrl + 'projects/' + projectId,
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
 
 
     getModels(projectId: string): Observable<IModel[]> {
-        return this._http.get<IModel[]>(
-            this._apiUrl + 'projects/' + projectId + '/models?pageSize=1000',
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.get<IModel[]>(
+                this._apiUrl + 'projects/' + projectId + '/models?pageSize=1000',
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     getRevisions(projectId: string, modelId: string): Observable<IRevision[]> {
-        return this._http.get<IRevision[]>(
-            this._apiUrl + 'projects/' + projectId + '/revisions?pageSize=1000&model=' + modelId,
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.get<IRevision[]>(
+                this._apiUrl + 'projects/' + projectId + '/revisions?pageSize=1000&model=' + modelId,
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     getProductsTypeSummary(projectId: string, revisionId: string): Observable<object> {
-        return this._http.get<object>(
-            this._apiUrl + 'projects/' + projectId + '/ifc/products/ifctypes?revision=' + revisionId,
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.get<object>(
+                this._apiUrl + 'projects/' + projectId + '/ifc/products/ifctypes?revision=' + revisionId,
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     getViewer3dToken(projectId: string, revisionId: string): Observable<IViewerToken> {
-        let revisions: any = {revisions: [revisionId]};
+        let revisions: any = { revisions: [revisionId] };
         let body: string = JSON.stringify(revisions);
 
-        return this._http.post<IViewerToken>(
-            this._apiUrl + 'projects/' + projectId + '/viewer3d/token',
-            body,
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.post<IViewerToken>(
+                this._apiUrl + 'projects/' + projectId + '/viewer3d/token',
+                body,
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     getProducts(projectId: string, revisionId: string, ifcClass: string, productsNumber: number): Observable<IProduct[]> {
         let requestsNumber = Math.ceil(productsNumber / 1000);
         let requestsPages = Array.from(new Array(requestsNumber), (val, index) => index + 1);
 
-        return from(requestsPages).pipe(
-            mergeMap(pageNumber => <Observable<IProduct[]>>this._http.get<IProduct[]>(
-                this._apiUrl + 'projects/'
-                + projectId + '/ifc/products?pageSize=1000&page='
-                + pageNumber + '&revision=' + revisionId + '&ifcType=' + ifcClass,
-                {
-                    headers: new HttpHeaders()
-                        .set('Authorization', 'Bearer ' + this._appService.GetToken())
-                        .set('Content-Type', 'application/json')
-                }))
-        )
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return from(requestsPages).pipe(
+                mergeMap(pageNumber => <Observable<IProduct[]>>this._http.get<IProduct[]>(
+                    this._apiUrl + 'projects/'
+                    + projectId + '/ifc/products?pageSize=1000&page='
+                    + pageNumber + '&revision=' + revisionId + '&ifcType=' + ifcClass,
+                    {
+                        headers: new HttpHeaders()
+                            .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                            .set('Content-Type', 'application/json')
+                    }))
+            )
+                .catch(this.handleError);
+        });
     }
 
     getProduct(projectId: string, productId: number): Observable<IProduct> {
 
+        return this._appService.GetUser().flatMap(user => {
             return this._http.get<IProduct>(
                 this._apiUrl + 'projects/' + projectId + '/ifc/products/' + productId,
                 {
                     headers: new HttpHeaders()
-                        .set('Authorization', 'Bearer ' + this._appService.GetToken())
+                        .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
                         .set('Content-Type', 'application/json')
                 })
                 .do(data => console.log('All: ' + JSON.stringify(data)))
                 .catch(this.handleError);
+        });
     }
 
     getAllRevisions(projectId: string): Observable<IRevision[]> {
-        return this._http.get<IRevision[]>(
-            this._apiUrl + 'projects/' + projectId + '/revisions?pageSize=1000',
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.get<IRevision[]>(
+                this._apiUrl + 'projects/' + projectId + '/revisions?pageSize=1000',
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     createNewProject(Name: string, Description: string): Observable<IProject> {
-        return this._http.post<IProject>(
-            this._apiUrl + 'projects',
-            {
-                name: Name,
-                description: Description
-            },
-            {
-                // params: new HttpParams().set('id', '56784'),
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.post<IProject>(
+                this._apiUrl + 'projects',
+                {
+                    name: Name,
+                    description: Description
+                },
+                {
+                    // params: new HttpParams().set('id', '56784'),
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     AddUser(ProjectId: string, UserId: string, Role: string): Observable<IMember> {
-        return this._http.post<IMember>(
-            this._apiUrl + 'projects/' + ProjectId + '/members',
-            {
-                user: UserId,
-                role: Role
-            },
-            {
-                // params: new HttpParams().set('id', '56784'),
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.post<IMember>(
+                this._apiUrl + 'projects/' + ProjectId + '/members',
+                {
+                    user: UserId,
+                    role: Role
+                },
+                {
+                    // params: new HttpParams().set('id', '56784'),
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     AddModel(ProjectId: string, ModelName: string): Observable<any> {
-        return this._http.post<any>(
-            this._apiUrl + 'projects/' + ProjectId + '/models',
-            {
-                name: ModelName
-            },
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetToken())
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.post<any>(
+                this._apiUrl + 'projects/' + ProjectId + '/models',
+                {
+                    name: ModelName
+                },
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     AddBoard(ProjectId: string, BoardName: string): Observable<IBimsyncBoard> {
-        return this._http.post<IBimsyncBoard>(
-            this._bcfUrl,
-            {
-                name: BoardName,
-                bimsync_project_id: ProjectId
-            },
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.post<IBimsyncBoard>(
+                this._bcfUrl,
+                {
+                    name: BoardName,
+                    bimsync_project_id: ProjectId
+                },
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.BCFToken)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     AddExtensionStatus(BoardId: string, extensionName: string, extensionColor: string, extensionType: string): Observable<any> {
-        return this._http.post<any>(
-            this._bcfUrl + '/' + BoardId + '/extensions/statuses',
-            {
-                name: extensionName,
-                color: extensionColor,
-                type: extensionType
-            },
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.post<any>(
+                this._bcfUrl + '/' + BoardId + '/extensions/statuses',
+                {
+                    name: extensionName,
+                    color: extensionColor,
+                    type: extensionType
+                },
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.BCFToken)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     UpdateExtensionStatus(BoardId: string,
@@ -232,84 +261,95 @@ export class BimsyncProjectService {
         extensionName: string,
         extensionColor: string,
         extensionType: string): Observable<any> {
-        return this._http.put<any>(
-            this._bcfUrl + '/' + BoardId + '/extensions/statuses',
-            {
-                existingName: existingExtensionName,
-                name: extensionName,
-                color: extensionColor,
-                type: extensionType
-            },
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.put<any>(
+                this._bcfUrl + '/' + BoardId + '/extensions/statuses',
+                {
+                    existingName: existingExtensionName,
+                    name: extensionName,
+                    color: extensionColor,
+                    type: extensionType
+                },
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.BCFToken)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     DeleteExtensionStatus(BoardId: string, existingExtensionName: string): Observable<any> {
-        let deleteBody: any = {name: existingExtensionName};
-
-        return this._http.request('delete',
-            this._bcfUrl + '/' + BoardId + '/extensions/statuses',
-            {
-                body: deleteBody,
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        let deleteBody: any = { name: existingExtensionName };
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.request('delete',
+                this._bcfUrl + '/' + BoardId + '/extensions/statuses',
+                {
+                    body: deleteBody,
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.BCFToken)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     AddExtensionType(BoardId: string, extensionName: string, extensionColor: string): Observable<any> {
-        return this._http.post<any>(
-            this._bcfUrl + '/' + BoardId + '/extensions/types',
-            {
-                name: extensionName,
-                color: extensionColor
-            },
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.post<any>(
+                this._bcfUrl + '/' + BoardId + '/extensions/types',
+                {
+                    name: extensionName,
+                    color: extensionColor
+                },
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.BCFToken)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     UpdateExtensionType(BoardId: string, existingExtensionName: string, extensionName: string, extensionColor: string): Observable<any> {
-        return this._http.put<any>(
-            this._bcfUrl + '/' + BoardId + '/extensions/types',
-            {
-                existingName: existingExtensionName,
-                name: extensionName,
-                color: extensionColor
-            },
-            {
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.put<any>(
+                this._bcfUrl + '/' + BoardId + '/extensions/types',
+                {
+                    existingName: existingExtensionName,
+                    name: extensionName,
+                    color: extensionColor
+                },
+                {
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.BCFToken)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
     DeleteExtensionType(BoardId: string, existingExtensionName: string): Observable<any> {
-        let deleteBody: any = {name: existingExtensionName};
+        return this._appService.GetUser().flatMap(user => {
+            let deleteBody: any = { name: existingExtensionName };
 
-        return this._http.request('delete',
-            this._bcfUrl + '/' + BoardId + '/extensions/types',
-            {
-                body: deleteBody,
-                headers: new HttpHeaders()
-                    .set('Authorization', 'Bearer ' + this._appService.GetUser().BCFToken)
-                    .set('Content-Type', 'application/json')
-            })
-            .do(data => console.log('All: ' + JSON.stringify(data)))
-            .catch(this.handleError);
+            return this._http.request('delete',
+                this._bcfUrl + '/' + BoardId + '/extensions/types',
+                {
+                    body: deleteBody,
+                    headers: new HttpHeaders()
+                        .set('Authorization', 'Bearer ' + user.BCFToken)
+                        .set('Content-Type', 'application/json')
+                })
+                .do(data => console.log('All: ' + JSON.stringify(data)))
+                .catch(this.handleError);
+        });
     }
 
 

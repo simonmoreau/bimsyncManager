@@ -14,7 +14,6 @@ import 'rxjs/add/operator/do';
 export class TakeoffService {
 
     // private instance variable to hold base url
-    private _bimsyncUrlV2 = 'https://api.bimsync.com/v2/';
     private _apiUrl = 'https://binsyncfunction.azurewebsites.net/api/';
 
     private _appService: AppService;

@@ -1,12 +1,14 @@
-import { Component, OnInit , ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { IProject, IBimsyncBoard } from './bimsync-project.models';
 import { IUser } from '../bimsync-oauth/bimsync-oauth.models';
 
 import { BimsyncProjectService } from './bimsync-project.services';
 
-import { ICreatedProject, ICreatedMember, ICreatedModel,
-  ICreatedBoard, ICreatedStatus, ICreatedType } from 'app/bimsync-project/creator.models';
+import {
+  ICreatedProject, ICreatedMember, ICreatedModel,
+  ICreatedBoard, ICreatedStatus, ICreatedType
+} from 'app/bimsync-project/creator.models';
 import { AppService } from 'app/app.service';
 
 import { ShareModalComponent } from '../share-modal/share-modal.component';
@@ -36,9 +38,14 @@ export class BimsyncProjectComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.User = this.appService.GetUser();
-    this.GetProjects();
-    this.IsBCF = (this.User.BCFToken === "");
+    this.appService.GetUser().subscribe(
+      user => {
+        this.User = user;
+        this.GetProjects();
+        this.IsBCF = (this.User.BCFToken === "");
+      },
+      error => (this.errorMessage = <any>error)
+    );
   }
 
   GetProjects() {
@@ -46,7 +53,7 @@ export class BimsyncProjectComponent implements OnInit {
       .subscribe(projects => {
         this.projects = projects;
       },
-      error => this.errorMessage = <any>error);
+        error => this.errorMessage = <any>error);
 
     return false;
   }
@@ -88,7 +95,7 @@ export class BimsyncProjectComponent implements OnInit {
           this.CreateBoards(creator, project.id);
         }
       },
-      error => this.errorMessage = <any>error);
+        error => this.errorMessage = <any>error);
   }
 
   AssingUsers(users: ICreatedMember[], projectId: string) {
@@ -98,7 +105,7 @@ export class BimsyncProjectComponent implements OnInit {
         .subscribe(member => {
           console.log(member.role);
         },
-        error => this.errorMessage = <any>error);
+          error => this.errorMessage = <any>error);
     }
   }
 
@@ -109,7 +116,7 @@ export class BimsyncProjectComponent implements OnInit {
         .subscribe(m => {
           console.log(m.name);
         },
-        error => this.errorMessage = <any>error);
+          error => this.errorMessage = <any>error);
     }
   }
 
@@ -134,7 +141,7 @@ export class BimsyncProjectComponent implements OnInit {
           }
 
         },
-        error => this.errorMessage = <any>error);
+          error => this.errorMessage = <any>error);
     }
   }
 
@@ -144,25 +151,25 @@ export class BimsyncProjectComponent implements OnInit {
 
     for (let status of statuses) {
 
-        let index = existingStatusesNames.indexOf(status.name);
+      let index = existingStatusesNames.indexOf(status.name);
 
-        if (index > -1) {
-          // If the status exist, update it
-          this._bimsyncProjectService.UpdateExtensionStatus(bimsyncBoard.project_id, status.name, status.name, status.color, status.type)
+      if (index > -1) {
+        // If the status exist, update it
+        this._bimsyncProjectService.UpdateExtensionStatus(bimsyncBoard.project_id, status.name, status.name, status.color, status.type)
           .subscribe(bimsyncStatus => {
             console.log(bimsyncStatus);
           },
-          error => this.errorMessage = <any>error);
-          // Remove it from the existingTypesNames
-          existingStatusesNames.splice(index, 1);
-        } else {
-          // If not, Create it
-          this._bimsyncProjectService.AddExtensionStatus(bimsyncBoard.project_id, status.name, status.color, status.type)
-            .subscribe(bimsyncStatus => {
-              console.log(bimsyncStatus);
-            },
             error => this.errorMessage = <any>error);
-        }
+        // Remove it from the existingTypesNames
+        existingStatusesNames.splice(index, 1);
+      } else {
+        // If not, Create it
+        this._bimsyncProjectService.AddExtensionStatus(bimsyncBoard.project_id, status.name, status.color, status.type)
+          .subscribe(bimsyncStatus => {
+            console.log(bimsyncStatus);
+          },
+            error => this.errorMessage = <any>error);
+      }
     }
 
     setTimeout(console.log('wait'), 500);
@@ -174,7 +181,7 @@ export class BimsyncProjectComponent implements OnInit {
         .subscribe(bimsyncStatus => {
           console.log(bimsyncStatus);
         },
-        error => this.errorMessage = <any>error);
+          error => this.errorMessage = <any>error);
     }
   }
 
@@ -189,10 +196,10 @@ export class BimsyncProjectComponent implements OnInit {
       if (index > -1) {
         // If the type exist, update it
         this._bimsyncProjectService.UpdateExtensionType(bimsyncBoard.project_id, type.name, type.name, type.color)
-        .subscribe(bimsyncType => {
-          console.log(bimsyncType);
-        },
-        error => this.errorMessage = <any>error);
+          .subscribe(bimsyncType => {
+            console.log(bimsyncType);
+          },
+            error => this.errorMessage = <any>error);
         // Remove it from the existingTypesNames
         existingTypesNames.splice(index, 1);
       } else {
@@ -201,7 +208,7 @@ export class BimsyncProjectComponent implements OnInit {
           .subscribe(bimsyncType => {
             console.log(bimsyncType);
           },
-          error => this.errorMessage = <any>error);
+            error => this.errorMessage = <any>error);
       }
     }
 
@@ -214,7 +221,7 @@ export class BimsyncProjectComponent implements OnInit {
         .subscribe(bimsyncType => {
           console.log(bimsyncType);
         },
-        error => this.errorMessage = <any>error);
+          error => this.errorMessage = <any>error);
     }
   }
 

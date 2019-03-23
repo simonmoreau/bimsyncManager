@@ -6,7 +6,7 @@ import { ISubscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 
-import { IAccessToken, IbimsyncUser, IUser } from 'app/bimsync-oauth/bimsync-oauth.models';
+import { IUser } from 'app/bimsync-oauth/bimsync-oauth.models';
 
 import Json from '*.json';
 
@@ -22,6 +22,7 @@ export class AppService {
   // _client_id = '6E63g0C2zVOwlNm';
   _client_id = 'hl94XJLXaQe3ogX';
   _user: IUser;
+  _user$: Observable<IUser>;
 
   constructor(
     private _http: HttpClient,
@@ -29,38 +30,67 @@ export class AppService {
   ) {
     // Encore the callbackURI
     this._callbackUrl = encodeURIComponent(this._callbackUrl);
+
     // Check if there is a user in local storage
-    let currentUser: IUser = JSON.parse(localStorage.getItem('user'));
-    if (currentUser != null) {
-      this._user = currentUser;
+    let storedUser: IUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser != null) {
+      this._user = storedUser;
+    }
+
+    this._user$ = this.GetUser();
+  }
+
+  GetUser(): Observable<IUser> {
+
+    // Get the current user and check the refresh date
+    if (this._user != null) {
+      let currentUser = this._user;
       let now = new Date();
       let refresh = new Date(this._user.RefreshDate)
       if (refresh < now) {
-        this.RefreshToken();
+        // We must refresh the token before using the user
+        return this.RefreshTokenRequest();
+      } else {
+        // create an observable with the current user
+        const userObservable = new Observable<IUser>((observer) => {
+          // observable execution
+          observer.next(currentUser)
+          observer.complete()
+        })
+        return userObservable;
       }
     }
   }
 
-  GetUser(): IUser {
-    if (this._user != null) {
-      let now = new Date();
-      let refresh = new Date(this._user.RefreshDate)
-      if (refresh < now) {
-        this.RefreshToken();
-      }
-    }
-    return this._user;
-  }
+  // RefreshToken() {
+  //   let updatedUser: IUser;
 
-  GetToken(): string {
-    if (this._user != null) {
-      let now = new Date();
-      let refresh = new Date(this._user.RefreshDate)
-      if (refresh < now) {
-        this.RefreshToken();
-      }
-    }
-    return this._user.AccessToken.access_token;
+  //   this.RefreshTokenRequest()
+  //     .subscribe(user => {
+
+  //       console.log('we have a token ! Do')
+  //     },
+  //       error => this.errorMessage = <any>error,
+  //       () => {
+  //         console.log('we have a token ! Finaly')
+  //       }
+  //     );
+  // }
+
+  private RefreshTokenRequest(): Observable<IUser> {
+    return this._http.get<IUser>(
+      this._projectsUrl + '/manager/users/' + this._user.PowerBISecret,
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      })
+      .do(user => {
+        this._user = user;
+        // Save to local storage
+        localStorage.setItem('user', JSON.stringify(user));
+        console.log('All: ' + JSON.stringify(user));
+      })
+      .catch(this.handleError);
   }
 
   CreateUser(authorization_code: string) {
@@ -75,22 +105,7 @@ export class AppService {
         error => this.errorMessage = <any>error);
   }
 
-  RefreshToken() {
-    let updatedUser: IUser;
 
-    this.RefreshTokenRequest()
-    .subscribe(user => {
-        this._user = user;
-        // Save to local storage
-        localStorage.setItem('user', JSON.stringify(user));
-        console.log('we have a token ! Do' )
-      },
-        error => this.errorMessage = <any>error,
-        () => {
-          console.log('we have a token ! Finaly')
-        }
-      );
-  }
 
   CreateBCFToken(authorization_code: string) {
     this.createBCFTokenRequest(authorization_code)
@@ -145,16 +160,7 @@ export class AppService {
       .catch(this.handleError);
   }
 
-  private RefreshTokenRequest(): Observable<IUser> {
-    return this._http.get<IUser>(
-      this._projectsUrl + '/manager/users/' + this._user.PowerBISecret,
-      {
-        headers: new HttpHeaders()
-          .set('Content-Type', 'application/x-www-form-urlencoded')
-      })
-      .do(data => console.log('All: ' + JSON.stringify(data)))
-      .catch(this.handleError);
-  }
+
 
   private handleError(err: HttpErrorResponse) {
     // in a real world app, we may send the server to some remote logging infrastructure
