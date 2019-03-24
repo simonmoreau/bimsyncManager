@@ -1,6 +1,6 @@
 [
     {
-        "projectName": "A terst project",
+        "projectName": "000 - A terst project",
         "projectDescription": "A description for the test project",
         "users": [
             {
@@ -24,28 +24,33 @@
                 "name": "Design",
                 "statuses": [
                     {
-                        "name": "Open",
+                        "name": "Ouvert",
                         "color": "#dd7e6b",
                         "type": "open"
                     },
                     {
-                        "name": "Current",
+                        "name": "Open",
+                        "color": "#6aa84f",
+                        "type": "open"
+                    },
+                    {
+                        "name": "En cour",
                         "color": "#e69138",
                         "type": "candidate"
                     },
                     {
-                        "name": "Closed",
+                        "name": "Fermé",
                         "color": "#6aa84f",
                         "type": "closed"
                     }
                 ],
                 "types": [
                     {
-                        "name": "Error",
+                        "name": "Erreur",
                         "color": "#cc0000"
                     },
                     {
-                        "name": "Warning",
+                        "name": "Avertissment",
                         "color": "#e69138"
                     },
                     {
@@ -53,7 +58,7 @@
                         "color": "#3d85c6"
                     },
                     {
-                        "name": "Unknown",
+                        "name": "Inconnu",
                         "color": "#d0e0e3"
                     }
                 ]

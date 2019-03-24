@@ -49,6 +49,17 @@ export interface IBimsyncBoard {
     bimsync_project_id: string;
 }
 
+export interface IExtensionType {
+    name: string;
+    color: string;
+}
+
+export interface IExtensionStatus {
+    name: string;
+    color: string;
+    type: string;
+}
+
 export interface IbimsyncUser {
     createdAt: string;
     id: string;
