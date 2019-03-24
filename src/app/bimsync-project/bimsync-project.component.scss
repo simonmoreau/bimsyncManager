@@ -5,3 +5,9 @@
 .table td{
     vertical-align: baseline;
 }
+
+.spinner.centered {
+    position: absolute;
+    margin-top: 20%;
+    left: calc(50% - 36px);
+  }

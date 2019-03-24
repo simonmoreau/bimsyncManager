@@ -35,6 +35,7 @@ export class BimsyncProjectComponent implements OnInit {
   jsonConfig: any;
   submitted: boolean;
   appService: AppService;
+  loaded: boolean = false;
 
   @ViewChild('shareModal') modal: ShareModalComponent;
 
@@ -57,6 +58,7 @@ export class BimsyncProjectComponent implements OnInit {
     this._bimsyncProjectService.getProjects()
       .subscribe(projects => {
         this.projects = projects;
+        this.loaded = true;
       },
         error => this.errorMessage = <any>error);
 

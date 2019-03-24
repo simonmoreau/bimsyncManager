@@ -52,23 +52,9 @@
             </clr-modal>
         </form>
 
-        <table class="table" *ngIf='createdProject'>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Id</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{createdProject.name}}</td>
-                    <td>{{createdProject.description}}</td>
-                    <td>{{createdProject.id}}</td>
-                </tr>
-            </tbody>
-        </table>
-
+        <span class='spinner centered' *ngIf='!loaded'>
+            Loading
+          </span>
         <table class="table" *ngIf='projects && projects.length'>
             <thead>
                 <tr>
