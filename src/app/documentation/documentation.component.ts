@@ -70,6 +70,28 @@ export class DocumentationComponent implements OnInit {
       "color": "#e69138"
   },`;
 
+    code7 = `
+    "folders": [
+        {
+            "name":"Design Phase",
+            "folders":[
+                {
+                    "name":"Architect"
+                },
+                {
+                    "name":"Structure"
+                },
+                {
+                    "name":"MEP"
+                }
+            ]
+        },
+        {
+            "name":"Detailing"
+        }
+    ]
+    `;
+
     example = `
   [
     {
@@ -156,6 +178,25 @@ export class DocumentationComponent implements OnInit {
                         "type":"closed"
                     }
                 ]
+            }
+        ],
+        "folders": [
+            {
+                "name":"Design Phase",
+                "folders":[
+                    {
+                        "name":"Architect"
+                    },
+                    {
+                        "name":"Structure"
+                    },
+                    {
+                        "name":"MEP"
+                    }
+                ]
+            },
+            {
+                "name":"Detailing"
             }
         ]
     },
