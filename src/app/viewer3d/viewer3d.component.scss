@@ -10,11 +10,7 @@
 
 .button-container {
       position: absolute;
-}
-    
-.button-container .btn {
-      margin: 0px;
-      margin-right: 1rem;
+      left: calc(50% - 36px);
 }
 
 .spinner.centered {

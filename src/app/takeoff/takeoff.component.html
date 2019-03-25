@@ -1,112 +1,113 @@
-<div class='clr-row' style='height: 100%;'>
-    <div class='clr-col-4 box'>
-        <div>
-                <table class="table" style="margin-top:0" *ngIf='selectedProject'>
-                        <thead>
-                            <tr>
-                                <th class="left" colspan='2'>{{selectedProject.name}}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngIf='models && models.length'>
-                                <td class="left padded"><label for='selects_2'>Model</label></td>
-                                <td class="left">
-                                    <div class='select'>
-                                        <select id='selects_2' (change)='GetRevisions()' [(ngModel)]='selectedModel'>
-                                            <option *ngFor='let model of models; let i = index; trackBy: trackByFn' [ngValue]='model'>{{model.name}}</option>
-                                        </select>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr *ngIf='revisions && revisions.length'>
-                                <td class="left padded"><label for='selects_3'>Revision</label></td>
-                                <td class="left">
-                                    <div class='select'>
-                                        <select id='selects_3' (change)='GetProductTypeSummary()' [(ngModel)]='selectedRevision'>
-                                            <option *ngFor='let revision of revisions; let i = index; trackBy: trackByFn' [ngValue]='revision'>{{revision.version}}</option>
-                                        </select>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr *ngIf='ifcClasses && ifcClasses.length'>
-                                <td class="left padded"><label for='selects_4'>Category</label></td>
-                                <td class="left">
-                                    <div class='select'>
-                                        <select id='selects_4' (change)='GetProducts()' [(ngModel)]='selectedIfcClass'>
-                                            <option *ngFor='let ifcClass of ifcClasses; let i = index; trackBy: trackByFn'
-                                                [ngValue]='ifcClass'>{{ifcClass.typeName}}
-                                                ({{ifcClass.typeQuantity}})</option>
-                                        </select>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-        </div>
+<div style='height: 100%;'>
+    <app-viewer3d *ngIf='viewer3dToken' [viewerToken]='viewer3dToken' [projectId]='selectedProject.id' [spaceIds]='spaces'
+    [highlightedElements]='highlightedElements'>
 
-        <div class='item customTable' *ngIf='selectedIfcClass'>
-            <div class='firstline'>
-                Values
+</app-viewer3d>
+<div style="position: absolute;bottom: 0;left: 0.5rem; right: 0.5rem;">
+    <clr-datagrid *ngIf='listOfRows && listOfRows.length'>
+        <clr-dg-column [clrDgField]="selectedValueProperty.columnGuid" *ngFor='let selectedValueProperty of selectedValueProperties'>{{selectedValueProperty.displayName}}</clr-dg-column>
+        <clr-dg-column>Color</clr-dg-column>
+        <clr-dg-row *clrDgItems='let row of listOfRows'>
+            <clr-dg-cell *ngFor='let selectedValueProperty of selectedValueProperties'>{{row[selectedValueProperty.columnGuid]}}</clr-dg-cell>
+            <clr-dg-cell><span class="color-square" [style.backgroundColor]="row.color"></span></clr-dg-cell>
+        </clr-dg-row>
+        <clr-dg-footer>
+            <div class="left">
+                <button class="btn btn-link btn-icon btn-inline" (click)="DownloadData()">
+                    <clr-icon shape="download" class="is-solid"></clr-icon> Download
+                </button>
             </div>
-            <div class='line' droppable (onDrop)='onValuePropertyDrop($event)'>
-                <span *ngIf='!selectedValueProperties.length'>Drop properties here ...</span>
-                <app-field-selector *ngFor='let selectedProperty of selectedValueProperties' (propertyClosed)='onValueLabelClose(selectedProperty)'
-                    (propertyUpdated)='onSelectedValueUpdate(selectedProperty,$event)' (rankUpdated)='onRankUpdated(selectedProperty,$event)'
-                    [displayedProperty]='selectedProperty'>
-                </app-field-selector>
+            <clr-dg-pagination #pagination [clrDgPageSize]="8">
+                {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+                of {{pagination.totalItems}}
+            </clr-dg-pagination>
+        </clr-dg-footer>
+    </clr-datagrid>
+</div>
+</div>
+<div style='height: 100%;position: fixed;width: 100%;top: 0;left: 0;' >
+    <div class='clr-row'>
+        <div class='clr-col-4 box' >
+            <div>
+                    <table class="table" style="margin-top:0" *ngIf='selectedProject'>
+                            <thead>
+                                <tr>
+                                    <th class="left" colspan='2'>{{selectedProject.name}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngIf='models && models.length'>
+                                    <td class="left padded"><label for='selects_2'>Model</label></td>
+                                    <td class="left">
+                                        <div class='select'>
+                                            <select id='selects_2' (change)='GetRevisions()' [(ngModel)]='selectedModel'>
+                                                <option *ngFor='let model of models; let i = index; trackBy: trackByFn' [ngValue]='model'>{{model.name}}</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr *ngIf='revisions && revisions.length'>
+                                    <td class="left padded"><label for='selects_3'>Revision</label></td>
+                                    <td class="left">
+                                        <div class='select'>
+                                            <select id='selects_3' (change)='GetProductTypeSummary()' [(ngModel)]='selectedRevision'>
+                                                <option *ngFor='let revision of revisions; let i = index; trackBy: trackByFn' [ngValue]='revision'>{{revision.version}}</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr *ngIf='ifcClasses && ifcClasses.length'>
+                                    <td class="left padded"><label for='selects_4'>Category</label></td>
+                                    <td class="left">
+                                        <div class='select'>
+                                            <select id='selects_4' (change)='GetProducts()' [(ngModel)]='selectedIfcClass'>
+                                                <option *ngFor='let ifcClass of ifcClasses; let i = index; trackBy: trackByFn'
+                                                    [ngValue]='ifcClass'>{{ifcClass.typeName}}
+                                                    ({{ifcClass.typeQuantity}})</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
             </div>
-        </div>
-        <div class='content customTable box' *ngIf='selectedIfcClass' style="min-height: 0px;">
-            <div class='firstline item'>
-                Properties
-            </div>
-            <div class='line content' droppable (onDrop)='onValuePropertyDrop($event)' style='padding: 0; padding-left: 0.5rem;overflow-y: auto;overflow-x: hidden'>
-                <span class='spinner centered' *ngIf='selectedProductsLoading'>
-                    Loading
-                </span>
-                <div *ngIf='!selectedProductsLoading'>
-                    <clr-tree-node *ngFor='let displayedPropertySet of displayedPropertySets'>
-                        {{displayedPropertySet.name}}
-                        <ng-template [clrIfExpanded]='true'>
-                            <clr-tree-node draggable *ngFor='let displayedProperty of displayedPropertySet.properties'
-                                [(clrSelected)]='displayedProperty.enable' (clrSelectedChange)='onTreeSelectionChange(displayedProperty)'
-                                [dragData]='displayedProperty'>
-                                <clr-icon class='is-highlight' [attr.shape]='displayedProperty.icon'></clr-icon>
-                                {{displayedProperty.name}}
-                            </clr-tree-node>
-                        </ng-template>
-                    </clr-tree-node>
+    
+            <div class='item customTable' *ngIf='selectedIfcClass'>
+                <div class='firstline'>
+                    Values
+                </div>
+                <div class='line' droppable (onDrop)='onValuePropertyDrop($event)'>
+                    <span *ngIf='!selectedValueProperties.length'>Drop properties here ...</span>
+                    <app-field-selector *ngFor='let selectedProperty of selectedValueProperties' (propertyClosed)='onValueLabelClose(selectedProperty)'
+                        (propertyUpdated)='onSelectedValueUpdate(selectedProperty,$event)' (rankUpdated)='onRankUpdated(selectedProperty,$event)'
+                        [displayedProperty]='selectedProperty'>
+                    </app-field-selector>
                 </div>
             </div>
-        </div>
-
-    </div>
-    <div class='clr-col-8' style="position: relative">
-
-        <app-viewer3d *ngIf='viewer3dToken' [viewerToken]='viewer3dToken' [projectId]='selectedProject.id' [spaceIds]='spaces'
-            [highlightedElements]='highlightedElements'>
-
-        </app-viewer3d>
-        <div style="position: absolute;bottom: 0;left: 0.5rem; right: 0.5rem;">
-            <clr-datagrid *ngIf='listOfRows && listOfRows.length'>
-                <clr-dg-column [clrDgField]="selectedValueProperty.columnGuid" *ngFor='let selectedValueProperty of selectedValueProperties'>{{selectedValueProperty.displayName}}</clr-dg-column>
-                <clr-dg-column>Color</clr-dg-column>
-                <clr-dg-row *clrDgItems='let row of listOfRows'>
-                    <clr-dg-cell *ngFor='let selectedValueProperty of selectedValueProperties'>{{row[selectedValueProperty.columnGuid]}}</clr-dg-cell>
-                    <clr-dg-cell><span class="color-square" [style.backgroundColor]="row.color"></span></clr-dg-cell>
-                </clr-dg-row>
-                <clr-dg-footer>
-                    <div class="left">
-                        <button class="btn btn-link btn-icon btn-inline" (click)="DownloadData()">
-                            <clr-icon shape="download" class="is-solid"></clr-icon> Download
-                        </button>
+            <div class='content customTable box' *ngIf='selectedIfcClass' style="min-height: 0px;">
+                <div class='firstline item'>
+                    Properties
+                </div>
+                <div class='line content' droppable (onDrop)='onValuePropertyDrop($event)' style='padding: 0; padding-left: 0.5rem;overflow-y: auto;overflow-x: hidden'>
+                    <span class='spinner centered' *ngIf='selectedProductsLoading'>
+                        Loading
+                    </span>
+                    <div *ngIf='!selectedProductsLoading'>
+                        <clr-tree-node *ngFor='let displayedPropertySet of displayedPropertySets'>
+                            {{displayedPropertySet.name}}
+                            <ng-template [clrIfExpanded]='true'>
+                                <clr-tree-node draggable *ngFor='let displayedProperty of displayedPropertySet.properties'
+                                    [(clrSelected)]='displayedProperty.enable' (clrSelectedChange)='onTreeSelectionChange(displayedProperty)'
+                                    [dragData]='displayedProperty'>
+                                    <clr-icon class='is-highlight' [attr.shape]='displayedProperty.icon'></clr-icon>
+                                    {{displayedProperty.name}}
+                                </clr-tree-node>
+                            </ng-template>
+                        </clr-tree-node>
                     </div>
-                    <clr-dg-pagination #pagination [clrDgPageSize]="8">
-                        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
-                        of {{pagination.totalItems}}
-                    </clr-dg-pagination>
-                </clr-dg-footer>
-            </clr-datagrid>
+                </div>
+            </div>
+    
         </div>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <span class='spinner centered' *ngIf='!isLoaded'>
   Loading
 </span>
-<div *ngIf='isLoaded' style='position: absolute'>
+<div *ngIf='isLoaded' class='button-container'>
   <div class='btn-group'>
     <clr-checkbox type='checkbox' class='btn btn-icon' [(ngModel)]='spacesVisibility' (ngModelChange)='ToogleSpaceVisibility()'
       title='Show/Hide Spaces'>
