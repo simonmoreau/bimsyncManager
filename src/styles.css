@@ -17,6 +17,10 @@
     overflow: hidden;
   }
 
+  .stack-view .stack-block-expanded>.stack-block-content, .stack-view .stack-block-expanded>.stack-block-label {
+    background-color: #fafafa;
+}
+
 body.layout-home {
   background-color: #fafafa; }
   body.layout-home .main-container {
