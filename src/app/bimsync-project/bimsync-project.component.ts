@@ -43,7 +43,7 @@ export class BimsyncProjectComponent implements OnInit {
   open: boolean;
   share: boolean;
   jsonConfig: any;
-  submitted: boolean;
+  submitted: boolean = false;
   appService: AppService;
   loaded: boolean = false;
 
@@ -82,86 +82,89 @@ export class BimsyncProjectComponent implements OnInit {
   onSubmit() {
     // let temp = (<any>this.jsonConfig);
     // let creators = <ICreator[]>temp;
+    this.submitted = true;
 
     let creators = JSON.parse(this.jsonConfig);
     console.log(creators);
 
     let creatorArray: ICreatedProject[] = creators;
 
-    for (let i = 0; i < creatorArray.length; i++) {
-      this.CreateProject(creatorArray[i]);
-    }
+    Observable.from(creatorArray)
+      .mergeMap(creator => {
+        return this.CreateProject(creator);
+      }).subscribe(result => {
+        console.log(result);
+      },
+        error => this.errorMessage = <any>error,
+        () => {
+          console.log("complete")
+          this.open = false;
+      }
+      );
   }
 
-  CreateProject(creator: ICreatedProject) {
-    console.log(creator);
+  CreateProject(creator: ICreatedProject): Observable<any> {
+
     // Create the project
-    this._bimsyncProjectService
+    return this._bimsyncProjectService
       .createNewProject(creator.projectName, creator.projectDescription)
-      .subscribe(
+      .flatMap(
         project => {
-          console.log(project.name);
+
+          let observable$: Observable<any> = new Observable<ILibraryItem>(observer => {
+            // observable execution
+            observer.next(null);
+            observer.complete();
+          });
 
           if (creator.users) {
             // Assign users
-            this.AssingUsers(creator.users, project.id);
+            observable$ = observable$.merge(this.AssingUsers(creator.users, project.id));
           }
           if (creator.models) {
             // Create models
-            this.CreateModels(creator.models, project.id);
+            observable$ = observable$.merge(this.CreateModels(creator.models, project.id));
           }
 
           if (creator.boards) {
             // Create boards
-            this.CreateBoards(creator, project.id);
+            observable$ = observable$.merge(this.CreateBoards(creator, project.id));
           }
 
           if (creator.folders) {
             // Create folders
-            this.CreateFolders(creator.folders, project.id);
+            observable$ = observable$.merge(this.CreateFolders(creator.folders, project.id));
           }
-        },
-        error => (this.errorMessage = <any>error)
-      );
+
+          return observable$;
+        });
   }
 
-  AssingUsers(users: ICreatedMember[], projectId: string) {
+  AssingUsers(users: ICreatedMember[], projectId: string): Observable<any> {
     // Assign new users
-    Observable.from(users)
+    return Observable.from(users)
       .mergeMap(user => {
         return this._bimsyncProjectService.AddUser(
           projectId,
           user.id,
           user.role
         );
-      })
-      .subscribe(
-        member => {
-          console.log(member.role);
-        },
-        error => (this.errorMessage = <any>error)
-      );
+      });
   }
 
-  CreateModels(models: ICreatedModel[], projectId: string) {
+  CreateModels(models: ICreatedModel[], projectId: string): Observable<any> {
     // Create new models
-    Observable.from(models)
+    return Observable.from(models)
       .mergeMap(model => {
         return this._bimsyncProjectService.AddModel(
           projectId,
           model.name
         );
-      })
-      .subscribe(
-        m => {
-          console.log(m.name);
-        },
-        error => (this.errorMessage = <any>error)
-      );
+      });
   }
 
-  CreateFolders(folders: ICreatedFolder[], projectId: string) {
-    this.GetDocumentLibrary(projectId)
+  CreateFolders(folders: ICreatedFolder[], projectId: string): Observable<any> {
+    return this.GetDocumentLibrary(projectId)
       .flatMap(library => {
         let parentId = null;
         return Observable.from(folders).mergeMap(subfolder => {
@@ -172,13 +175,7 @@ export class BimsyncProjectComponent implements OnInit {
             library
           );
         });
-      })
-      .subscribe(
-        m => {
-          console.log(m.name);
-        },
-        error => (this.errorMessage = <any>error)
-      );
+      });
   }
 
   CreateAFolder(
@@ -223,51 +220,50 @@ export class BimsyncProjectComponent implements OnInit {
       });
   }
 
-  CreateBoards(creator: ICreatedProject, projectId: string) {
+  CreateBoards(creator: ICreatedProject, projectId: string): Observable<any> {
     // Create new boards
-    Observable.from(creator.boards)
+    return Observable.from(creator.boards)
       .mergeMap(board => {
         return this.CreateABoard(creator, projectId, board)
-      }).subscribe(
-        bimsyncBoard => {
-          console.log(bimsyncBoard);
-          console.log("bimsyncBoard");
-        },
-        error => (this.errorMessage = <any>error),
-        () => {
-          console.log("test");
-        }
-      );
+      });
   }
 
   CreateABoard(creator: ICreatedProject, projectId: string, board: ICreatedBoard): Observable<any> {
-        // Create a new board
-        return this._bimsyncProjectService
-          .AddBoard(projectId, board.name)
-          .flatMap(createdboard => {
+    // Create a new board
+    return this._bimsyncProjectService
+      .AddBoard(projectId, board.name)
+      .flatMap(createdboard => {
 
-            let statues$: Observable<IExtensionStatus> = null;
-            let types$: Observable<IExtensionType> = null;
+        let statues$: Observable<IExtensionStatus> = null;
+        let types$: Observable<IExtensionType> = null;
 
-            // Create extention statuses
-            if (board.statuses) {
-              statues$ = this.CreateExtensionStatuses(
-                createdboard,
-                board
-              );
-            }
+        // Create extention statuses
+        if (board.statuses) {
+          statues$ = this.CreateExtensionStatuses(
+            createdboard,
+            board
+          );
+        }
 
-            // Create extension types
-            if (board.types) {
-              types$ = this.CreateExtensionTypes(
-                createdboard,
-                board
-              );
-            }
+        // Create extension types
+        if (board.types) {
+          types$ = this.CreateExtensionTypes(
+            createdboard,
+            board
+          );
+        }
 
-            return statues$.concat(types$)
+        if (statues$ != null && types$ != null) {
+          return statues$.concat(types$)
+        } else if (statues$ != null) {
+          return statues$
+        } else if (types$ != null) {
+          return types$
+        } else {
+          return null
+        }
 
-          })
+      })
   }
 
   CreateExtensionStatuses(
