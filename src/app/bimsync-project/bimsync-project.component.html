@@ -67,7 +67,6 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Id</th>
                     <th></th>
                 </tr>
             </thead>
@@ -76,30 +75,33 @@
                     <td>
                         <a href="https://bimsync.com/project/{{project.id}}">{{project.name}}</a>
                     </td>
-                    <td>{{project.id}}</td>
                     <td>
-                        <button title="Quantity Takeoff" class="btn btn-link btn-icon btn-inline" href="#"
-                            [routerLink]="['/takeoff', project.id]" routerLinkActive="active">
-                            <clr-icon shape="line-chart" class="is-solid"></clr-icon>
-                        </button>
-                        <button title="Share your project" class="btn btn-link btn-icon btn-inline" (click)="Share(project)">
-                            <clr-icon shape="share" class="is-solid"></clr-icon>
-                        </button>
-                        <!-- add the #shareModal -->
-                        <app-share-modal #shareModal></app-share-modal>
-                        <button title="Create folders and boards" class="btn btn-link btn-icon btn-inline" (click)="Share(project)">
-                            <clr-icon shape="add-text" class="is-solid"></clr-icon>
-                        </button>
-                        <!-- add the #createModal -->
-                        <app-share-modal #shareModal></app-share-modal>
-                        <button title="Show project details" class="btn btn-link btn-icon btn-inline" (click)="OpenDetails(project)">
-                            <clr-icon shape="details" class="is-solid"></clr-icon>
-                        </button>
-                        <!-- add the #createModal -->
-                        <app-project-detail-modal #projectDetailModal></app-project-detail-modal>
+                        <div class="btn-group btn-icon btn-link">
+                            <button title="Quantity Takeoff" class="btn" href="#"
+                                [routerLink]="['/takeoff', project.id]" routerLinkActive="active">
+                                <clr-icon shape="line-chart" class="is-solid"></clr-icon>
+                                <span class="clr-icon-title">Quantity Takeoff</span>
+                            </button>
+                            <button class="btn" title="Share your project" (click)="Share(project)">
+                                <clr-icon shape="share" class="is-solid"></clr-icon>
+                                <span class="clr-icon-title">Share your project</span>
+                            </button>
+                            <button class="btn" title="Create folders and boards" (click)="Share(project)">
+                                <clr-icon shape="add-text" class="is-solid"></clr-icon>
+                                <span class="clr-icon-title">Create folders and boards</span>
+                            </button>
+                            <button class="btn" title="Show project details" (click)="OpenDetails(project)">
+                                <clr-icon shape="info-circle" class="is-solid"></clr-icon>
+                                <span class="clr-icon-title">Show project details</span>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
+    <!-- add the #shareModal -->
+    <app-share-modal #shareModal></app-share-modal>
+    <!-- add the #createModal -->
+    <app-project-detail-modal #projectDetailModal></app-project-detail-modal>
 </div>

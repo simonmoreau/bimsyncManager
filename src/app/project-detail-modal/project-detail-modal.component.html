@@ -1,12 +1,19 @@
 <clr-modal [(clrModalOpen)]="detail" class="modal-dialog">
-    <h3 class="modal-title" *ngIf="selectedProject">Share</h3>
-    <div class="modal-body modal-text">
-      test
-    </div>
+    <h3 class="modal-title" *ngIf="selectedProject">{{selectedProject.name}}</h3>
     <div class="modal-body modal-text" *ngIf="selectedProject">
         <div class="row">
             <div class="col-xs-12">
-              {{selectedProject.id}}
+              {{selectedProject.description}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+              Created on : {{selectedProject.createdAt}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+              Project Id : {{selectedProject.id}}
             </div>
         </div>
     </div>
