@@ -22,6 +22,7 @@ import { FieldSelectorComponent } from './takeoff/takeoff-components/field-selec
 import { Viewer3dComponent } from './viewer3d/viewer3d.component';
 import { PropertyPanelComponent } from './property-panel/property-panel.component';
 import { ProjectDetailModalComponent } from './project-detail-modal/project-detail-modal.component';
+import { ProjectCreateModalComponent } from './project-create-modal/project-create-modal.component';
 
 window["$"] = $;
 window["jQuery"] = $;
@@ -39,7 +40,8 @@ window["jQuery"] = $;
         FieldSelectorComponent,
         Viewer3dComponent,
         PropertyPanelComponent,
-        ProjectDetailModalComponent
+        ProjectDetailModalComponent,
+        ProjectCreateModalComponent
     ],
     imports: [
         BrowserAnimationsModule,

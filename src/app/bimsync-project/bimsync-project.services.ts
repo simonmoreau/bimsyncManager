@@ -1,8 +1,10 @@
 // Imports
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IProject, IRevision, IMember, IBimsyncBoard, IViewerToken, IProduct, IModel,
-    ILibrary, ILibraryItem } from '../bimsync-project/bimsync-project.models';
+import {
+    IProject, IRevision, IMember, IBimsyncBoard, IViewerToken, IProduct, IModel,
+    ILibrary, ILibraryItem
+} from '../bimsync-project/bimsync-project.models';
 import { AppService } from 'app/app.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -186,12 +188,42 @@ export class BimsyncProjectService {
 
     AddUser(ProjectId: string, UserId: string, Role: string): Observable<IMember> {
         return this._appService.GetUser().flatMap(user => {
-            return this._http.post<IMember>(
-                this._apiUrl + 'projects/' + ProjectId + '/members',
-                {
-                    user: UserId,
-                    role: Role
-                },
+            return this.ListMembers(ProjectId).flatMap(members => {
+                let existingMember: IMember[] = members.filter(x => x.user.id === UserId);
+                if (existingMember.length !== 0) {
+                    // create an observable with the member
+                    return new Observable<IMember>((observer) => {
+                        // observable execution
+                        observer.next(existingMember[0])
+                        observer.complete()
+                    });
+                } else {
+                    // Add the new member
+                    return this._http.post<IMember>(
+                        this._apiUrl + 'projects/' + ProjectId + '/members',
+                        {
+                            user: UserId,
+                            role: Role
+                        },
+                        {
+                            // params: new HttpParams().set('id', '56784'),
+                            headers: new HttpHeaders()
+                                .set('Authorization', 'Bearer ' + user.AccessToken.access_token)
+                                .set('Content-Type', 'application/json')
+                        })
+                        .do(data => console.log('All: ' + JSON.stringify(data)))
+                        .catch(this.handleError);
+                }
+
+            });
+
+        });
+    }
+
+    ListMembers(ProjectId: string): Observable<IMember[]> {
+        return this._appService.GetUser().flatMap(user => {
+            return this._http.get<IMember[]>(
+                this._apiUrl + 'projects/' + ProjectId + '/members?pageSize=1000',
                 {
                     // params: new HttpParams().set('id', '56784'),
                     headers: new HttpHeaders()

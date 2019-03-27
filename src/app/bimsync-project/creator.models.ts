@@ -1,5 +1,5 @@
 export interface ICreatedProject {
-  projectName: string;
+  projectName?: string;
   projectDescription?: string;
   users?: ICreatedMember[];
   models?: ICreatedModel[];
