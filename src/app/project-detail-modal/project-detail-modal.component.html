@@ -1,0 +1,13 @@
+<clr-modal [(clrModalOpen)]="detail" class="modal-dialog">
+    <h3 class="modal-title" *ngIf="selectedProject">Share</h3>
+    <div class="modal-body modal-text">
+      test
+    </div>
+    <div class="modal-body modal-text" *ngIf="selectedProject">
+        <div class="row">
+            <div class="col-xs-12">
+              {{selectedProject.id}}
+            </div>
+        </div>
+    </div>
+</clr-modal>

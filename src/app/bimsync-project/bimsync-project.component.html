@@ -69,7 +69,6 @@
                     <th>Name</th>
                     <th>Id</th>
                     <th></th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -79,17 +78,25 @@
                     </td>
                     <td>{{project.id}}</td>
                     <td>
-                        <button class="btn btn-link btn-icon btn-inline" href="#"
+                        <button title="Quantity Takeoff" class="btn btn-link btn-icon btn-inline" href="#"
                             [routerLink]="['/takeoff', project.id]" routerLinkActive="active">
                             <clr-icon shape="line-chart" class="is-solid"></clr-icon>
                         </button>
-                    </td>
-                    <td>
-                        <button class="btn btn-link btn-icon btn-inline" (click)="Share(project)">
+                        <button title="Share your project" class="btn btn-link btn-icon btn-inline" (click)="Share(project)">
                             <clr-icon shape="share" class="is-solid"></clr-icon>
                         </button>
                         <!-- add the #shareModal -->
                         <app-share-modal #shareModal></app-share-modal>
+                        <button title="Create folders and boards" class="btn btn-link btn-icon btn-inline" (click)="Share(project)">
+                            <clr-icon shape="add-text" class="is-solid"></clr-icon>
+                        </button>
+                        <!-- add the #createModal -->
+                        <app-share-modal #shareModal></app-share-modal>
+                        <button title="Show project details" class="btn btn-link btn-icon btn-inline" (click)="OpenDetails(project)">
+                            <clr-icon shape="details" class="is-solid"></clr-icon>
+                        </button>
+                        <!-- add the #createModal -->
+                        <app-project-detail-modal #projectDetailModal></app-project-detail-modal>
                     </td>
                 </tr>
             </tbody>

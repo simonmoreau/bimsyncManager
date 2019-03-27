@@ -27,6 +27,7 @@ import {
 import { AppService } from "app/app.service";
 
 import { ShareModalComponent } from "../share-modal/share-modal.component";
+import { ProjectDetailModalComponent } from "../project-detail-modal/project-detail-modal.component";
 
 @Component({
   selector: "app-bimsync-project",
@@ -47,7 +48,8 @@ export class BimsyncProjectComponent implements OnInit {
   appService: AppService;
   loaded: boolean = false;
 
-  @ViewChild("shareModal") modal: ShareModalComponent;
+  @ViewChild("shareModal") shareModal: ShareModalComponent;
+  @ViewChild("projectDetailModal") projectDetailModal: ProjectDetailModalComponent;
 
   constructor(
     private _bimsyncProjectService: BimsyncProjectService,
@@ -393,6 +395,10 @@ export class BimsyncProjectComponent implements OnInit {
   }
 
   Share(project) {
-    this.modal.OpenShareModal(project);
+    this.shareModal.OpenShareModal(project);
+  }
+
+  OpenDetails(project) {
+    this.projectDetailModal.OpenDetailModal(project);
   }
 }
