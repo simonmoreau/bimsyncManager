@@ -75,8 +75,8 @@ export class ProjectCreateModalComponent implements OnInit {
       },
         error => this.errorMessage = <any>error,
         () => {
-          console.log("complete")
-          this.submitted = true;
+          console.log("complete");
+          this.submitted = false;
           this.open = false;
       }
       );
@@ -89,12 +89,12 @@ export class ProjectCreateModalComponent implements OnInit {
       },
         error => this.errorMessage = <any>error,
         () => {
-          console.log("complete")
+          console.log("complete");
+          this.submitted = false;
           this.open = false;
       }
       );
     }
-
   }
 
   UpdateProject(creator: ICreatedProject, project: IProject): Observable<any> {
