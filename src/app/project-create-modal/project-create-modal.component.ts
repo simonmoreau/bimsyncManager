@@ -212,7 +212,7 @@ export class ProjectCreateModalComponent implements OnInit {
       .getLibraries(projectId)
       .map(libraries => {
         let documentLibrary = libraries.filter(
-          library => library.name === "Documents"
+          library => library.type === "document"
         );
         return documentLibrary.length > 0 ? documentLibrary[0] : null;
       });
