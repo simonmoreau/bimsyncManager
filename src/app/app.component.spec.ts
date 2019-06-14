@@ -19,7 +19,7 @@ describe('AppComponent', () => {
                 HomeComponent
             ],
             imports: [
-                ClarityModule.forRoot(),
+                ClarityModule,
                 ROUTING
             ],
             providers: [{provide: APP_BASE_HREF, useValue: '/'}]

@@ -2,8 +2,6 @@ import { AfterViewInit, Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Params } from "@angular/router";
 import { TakeoffService } from "../takeoff/takeoff.services";
 import * as $ from "jquery";
-import { flatten } from "@angular/compiler";
-import { fade } from "@clr/angular";
 
 declare var bimsync: any;
 

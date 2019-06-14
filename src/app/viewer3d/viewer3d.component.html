@@ -3,10 +3,10 @@
 </span>
 <div *ngIf='isLoaded' style='position: absolute'>
   <div class='btn-group'>
-    <clr-checkbox type='checkbox' class='btn btn-icon' [(ngModel)]='spacesVisibility' (ngModelChange)='ToogleSpaceVisibility()'
+    <clr-checkbox-wrapper type='checkbox' class='btn btn-icon' [(ngModel)]='spacesVisibility' (ngModelChange)='ToogleSpaceVisibility()'
       title='Show/Hide Spaces'>
       <clr-icon shape='block'></clr-icon>
-    </clr-checkbox>
+    </clr-checkbox-wrapper>
   </div>
   <div class='btn-group btn-icon'>
     <button class='btn' (click)='FocusModel()' title='Center Model'>
@@ -15,17 +15,17 @@
     </button>
   </div>
   <div class='btn-group'>
-    <clr-checkbox type='checkbox' class='btn btn-icon' title='Show/Hide Other Elements' [(ngModel)]='otherHidden'
+    <clr-checkbox-wrapper type='checkbox' class='btn btn-icon' title='Show/Hide Other Elements' [(ngModel)]='otherHidden'
       (ngModelChange)='ToogleOthersVisibility()'>
       <clr-icon shape='eye' class='is-solid'></clr-icon>
-    </clr-checkbox>
-    <clr-checkbox type='checkbox' class='btn btn-icon' title='Make Other Elements Transparent' [(ngModel)]='otherDimmed'
+    </clr-checkbox-wrapper>
+    <clr-checkbox-wrapper type='checkbox' class='btn btn-icon' title='Make Other Elements Transparent' [(ngModel)]='otherDimmed'
     (ngModelChange)='ToogleOtherTransparency()'>
       <clr-icon shape='eye' ></clr-icon>
-    </clr-checkbox>
-    <clr-checkbox type='checkbox' class='btn btn-icon' title='Show Properties' [(ngModel)]='displayProperties'>
+    </clr-checkbox-wrapper>
+    <clr-checkbox-wrapper type='checkbox' class='btn btn-icon' title='Show Properties' [(ngModel)]='displayProperties'>
       <clr-icon shape='list' ></clr-icon>
-    </clr-checkbox>
+    </clr-checkbox-wrapper>
   </div>
 </div>
 <div *ngIf='isLoaded' class='panel-container'>
