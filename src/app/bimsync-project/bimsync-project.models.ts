@@ -27,6 +27,7 @@ export interface IRevision {
 export interface ILibrary {
     id: string;
     name: string;
+    type: string;
 }
 
 export interface ILibraryItem {
