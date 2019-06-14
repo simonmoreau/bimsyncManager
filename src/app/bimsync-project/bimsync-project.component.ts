@@ -24,9 +24,9 @@ export class BimsyncProjectComponent implements OnInit {
   appService: AppService;
   loaded: boolean = false;
 
-  @ViewChild("shareModal") shareModal: ShareModalComponent;
-  @ViewChild("projectDetailModal") projectDetailModal: ProjectDetailModalComponent;
-  @ViewChild("createModal") createModal: ProjectCreateModalComponent;
+  @ViewChild("shareModal", {static: false}) shareModal: ShareModalComponent;
+  @ViewChild("projectDetailModal", {static: false}) projectDetailModal: ProjectDetailModalComponent;
+  @ViewChild("createModal", {static: false}) createModal: ProjectCreateModalComponent;
 
   constructor(
     private _appService: AppService,

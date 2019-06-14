@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from "rxjs/Observable";
-import { from } from "rxjs/observable/from";
-import { mergeMap } from "rxjs/operators";
-import "rxjs/add/operator/catch";
-import "rxjs/add/operator/do";
+
+import { Observable, from } from 'rxjs';
+import { mergeMap, merge, map } from 'rxjs/operators';
+
+
 import {
   ICreatedProject,
   ICreatedMember,
@@ -67,33 +67,33 @@ export class ProjectCreateModalComponent implements OnInit {
     let creatorArray: ICreatedProject[] = creators;
 
     if (this.existingProject) {
-      Observable.from(creatorArray)
-      .mergeMap(creator => {
-        return this.UpdateProject(creator, this.existingProject);
-      }).subscribe(result => {
-        console.log(result);
-      },
-        error => this.errorMessage = <any>error,
-        () => {
-          console.log("complete");
-          this.submitted = false;
-          this.open = false;
-      }
-      );
+      from(creatorArray).pipe(
+        mergeMap(creator => {
+          return this.UpdateProject(creator, this.existingProject);
+        })).subscribe(result => {
+          console.log(result);
+        },
+          error => this.errorMessage = <any>error,
+          () => {
+            console.log("complete");
+            this.submitted = false;
+            this.open = false;
+          }
+        );
     } else {
-      Observable.from(creatorArray)
-      .mergeMap(creator => {
-        return this.CreateProject(creator);
-      }).subscribe(result => {
-        console.log(result);
-      },
-        error => this.errorMessage = <any>error,
-        () => {
-          console.log("complete");
-          this.submitted = false;
-          this.open = false;
-      }
-      );
+      from(creatorArray).pipe(
+        mergeMap(creator => {
+          return this.CreateProject(creator);
+        })).subscribe(result => {
+          console.log(result);
+        },
+          error => this.errorMessage = <any>error,
+          () => {
+            console.log("complete");
+            this.submitted = false;
+            this.open = false;
+          }
+        );
     }
   }
 
@@ -105,75 +105,90 @@ export class ProjectCreateModalComponent implements OnInit {
       observer.complete();
     });
 
+
     if (creator.users) {
       // Assign users
-      observable$ = observable$.merge(this.AssingUsers(creator.users, project.id));
+      observable$ = observable$.pipe(
+        merge(this.AssingUsers(creator.users, project.id))
+      );
     }
     if (creator.models) {
       // Create models
-      observable$ = observable$.merge(this.CreateModels(creator.models, project.id));
+      observable$ = observable$.pipe(
+        merge(this.CreateModels(creator.models, project.id))
+      );
     }
 
     if (creator.boards) {
       // Create boards
-      observable$ = observable$.merge(this.CreateBoards(creator, project.id));
+      observable$ = observable$.pipe(
+        merge(this.CreateBoards(creator, project.id))
+      );
     }
 
     if (creator.folders) {
       // Create folders
-      observable$ = observable$.merge(this.CreateFolders(creator.folders, project.id));
+      observable$ = observable$.pipe(
+        merge(this.CreateFolders(creator.folders, project.id))
+      );
     }
 
     return observable$;
   }
 
   CreateProject(creator: ICreatedProject): Observable<any> {
-
     // Create the project
     return this._bimsyncProjectService
-      .createNewProject(creator.projectName, creator.projectDescription)
-      .flatMap(
-        project => {
-          return this.UpdateProject(creator, project);
-        });
+      .createNewProject(creator.projectName, creator.projectDescription).pipe(
+        mergeMap(
+          project => {
+            return this.UpdateProject(creator, project);
+          }
+        )
+      );
   }
 
   AssingUsers(users: ICreatedMember[], projectId: string): Observable<any> {
     // Assign new users
-    return Observable.from(users)
-      .mergeMap(user => {
+    return from(users).pipe(
+      mergeMap(user => {
         return this._bimsyncProjectService.AddUser(
           projectId,
           user.id,
           user.role
         );
-      });
+      })
+    );
   }
 
   CreateModels(models: ICreatedModel[], projectId: string): Observable<any> {
     // Create new models
-    return Observable.from(models)
-      .mergeMap(model => {
+    return from(models).pipe(
+      mergeMap(model => {
         return this._bimsyncProjectService.AddModel(
           projectId,
           model.name
         );
-      });
+      })
+    );
   }
 
   CreateFolders(folders: ICreatedFolder[], projectId: string): Observable<any> {
-    return this.GetDocumentLibrary(projectId)
-      .flatMap(library => {
+    return this.GetDocumentLibrary(projectId).pipe(
+      mergeMap(library => {
         let parentId = null;
-        return Observable.from(folders).mergeMap(subfolder => {
-          return this.CreateAFolder(
-            subfolder,
-            projectId,
-            parentId,
-            library
-          );
-        });
-      });
+        return from(folders).pipe(
+          mergeMap(subfolder => {
+            return this.CreateAFolder(
+              subfolder,
+              projectId,
+              parentId,
+              library
+            );
+          })
+        );
+      })
+    );
   }
 
   CreateAFolder(
@@ -183,85 +198,90 @@ export class ProjectCreateModalComponent implements OnInit {
     library: ILibrary
   ): Observable<ILibraryItem> {
     return this._bimsyncProjectService
-      .AddFolder(projectId, folder.name, parentId, library.id)
-      .flatMap(createdFolder => {
-        if (folder.folders) {
-          return Observable.from(folder.folders).mergeMap(
-            subfolder => {
-              return this.CreateAFolder(
-                subfolder,
-                projectId,
-                createdFolder.id,
-                library
-              );
-            }
-          );
-        } else {
-          return new Observable<ILibraryItem>(observer => {
-            // observable execution
-            observer.next(createdFolder);
-            observer.complete();
-          });
-        }
-      });
+      .AddFolder(projectId, folder.name, parentId, library.id).pipe(
+        mergeMap(createdFolder => {
+          if (folder.folders) {
+            return from(folder.folders).pipe(
+              mergeMap(
+                subfolder => {
+                  return this.CreateAFolder(
+                    subfolder,
+                    projectId,
+                    createdFolder.id,
+                    library
+                  );
+                }
+              )
+            );
+          } else {
+            return new Observable<ILibraryItem>(observer => {
+              // observable execution
+              observer.next(createdFolder);
+              observer.complete();
+            });
+          }
+        })
+      );
   }
 
   GetDocumentLibrary(projectId: string): Observable<ILibrary> {
     // Get the Document library id
     return this._bimsyncProjectService
-      .getLibraries(projectId)
-      .map(libraries => {
-        let documentLibrary = libraries.filter(
-          library => library.name === "Documents"
-        );
-        return documentLibrary.length > 0 ? documentLibrary[0] : null;
-      });
+      .getLibraries(projectId).pipe(
+        map(libraries => {
+          let documentLibrary = libraries.filter(
+            library => library.name === "Documents"
+          );
+          return documentLibrary.length > 0 ? documentLibrary[0] : null;
+        })
+      );
   }
 
   CreateBoards(creator: ICreatedProject, projectId: string): Observable<any> {
     // Create new boards
-    return Observable.from(creator.boards)
-      .mergeMap(board => {
+    return from(creator.boards).pipe(
+      mergeMap(board => {
         return this.CreateABoard(creator, projectId, board)
-      });
+      })
+    );
   }
 
   CreateABoard(creator: ICreatedProject, projectId: string, board: ICreatedBoard): Observable<any> {
     // Create a new board
     return this._bimsyncProjectService
-      .AddBoard(projectId, board.name)
-      .flatMap(createdboard => {
+      .AddBoard(projectId, board.name).pipe(
+        mergeMap(createdboard => {
 
-        let statues$: Observable<IExtensionStatus> = null;
-        let types$: Observable<IExtensionType> = null;
+          let statues$: Observable<IExtensionStatus> = null;
+          let types$: Observable<IExtensionType> = null;
 
-        // Create extention statuses
-        if (board.statuses) {
-          statues$ = this.CreateExtensionStatuses(
-            createdboard,
-            board
-          );
-        }
+          // Create extention statuses
+          if (board.statuses) {
+            statues$ = this.CreateExtensionStatuses(
+              createdboard,
+              board
+            );
+          }
+          // Create extension types
+          if (board.types) {
+            types$ = this.CreateExtensionTypes(
+              createdboard,
+              board
+            );
+          }
 
-        // Create extension types
-        if (board.types) {
-          types$ = this.CreateExtensionTypes(
-            createdboard,
-            board
-          );
-        }
+          if (statues$ != null && types$ != null) {
+            return statues$.pipe( merge(types$));
+          } else if (statues$ != null) {
+            return statues$
+          } else if (types$ != null) {
+            return types$
+          } else {
+            return null
+          }
 
-        if (statues$ != null && types$ != null) {
-          return statues$.concat(types$)
-        } else if (statues$ != null) {
-          return statues$
-        } else if (types$ != null) {
-          return types$
-        } else {
-          return null
-        }
-
-      })
+        })
+      );
   }
 
   CreateExtensionStatuses(
@@ -288,42 +308,48 @@ export class ProjectCreateModalComponent implements OnInit {
     }
 
     // Update statuses
-    let updatedStatues$: Observable<any> = Observable.from(
+    let updatedStatues$: Observable<any> = from(
       updatedStatues
-    ).flatMap(status => {
-      return this._bimsyncProjectService.UpdateExtensionStatus(
-        bimsyncBoard.project_id,
-        status.name,
-        status.name,
-        status.color,
-        status.type
-      );
-    });
+    ).pipe(
+      mergeMap(status => {
+        return this._bimsyncProjectService.UpdateExtensionStatus(
+          bimsyncBoard.project_id,
+          status.name,
+          status.name,
+          status.color,
+          status.type
+        );
+      })
+    );
 
     // Create statues
-    let createdStatues$: Observable<any> = Observable.from(
+    let createdStatues$: Observable<any> = from(
       createdStatuses
-    ).flatMap(status => {
+    ).pipe(mergeMap(status => {
       return this._bimsyncProjectService.AddExtensionStatus(
         bimsyncBoard.project_id,
         status.name,
         status.color,
         status.type
       );
-    });
+    })
+    );
 
     // Detele remaining existing statuses
-    let deleteStatues$: Observable<any> = Observable.from(
+    let deleteStatues$: Observable<any> = from(
       existingStatusesNames
-    ).flatMap(name => {
+    ).pipe(
+      mergeMap(name => {
       return this._bimsyncProjectService.DeleteExtensionStatus(
         bimsyncBoard.project_id,
         name
       );
-    });
+    }));
 
-    return createdStatues$.concat(updatedStatues$).concat(deleteStatues$);
-
+    return createdStatues$.pipe(
+      merge(updatedStatues$),
+      merge(deleteStatues$)
+      );
   }
 
   CreateExtensionTypes(
@@ -355,39 +381,48 @@ export class ProjectCreateModalComponent implements OnInit {
     }
 
     // Update types
-    let updatedTypes$: Observable<any> = Observable.from(
+    let updatedTypes$: Observable<any> = from(
       updatedTypes
-    ).flatMap(type => {
-      return this._bimsyncProjectService.UpdateExtensionType(
-        bimsyncBoard.project_id,
-        type.name,
-        type.name,
-        type.color
-      );
-    });
+    ).pipe(
+      mergeMap(type => {
+        return this._bimsyncProjectService.UpdateExtensionType(
+          bimsyncBoard.project_id,
+          type.name,
+          type.name,
+          type.color
+        );
+      })
+    );
 
     // Create types
-    let createdTypes$: Observable<any> = Observable.from(
+    let createdTypes$: Observable<any> = from(
       createdTypes
-    ).flatMap(type => {
-      return this._bimsyncProjectService.AddExtensionType(
-        bimsyncBoard.project_id,
-        type.name,
-        type.color
-      );
-    });
+    ).pipe(
+      mergeMap(type => {
+        return this._bimsyncProjectService.AddExtensionType(
+          bimsyncBoard.project_id,
+          type.name,
+          type.color
+        );
+      })
+    );
 
     // Detele remaining existing types
-    let deleteTypes$: Observable<any> = Observable.from(
+    let deleteTypes$: Observable<any> = from(
       existingTypesNames
-    ).flatMap(name => {
-      return this._bimsyncProjectService.DeleteExtensionType(
-        bimsyncBoard.project_id,
-        name
-      );
-    });
+    ).pipe(
+      mergeMap(name => {
+        return this._bimsyncProjectService.DeleteExtensionType(
+          bimsyncBoard.project_id,
+          name
+        );
+      })
+    );
 
-    return updatedTypes$.concat(createdTypes$).concat(deleteTypes$);
+    return updatedTypes$.pipe(
+      merge(createdTypes$),
+      merge(deleteTypes$)
+    );
   }
 
 }

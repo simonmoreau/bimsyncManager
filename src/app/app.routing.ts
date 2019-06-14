@@ -3,8 +3,9 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import { ModuleWithProviders } from '@angular/core/src/metadata/ng_module';
-import { Routes, RouterModule } from '@angular/router';
+
+import { Routes, RouterModule,  } from '@angular/router';
+import { ModuleWithProviders } from '@angular/core';
 
 import { HomeComponent } from './home/home.component';
 import { BimsyncProjectComponent } from './bimsync-project/bimsync-project.component';

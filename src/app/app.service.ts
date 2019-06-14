@@ -1,11 +1,9 @@
+
+import {throwError,  Observable } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { ISubscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
-
 import { IUser } from 'app/bimsync-oauth/bimsync-oauth.models';
 
 import Json from '*.json';
@@ -68,14 +66,15 @@ export class AppService {
       {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')
-      })
-      .do(user => {
-        this._user = user;
-        // Save to local storage
-        localStorage.setItem('user', JSON.stringify(user));
-        console.log('All: ' + JSON.stringify(user));
-      })
-      .catch(this.handleError);
+      }).pipe(
+        tap(user => {
+          this._user = user;
+          // Save to local storage
+          localStorage.setItem('user', JSON.stringify(user));
+          console.log('All: ' + JSON.stringify(user));
+        }),
+        catchError(this.handleError)
+      );
   }
 
   CreateUser(authorization_code: string) {
@@ -111,9 +110,10 @@ export class AppService {
         params: new HttpParams().set('code', authorization_code),
         headers: new HttpHeaders()
           .set('Content-Type', 'application/json')
-      })
-      .do(data => console.log('All: ' + JSON.stringify(data)))
-      .catch(this.handleError);
+      }).pipe(
+        tap(data => console.log('All: ' + JSON.stringify(data))),
+        catchError(this.handleError)
+      );
   }
 
   private createUserRequest(authorization_code: string): Observable<IUser> {
@@ -128,9 +128,10 @@ export class AppService {
       {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/json')
-      })
-      .do(data => console.log('All: ' + JSON.stringify(data)))
-      .catch(this.handleError);
+      }).pipe(
+        tap(data => console.log('All: ' + JSON.stringify(data))),
+        catchError(this.handleError)
+      );
   }
 
   private createBCFTokenRequest(authorization_code: string): Observable<IUser> {
@@ -140,9 +141,10 @@ export class AppService {
         params: new HttpParams().set('code', authorization_code),
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')
-      })
-      .do(data => console.log('All: ' + JSON.stringify(data)))
-      .catch(this.handleError);
+      }).pipe(
+        tap(data => console.log('All: ' + JSON.stringify(data))),
+        catchError(this.handleError)
+      );
   }
 
 
@@ -160,6 +162,6 @@ export class AppService {
       errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
     }
     console.log(errorMessage);
-    return Observable.throw(errorMessage);
+    return throwError(errorMessage);
   }
 }

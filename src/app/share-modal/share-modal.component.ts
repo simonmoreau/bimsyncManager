@@ -5,8 +5,8 @@ import { IProject, IModel, ISharedRevisions, IRevision } from '../bimsync-projec
 import { ClrLoadingState } from '@clr/angular';
 import { AppService } from 'app/app.service';
 
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
+
+
 
 @Component({
   selector: 'app-share-modal',
@@ -17,7 +17,7 @@ import 'rxjs/add/operator/do';
 
 export class ShareModalComponent implements OnInit {
 
-  @ViewChild('content') content: any;
+  @ViewChild('content', { static: true }) content: any;
 
   selectedProject: IProject;
   share: boolean;
