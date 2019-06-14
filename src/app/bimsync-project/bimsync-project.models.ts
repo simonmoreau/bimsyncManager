@@ -24,6 +24,19 @@ export interface IRevision {
     version: string;
 }
 
+export interface ILibrary {
+    id: string;
+    name: string;
+    type: string;
+}
+
+export interface ILibraryItem {
+    id: string;
+    name: string;
+    parentId: string;
+    document: any;
+}
+
 export interface IMember {
     role: string;
     user: IbimsyncUser;
@@ -35,6 +48,17 @@ export interface IBimsyncBoard {
     name: string;
     bimsync_project_name: string;
     bimsync_project_id: string;
+}
+
+export interface IExtensionType {
+    name: string;
+    color: string;
+}
+
+export interface IExtensionStatus {
+    name: string;
+    color: string;
+    type: string;
 }
 
 export interface IbimsyncUser {

@@ -12,8 +12,8 @@ import {
 import {DisplayProperty, GroupingModeEnum,
     IDisplayPropertySet, Products, ValueTree, Guid, IHighlightedElements, SortEnum,
 } from "./takeoff.model";
+import { from, Observable, forkJoin  } from 'rxjs';
 import { DropEvent } from 'ng-drag-drop';
-import { Observable } from 'rxjs/Rx';
 
 
 @Component({
@@ -163,11 +163,11 @@ export class TakeoffComponent implements OnInit {
                             spaceClass.typeQuantity
                         );
                     } else {
-                        spacesProductsObs = Observable.of(null);
+                        // spacesProductsObs = from(null);
                     }
 
                     // Use the two observables to launch the viewer
-                    Observable.forkJoin([viewerToken, spacesProductsObs]).subscribe(results => {
+                    forkJoin(viewerToken, spacesProductsObs ).subscribe(results => {
                         // results[0] is our viewerToken
                         // results[1] is our spacesProducts
                         let spacesProducts: IProduct[] = results[1];

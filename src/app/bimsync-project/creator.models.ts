@@ -1,9 +1,10 @@
 export interface ICreatedProject {
-  projectName: string;
+  projectName?: string;
   projectDescription?: string;
   users?: ICreatedMember[];
   models?: ICreatedModel[];
   boards?: ICreatedBoard[];
+  folders?: ICreatedFolder[];
 }
 
 export interface ICreatedBoard {
@@ -30,4 +31,9 @@ export interface ICreatedModel {
 export interface ICreatedMember {
   id: string;
   role: string;
+}
+
+export interface ICreatedFolder {
+  name: string;
+  folders: ICreatedFolder[];
 }

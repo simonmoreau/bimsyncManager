@@ -1,20 +1,19 @@
-import { Component, OnInit , ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from "@angular/core";
 
-import { IProject, IBimsyncBoard } from './bimsync-project.models';
-import { IUser } from '../bimsync-oauth/bimsync-oauth.models';
+import {  IProject} from "./bimsync-project.models";
+import { IUser } from "../bimsync-oauth/bimsync-oauth.models";
 
-import { BimsyncProjectService } from './bimsync-project.services';
+import { BimsyncProjectService } from "app/bimsync-project/bimsync-project.services";
+import { AppService } from "app/app.service";
 
-import { ICreatedProject, ICreatedMember, ICreatedModel,
-  ICreatedBoard, ICreatedStatus, ICreatedType } from 'app/bimsync-project/creator.models';
-import { AppService } from 'app/app.service';
-
-import { ShareModalComponent } from '../share-modal/share-modal.component';
+import { ShareModalComponent } from "../share-modal/share-modal.component";
+import { ProjectDetailModalComponent } from "../project-detail-modal/project-detail-modal.component";
+import { ProjectCreateModalComponent } from "../project-create-modal/project-create-modal.component"
 
 @Component({
-  selector: 'app-bimsync-project',
-  templateUrl: './bimsync-project.component.html',
-  styleUrls: ['./bimsync-project.component.scss'],
+  selector: "app-bimsync-project",
+  templateUrl: "./bimsync-project.component.html",
+  styleUrls: ["./bimsync-project.component.scss"],
   providers: [BimsyncProjectService]
 })
 export class BimsyncProjectComponent implements OnInit {
@@ -22,203 +21,51 @@ export class BimsyncProjectComponent implements OnInit {
   User: IUser;
   IsBCF: boolean;
   projects: IProject[] = [];
-  createdProject: IProject;
-  open: boolean;
-  share: boolean;
-  jsonConfig: any;
-  submitted: boolean;
   appService: AppService;
+  loaded: boolean = false;
 
-  @ViewChild('shareModal') modal: ShareModalComponent;
+  @ViewChild("shareModal", {static: false}) shareModal: ShareModalComponent;
+  @ViewChild("projectDetailModal", {static: false}) projectDetailModal: ProjectDetailModalComponent;
+  @ViewChild("createModal", {static: false}) createModal: ProjectCreateModalComponent;
 
-  constructor(private _bimsyncProjectService: BimsyncProjectService, private _appService: AppService) {
+  constructor(
+    private _appService: AppService,
+    private _bimsyncProjectService: BimsyncProjectService
+  ) {
     this.appService = _appService;
   }
 
   ngOnInit() {
-    this.User = this.appService.GetUser();
-    this.GetProjects();
-    this.IsBCF = (this.User.BCFToken === "");
+    this.appService.GetUser().subscribe(
+      user => {
+        this.User = user;
+        this.GetProjects();
+        this.IsBCF = this.User.BCFToken === "";
+      },
+      error => (this.errorMessage = <any>error)
+    );
   }
 
   GetProjects() {
-    this._bimsyncProjectService.getProjects()
-      .subscribe(projects => {
+    this._bimsyncProjectService.getProjects().subscribe(
+      projects => {
         this.projects = projects;
+        this.loaded = true;
       },
-      error => this.errorMessage = <any>error);
+      error => (this.errorMessage = <any>error)
+    );
 
     return false;
   }
-
-  onSubmit() {
-
-    // let temp = (<any>this.jsonConfig);
-    // let creators = <ICreator[]>temp;
-
-    let creators = JSON.parse(this.jsonConfig);
-    console.log(creators);
-
-    let creatorArray: ICreatedProject[] = creators;
-
-    for (let i = 0; i < creatorArray.length; i++) {
-      this.CreateProject(creatorArray[i]);
-    }
-  }
-
-  CreateProject(creator: ICreatedProject) {
-
-    console.log(creator);
-    // Create the project
-    this._bimsyncProjectService.createNewProject(creator.projectName, creator.projectDescription)
-      .subscribe(project => {
-        console.log(project.name);
-
-        if (creator.users) {
-          // Assign users
-          this.AssingUsers(creator.users, project.id);
-        }
-        if (creator.models) {
-          // Create models
-          this.CreateModels(creator.models, project.id);
-        }
-
-        if (creator.boards) {
-          // Create boards
-          this.CreateBoards(creator, project.id);
-        }
-      },
-      error => this.errorMessage = <any>error);
-  }
-
-  AssingUsers(users: ICreatedMember[], projectId: string) {
-    for (let user of users) {
-      // Assign a new user
-      this._bimsyncProjectService.AddUser(projectId, user.id, user.role)
-        .subscribe(member => {
-          console.log(member.role);
-        },
-        error => this.errorMessage = <any>error);
-    }
-  }
-
-  CreateModels(models: ICreatedModel[], projectId: string) {
-    for (let model of models) {
-      // Create a new model
-      this._bimsyncProjectService.AddModel(projectId, model.name)
-        .subscribe(m => {
-          console.log(m.name);
-        },
-        error => this.errorMessage = <any>error);
-    }
-  }
-
-  CreateBoards(creator: ICreatedProject, projectId: string) {
-
-    let boards: ICreatedBoard[] = creator.boards;
-
-    for (let board of boards) {
-      // Create a new board
-      this._bimsyncProjectService.AddBoard(projectId, board.name)
-        .subscribe(bimsyncBoard => {
-          console.log(bimsyncBoard.name);
-
-          // Create extention statuses
-          if (board.statuses) {
-            this.CreateExtensionStatuses(bimsyncBoard, board);
-          }
-
-          // Create extension types
-          if (board.types) {
-            this.CreateExtensionTypes(bimsyncBoard, board);
-          }
-
-        },
-        error => this.errorMessage = <any>error);
-    }
-  }
-
-  CreateExtensionStatuses(bimsyncBoard: IBimsyncBoard, board: ICreatedBoard) {
-    let statuses: ICreatedStatus[] = board.statuses;
-    let existingStatusesNames: string[] = ["Closed", "Open"];
-
-    for (let status of statuses) {
-
-        let index = existingStatusesNames.indexOf(status.name);
-
-        if (index > -1) {
-          // If the status exist, update it
-          this._bimsyncProjectService.UpdateExtensionStatus(bimsyncBoard.project_id, status.name, status.name, status.color, status.type)
-          .subscribe(bimsyncStatus => {
-            console.log(bimsyncStatus);
-          },
-          error => this.errorMessage = <any>error);
-          // Remove it from the existingTypesNames
-          existingStatusesNames.splice(index, 1);
-        } else {
-          // If not, Create it
-          this._bimsyncProjectService.AddExtensionStatus(bimsyncBoard.project_id, status.name, status.color, status.type)
-            .subscribe(bimsyncStatus => {
-              console.log(bimsyncStatus);
-            },
-            error => this.errorMessage = <any>error);
-        }
-    }
-
-    setTimeout(console.log('wait'), 500);
-
-    // Detele remaining existing statuses
-    for (let name of existingStatusesNames) {
-      // Delete a status
-      this._bimsyncProjectService.DeleteExtensionStatus(bimsyncBoard.project_id, name)
-        .subscribe(bimsyncStatus => {
-          console.log(bimsyncStatus);
-        },
-        error => this.errorMessage = <any>error);
-    }
-  }
-
-  CreateExtensionTypes(bimsyncBoard: IBimsyncBoard, board: ICreatedBoard) {
-    let types: ICreatedType[] = board.types;
-    let existingTypesNames: string[] = ["Error", "Warning", "Info", "Unknown"];
-
-    for (let type of types) {
-
-      let index = existingTypesNames.indexOf(type.name);
-
-      if (index > -1) {
-        // If the type exist, update it
-        this._bimsyncProjectService.UpdateExtensionType(bimsyncBoard.project_id, type.name, type.name, type.color)
-        .subscribe(bimsyncType => {
-          console.log(bimsyncType);
-        },
-        error => this.errorMessage = <any>error);
-        // Remove it from the existingTypesNames
-        existingTypesNames.splice(index, 1);
-      } else {
-        // If not, Create it
-        this._bimsyncProjectService.AddExtensionType(bimsyncBoard.project_id, type.name, type.color)
-          .subscribe(bimsyncType => {
-            console.log(bimsyncType);
-          },
-          error => this.errorMessage = <any>error);
-      }
-    }
-
-    setTimeout(console.log('wait'), 500);
-
-    // Detele remaining existing types
-    for (let name of existingTypesNames) {
-      // Delete a status
-      this._bimsyncProjectService.DeleteExtensionType(bimsyncBoard.project_id, name)
-        .subscribe(bimsyncType => {
-          console.log(bimsyncType);
-        },
-        error => this.errorMessage = <any>error);
-    }
-  }
-
   Share(project) {
-    this.modal.OpenShareModal(project);
+    this.shareModal.OpenShareModal(project);
+  }
+
+  OpenDetails(project) {
+    this.projectDetailModal.OpenDetailModal(project);
+  }
+
+  OpenCreate(project) {
+    this.createModal.OpenCreateModal(project);
   }
 }
