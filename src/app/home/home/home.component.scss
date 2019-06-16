@@ -1,0 +1,117 @@
+.app-home {
+    overflow-y: auto;
+}
+
+.header-background {
+    background: #3f51b5;
+    overflow: hidden;
+}
+
+.header-section{
+    text-align: center;
+    padding-top: 60px;
+}
+
+.header-headline {
+    color: #fff;
+}
+
+app-home .homepage-row {
+    color: rgba(0,0,0,.54);
+}
+
+.header-headline h1 {
+    font-size: 56px;
+    font-weight: 300;
+    line-height: 56px;
+    margin: 15px 5px;
+}
+
+.header-headline h2 {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 28px;
+    margin: 15px 0 25px;
+}
+
+.header-start, .homepage-bottom-start {
+    text-align: center;
+    margin: 60px 0;
+}
+
+.mat-raised-button {
+    box-sizing: border-box;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    outline: 0;
+    border: none;
+    -webkit-tap-highlight-color: transparent;
+    display: inline-block;
+    white-space: nowrap;
+    text-decoration: none;
+    vertical-align: baseline;
+    text-align: center;
+    margin: 0;
+    min-width: 64px;
+    line-height: 36px;
+    padding: 0 16px;
+    border-radius: 4px;
+    overflow: visible;
+    transform: translate3d(0,0,0);
+    transition: background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1);
+}
+
+.homepage-promo {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+}
+
+.homepage-row {
+    display: flex;
+    max-width: 920px;
+    margin: 60px 0;
+}
+
+.homepage-reverse-row {
+    flex-direction: row-reverse;
+}
+
+.homepage-promo-img {
+    text-align: center;
+}
+
+.homepage-promo-desc {
+    line-height: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.homepage-promo-desc, .homepage-promo-img {
+    width: 50%;
+}
+
+.homepage-promo h2 {
+    font-size: 25px;
+    font-weight: 400;
+    margin: 0 0 16px;
+    padding: 0;
+}
+
+.homepage-promo p {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 28px;
+    margin: 0 0 24px;
+    padding: 0;
+}
+
+.image {
+    vertical-align: middle;
+}
