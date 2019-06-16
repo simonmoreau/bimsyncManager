@@ -1,26 +1,13 @@
 {
-    "compileOnSave": false,
-    "compilerOptions": {
-        "rootDir": "../",
-        "baseUrl": "",
-        "declaration": false,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "outDir": "dist/out-tsc-e2e",
-        "sourceMap": true,
-        "target": "es5",
-        "typeRoots": [
-            "node_modules/@types"
-        ],
-        "types": [
-          "jasmine",
-          "jasminewd2"
-        ]
-    },
-    "exclude": [
-        "node_modules",
-        "dist"
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/e2e",
+    "module": "commonjs",
+    "target": "es5",
+    "types": [
+      "jasmine",
+      "jasminewd2",
+      "node"
     ]
+  }
 }
