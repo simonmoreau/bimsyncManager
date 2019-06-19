@@ -28,4 +28,13 @@ describe('UserComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render the log in button in a <a> tag when no user are logged', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    if (!component.user) {
+      expect(compiled.querySelector('a').textContent).toContain('Log In');
+    } else {
+      expect(compiled.querySelector('a').textContent).toContain('Log In');
+    }
+  });
 });

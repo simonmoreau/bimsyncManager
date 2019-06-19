@@ -1,9 +1,17 @@
-<mat-menu #appMenu="matMenu">
-  <button mat-menu-item>My account</button>
-  <button mat-menu-item>Help</button>
-  <button mat-menu-item>Log out</button>
-</mat-menu>
+<div *ngIf="user">
+  <mat-menu #appMenu="matMenu">
+    <button mat-menu-item>My account</button>
+    <button mat-menu-item>Help</button>
+    <button mat-menu-item>Log out</button>
+  </mat-menu>
 
-<button mat-icon-button [matMenuTriggerFor]="appMenu">
-  <mat-icon>more_vert</mat-icon>
-</button>
+  <button mat-icon-button [matMenuTriggerFor]="appMenu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+</div>
+<div *ngIf="!user">
+  <a mat-flat-button color="accent"
+    href="https://api.bimsync.com/oauth2/authorize?client_id={{clientId}}&response_type=code&state=api&redirect_uri={{callbackUrl}}">
+    Log In
+  </a>
+</div>
