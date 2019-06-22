@@ -10,15 +10,19 @@ import { IUser } from '../../shared/models/user.model';
 export class UserComponent implements OnInit {
 
   user: IUser;
-  // url: string = 'https://bimsyncmanager.firebaseapp.com';
-  url = 'http://localhost:4200';
-  callbackUrl: string = this.url + '/callback';
-    // client_id = '6E63g0C2zVOwlNm';
-  clientId = 'hl94XJLXaQe3ogX';
+  clientId: string;
+  callbackUrl: string;
+
+  private apiUrl = 'https://binsyncfunction-dev.azurewebsites.net/api';
+  // private apiUrl = 'https://binsyncfunction-dev.azurewebsites.net/api';
 
   constructor(private userService: UserService) { }
 
   ngOnInit() {
+
+    this.user = this.userService.user;
+    this.clientId = this.userService.clientId;
+    this.callbackUrl = this.userService.url + '/callback';
   }
 
 }

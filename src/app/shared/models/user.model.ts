@@ -11,8 +11,8 @@ export interface IUser {
     id: number;
     Name: string;
     PowerBISecret: string;
-    bimsyncUser: IUser;
+    AccessToken: IAccessToken;
     RefreshDate?: Date;
     BCFToken: string;
-  }
+}
 
