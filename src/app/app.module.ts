@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserComponent } from './user/user/user.component';
 import { ProjectsComponent } from './projects-list/projects/projects.component';
+import { Page404Component } from './shared/components/page404/page404.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { ProjectsComponent } from './projects-list/projects/projects.component';
     HeaderComponent,
     HomeComponent,
     UserComponent,
-    ProjectsComponent
+    ProjectsComponent,
+    Page404Component
   ],
   imports: [
     BrowserModule,

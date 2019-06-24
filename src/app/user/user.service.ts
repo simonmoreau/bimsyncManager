@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { throwError, Observable } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
+import { throwError, Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IUser } from '../shared/models/user.model';
 
@@ -11,6 +11,7 @@ import { IUser } from '../shared/models/user.model';
 export class UserService {
 
   user: IUser;
+  user$: Observable<IUser>;
 
   // url: string = 'https://bimsyncmanager.firebaseapp.com';
   url = 'http://localhost:4200';
@@ -18,13 +19,54 @@ export class UserService {
   clientId = 'hl94XJLXaQe3ogX';
   callbackUrl: string = this.url + '/callback';
 
-  // private apiUrl = 'https://binsyncfunction-dev.azurewebsites.net/api';
-  private apiUrl = 'https://binsyncfunction-dev.azurewebsites.net/api';
+  // private apiUrl = 'https://bimsyncfunction.azurewebsites.net/api';
+  private apiUrl = 'https://bimsyncfunction-dev.azurewebsites.net/api';
 
   constructor(
     private http: HttpClient,
     private router: Router
-  ) { }
+  ) {
+    // Encode the callbackUrl
+    this.callbackUrl = encodeURIComponent(this.callbackUrl);
+  }
+
+  GetUser(): Observable<IUser> {
+
+    // Check if there is a user in memory
+    if (this.user) {
+      return of(this.user);
+    }
+
+    // Check if there is a user in local storage
+    const storedUser: IUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser != null) {
+      this.user = storedUser;
+      return of(this.user);
+    }
+
+    // if there is no user, go to the home page
+    this.router.navigate(['home']);
+  }
+
+  private RefreshToken(user: IUser): Observable<IUser> {
+    const now = new Date();
+    const refresh = new Date(user.RefreshDate);
+    if (refresh < now) {
+      // We must refresh the token before using the user
+      return this.RefreshTokenRequest(user);
+    } else {
+      return of(user);
+    }
+  }
+
+  private RefreshTokenRequest(user: IUser): Observable<IUser> {
+    return this.http.get<IUser>(
+      this.apiUrl + '/manager/users/' + user.PowerBISecret,
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+      });
+  }
 
   CreateUser(authorizationCode: string) {
     this.createUserRequest(authorizationCode)
@@ -65,7 +107,7 @@ export class UserService {
         // Redirect to the home page
         this.router.navigate(['/projects']);
       },
-      error => console.log(error));
+        error => console.log(error));
   }
 
   private createBCFTokenRequest(authorizationCode: string): Observable<IUser> {
