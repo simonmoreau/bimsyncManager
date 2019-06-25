@@ -20,7 +20,7 @@ export class UserComponent implements OnInit {
 
   ngOnInit() {
 
-    this.user = this.userService.user;
+    this.userService.User.subscribe(u => this.user = u);
     this.clientId = this.userService.clientId;
     this.callbackUrl = this.userService.url + '/callback';
   }

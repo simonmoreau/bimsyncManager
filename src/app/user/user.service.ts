@@ -10,8 +10,8 @@ import { IUser } from '../shared/models/user.model';
 })
 export class UserService {
 
-  user: IUser;
-  user$: Observable<IUser>;
+  private user: IUser;
+  private user$: Observable<IUser>;
 
   // url: string = 'https://bimsyncmanager.firebaseapp.com';
   url = 'http://localhost:4200';
@@ -28,24 +28,28 @@ export class UserService {
   ) {
     // Encode the callbackUrl
     this.callbackUrl = encodeURIComponent(this.callbackUrl);
+    this.user$ = this.getUser();
   }
 
-  GetUser(): Observable<IUser> {
+  get User(): Observable<IUser> {
+    return this.user$;
+  }
+
+  private getUser(): Observable<IUser> {
 
     // Check if there is a user in memory
     if (this.user) {
-      return of(this.user);
+      return this.RefreshToken(this.user);
     }
 
     // Check if there is a user in local storage
     const storedUser: IUser = JSON.parse(localStorage.getItem('user'));
     if (storedUser != null) {
       this.user = storedUser;
-      return of(this.user);
+      return this.RefreshToken(this.user);
     }
 
-    // if there is no user, go to the home page
-    this.router.navigate(['home']);
+    return of(null);
   }
 
   private RefreshToken(user: IUser): Observable<IUser> {

@@ -19,7 +19,7 @@ export class ProjectsComponent implements OnInit {
     this.activatedRoute.url.pipe(first()).subscribe(url => {
       if (url[0].path === 'projects') {
         console.log(url[0].path);
-        console.log(this.userService.user);
+        console.log(this.userService.User);
       } else {
         let state = '';
         let authorizationCode = '';
