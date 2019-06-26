@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UserService } from '../../user/user.service';
 import { first } from 'rxjs/operators';
 
@@ -10,8 +10,12 @@ import { first } from 'rxjs/operators';
 })
 export class ProjectsComponent implements OnInit {
 
+  loading = false;
+  error = '';
+
   constructor(
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private userService: UserService) { }
 
   ngOnInit() {
@@ -19,7 +23,7 @@ export class ProjectsComponent implements OnInit {
     this.activatedRoute.url.pipe(first()).subscribe(url => {
       if (url[0].path === 'projects') {
         console.log(url[0].path);
-        console.log(this.userService.User);
+        console.log(this.userService.currentUserValue);
       } else {
         let state = '';
         let authorizationCode = '';
@@ -30,12 +34,31 @@ export class ProjectsComponent implements OnInit {
         });
 
         // Get the connected user
+        this.loading = true;
         if (state === 'api') {
-          this.userService.CreateUser(authorizationCode);
+          this.userService.Login(authorizationCode)
+          .pipe(first())
+          .subscribe(
+              data => {
+                this.router.navigate(['/projects']);
+              },
+              error => {
+                  this.error = error;
+                  this.loading = false;
+              });
         }
 
         if (state === 'bcf') {
-          this.userService.CreateBCFToken(authorizationCode);
+          this.userService.CreateBCFToken(authorizationCode)
+          .pipe(first())
+          .subscribe(
+              data => {
+                this.router.navigate(['/projects']);
+              },
+              error => {
+                  this.error = error;
+                  this.loading = false;
+              });
         }
       }
 

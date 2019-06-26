@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { throwError, Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { throwError, Observable, of, BehaviorSubject } from 'rxjs';
+import { catchError, tap, map } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IUser } from '../shared/models/user.model';
 
@@ -10,8 +10,8 @@ import { IUser } from '../shared/models/user.model';
 })
 export class UserService {
 
-  private user: IUser;
-  private user$: Observable<IUser>;
+  private currentUserSubject: BehaviorSubject<IUser>;
+  public currentUser: Observable<IUser>;
 
   // url: string = 'https://bimsyncmanager.firebaseapp.com';
   url = 'http://localhost:4200';
@@ -23,65 +23,64 @@ export class UserService {
   private apiUrl = 'https://bimsyncfunction-dev.azurewebsites.net/api';
 
   constructor(
-    private http: HttpClient,
-    private router: Router
+    private http: HttpClient
   ) {
     // Encode the callbackUrl
     this.callbackUrl = encodeURIComponent(this.callbackUrl);
-    this.user$ = this.getUser();
+    this.currentUserSubject = new BehaviorSubject<IUser>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  get User(): Observable<IUser> {
-    return this.user$;
+  public get currentUserValue(): IUser {
+    this.RefreshToken();
+    return this.currentUserSubject.value;
   }
 
-  private getUser(): Observable<IUser> {
 
-    // Check if there is a user in memory
-    if (this.user) {
-      return this.RefreshToken(this.user);
-    }
-
-    // Check if there is a user in local storage
-    const storedUser: IUser = JSON.parse(localStorage.getItem('user'));
-    if (storedUser != null) {
-      this.user = storedUser;
-      return this.RefreshToken(this.user);
-    }
-
-    return of(null);
-  }
-
-  private RefreshToken(user: IUser): Observable<IUser> {
+  private RefreshToken(): Observable<IUser> {
     const now = new Date();
-    const refresh = new Date(user.RefreshDate);
+    const refresh = new Date(this.currentUserSubject.value.RefreshDate);
     if (refresh < now) {
       // We must refresh the token before using the user
-      return this.RefreshTokenRequest(user);
-    } else {
-      return of(user);
+      return this.RefreshTokenRequest()
+        .pipe(map(user => {
+          // login successful if there's a jwt token in the response
+          if (user && user.AccessToken) {
+            // store user details and jwt token in local storage to keep user logged in between page refreshes
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            this.currentUserSubject.next(user);
+          }
+          return user;
+        }));
     }
   }
 
-  private RefreshTokenRequest(user: IUser): Observable<IUser> {
+  private RefreshTokenRequest(): Observable<IUser> {
     return this.http.get<IUser>(
-      this.apiUrl + '/manager/users/' + user.PowerBISecret,
+      this.apiUrl + '/manager/users/' + this.currentUserSubject.value.PowerBISecret,
       {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')
       });
   }
 
-  CreateUser(authorizationCode: string) {
-    this.createUserRequest(authorizationCode)
-      .subscribe(user => {
-        this.user = user;
-        // Save to local storage
-        localStorage.setItem('user', JSON.stringify(user));
-        // Redirect to the home page
-        this.router.navigate(['/projects']);
-      },
-        error => console.log(error));
+  Login(authorizationCode: string): Observable<IUser> {
+    return this.createUserRequest(authorizationCode)
+      .pipe(map(user => {
+        // login successful if there's a jwt token in the response
+        if (user && user.AccessToken) {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          this.currentUserSubject.next(user);
+        }
+        return user;
+      }));
+  }
+
+  Logout() {
+    // remove user from local storage to log user out
+    localStorage.removeItem('currentUser');
+    this.currentUserSubject.next(null);
   }
 
   private createUserRequest(authorizationCode: string): Observable<IUser> {
@@ -102,21 +101,22 @@ export class UserService {
       );
   }
 
-  CreateBCFToken(authorizationCode: string) {
-    this.createBCFTokenRequest(authorizationCode)
-      .subscribe(user => {
-        this.user = user;
-        // Save to local storage
-        localStorage.setItem('user', JSON.stringify(user));
-        // Redirect to the home page
-        this.router.navigate(['/projects']);
-      },
-        error => console.log(error));
+  CreateBCFToken(authorizationCode: string): Observable<IUser> {
+    return this.createBCFTokenRequest(authorizationCode)
+      .pipe(map(user => {
+        // login successful if there's a jwt token in the response
+        if (user && user.BCFToken) {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          this.currentUserSubject.next(user);
+        }
+        return user;
+      }));
   }
 
   private createBCFTokenRequest(authorizationCode: string): Observable<IUser> {
     return this.http.get<IUser>(
-      this.apiUrl + '/manager/users/' + this.user.PowerBISecret + '/bcf',
+      this.apiUrl + '/manager/users/' + this.currentUserSubject.value.PowerBISecret + '/bcf',
       {
         params: new HttpParams().set('code', authorizationCode),
         headers: new HttpHeaders()
