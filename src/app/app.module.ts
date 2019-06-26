@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { MatToolbarModule, MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
+import { MatToolbarModule, MatMenuModule, MatIconModule, MatButtonModule, MatListModule } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,6 +29,7 @@ import { Page404Component } from './shared/components/page404/page404.component'
     MatToolbarModule,
     MatMenuModule,
     MatIconModule,
+    MatListModule,
     MatButtonModule,
     HttpClientModule
   ],

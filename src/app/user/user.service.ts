@@ -27,7 +27,9 @@ export class UserService {
   ) {
     // Encode the callbackUrl
     this.callbackUrl = encodeURIComponent(this.callbackUrl);
-    this.currentUserSubject = new BehaviorSubject<IUser>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUserSubject = new BehaviorSubject<IUser>(
+      JSON.parse(localStorage.getItem('currentUser'))
+      );
     this.currentUser = this.currentUserSubject.asObservable();
   }
 

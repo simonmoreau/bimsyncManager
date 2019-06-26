@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UserService } from '../../user/user.service';
 import { first } from 'rxjs/operators';
+import { IProject } from 'src/app/shared/models/bimsync.model';
 
 @Component({
   selector: 'app-projects',
@@ -12,6 +13,8 @@ export class ProjectsComponent implements OnInit {
 
   loading = false;
   error = '';
+  projects: IProject[];
+  favorites: IProject[];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -22,8 +25,7 @@ export class ProjectsComponent implements OnInit {
 
     this.activatedRoute.url.pipe(first()).subscribe(url => {
       if (url[0].path === 'projects') {
-        console.log(url[0].path);
-        console.log(this.userService.currentUserValue);
+
       } else {
         let state = '';
         let authorizationCode = '';
