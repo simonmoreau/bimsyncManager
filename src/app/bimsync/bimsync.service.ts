@@ -19,11 +19,11 @@ export class BimsyncService {
   constructor(
     private http: HttpClient) { }
 
-    getProjects(): Observable<IProject[]> {
-      return this.http.get<IProject[]>(
-        this.apiUrl + 'projects?pageSize=1000',
-        {
-            headers: new HttpHeaders().set('Content-Type', 'application/json')
-        });
+  getProjects(): Observable<IProject[]> {
+    return this.http.get<IProject[]>(
+      this.apiUrl + 'projects?pageSize=1000',
+      {
+        headers: new HttpHeaders().set('Content-Type', 'application/json')
+      });
   }
 }
