@@ -3,29 +3,105 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor,
+  HttpErrorResponse
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+
+import { Observable, BehaviorSubject } from 'rxjs';
+import { filter, take, switchMap, catchError, finalize } from 'rxjs/operators';
+
 import { UserService } from 'src/app/user/user.service';
+import { IUser } from '../models/user.model';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class InterceptorService implements HttpInterceptor {
 
-  constructor(public userService: UserService) {}
+  isRefreshingToken = false;
+  userSubject: BehaviorSubject<IUser> = new BehaviorSubject<IUser>(null);
+
+  constructor(
+    private userService: UserService,
+    private router: Router) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    request = this.addToken(request, this.userService.currentUserValue);
+    return next.handle(request).pipe(
+      catchError(error => {
+        if (error instanceof HttpErrorResponse) {
+          switch ((error as HttpErrorResponse).status) {
+            case 401:
+              return this.handle401Error(request, next);
+            default:
+              return this.handleError(request, next);
+          }
+        } else {
+          return Observable.throw(error);
+        }
+      })
+    );
+  }
 
+  addToken(request: HttpRequest<any>, user: IUser): HttpRequest<any> {
     if (request.url.match(/api.bimsync.com\//)) {
-      request = request.clone({
+      return request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${this.userService.currentUserValue.AccessToken.access_token}`
+          Authorization: `Bearer ${user.AccessToken.access_token}`
         }
       });
     }
+  }
 
+  handleError(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return this.logoutUser();
+  }
 
-    return next.handle(request);
+  handle401Error(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (!this.isRefreshingToken) {
+      this.isRefreshingToken = true;
+
+      // Reset here so that the following requests wait until the token
+      // comes back from the refreshToken call.
+      this.userSubject.next(null);
+
+      return this.userService.refreshToken().pipe(
+        switchMap((newUser: IUser) => {
+          if (newUser) {
+            this.userSubject.next(newUser);
+            return next.handle(this.addToken(request, newUser));
+          }
+
+          // If we don't get a new token, we are in trouble so logout.
+          return this.logoutUser();
+        }),
+        catchError(error => {
+          // If there is an exception calling 'refreshToken', bad news so logout.
+          return this.logoutUser();
+        }),
+        finalize(() => {
+          this.isRefreshingToken = false;
+        })
+      );
+    } else {
+      return this.userSubject.pipe(
+        filter(token => token != null),
+        take(1),
+        switchMap(token => {
+          return next.handle(this.addToken(request, token));
+        })
+      );
+    }
+  }
+
+  logoutUser() {
+    // Route to the login page (implementation up to you)
+    this.userService.Logout();
+    this.router.navigate(['/home']);
+
+    return Observable.throw('');
   }
 }

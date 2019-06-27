@@ -3,6 +3,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UserService } from '../../user/user.service';
 import { first } from 'rxjs/operators';
 import { IProject } from 'src/app/shared/models/bimsync.model';
+import { BimsyncService } from 'src/app/bimsync/bimsync.service';
 
 @Component({
   selector: 'app-projects',
@@ -19,10 +20,18 @@ export class ProjectsComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private userService: UserService) { }
+    private userService: UserService,
+    private bimsyncService: BimsyncService) { }
 
   ngOnInit() {
 
+    this.createUser();
+    this.bimsyncService.getProjects().subscribe(
+      p => this.projects = p
+    );
+  }
+
+  createUser() {
     this.activatedRoute.url.pipe(first()).subscribe(url => {
       if (url[0].path === 'projects') {
 
@@ -39,35 +48,32 @@ export class ProjectsComponent implements OnInit {
         this.loading = true;
         if (state === 'api') {
           this.userService.Login(authorizationCode)
-          .pipe(first())
-          .subscribe(
+            .pipe(first())
+            .subscribe(
               data => {
                 this.router.navigate(['/projects']);
               },
               error => {
-                  this.error = error;
-                  this.loading = false;
+                this.error = error;
+                this.loading = false;
               });
         }
 
         if (state === 'bcf') {
           this.userService.CreateBCFToken(authorizationCode)
-          .pipe(first())
-          .subscribe(
+            .pipe(first())
+            .subscribe(
               data => {
                 this.router.navigate(['/projects']);
               },
               error => {
-                  this.error = error;
-                  this.loading = false;
+                this.error = error;
+                this.loading = false;
               });
         }
       }
 
     });
-
-
-
   }
 
 }

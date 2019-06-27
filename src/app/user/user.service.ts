@@ -34,12 +34,12 @@ export class UserService {
   }
 
   public get currentUserValue(): IUser {
-    this.RefreshToken();
+    this.refreshToken();
     return this.currentUserSubject.value;
   }
 
 
-  private RefreshToken(): Observable<IUser> {
+  public refreshToken(): Observable<IUser> {
     const now = new Date();
     const refresh = new Date(this.currentUserSubject.value.RefreshDate);
     if (refresh < now) {
