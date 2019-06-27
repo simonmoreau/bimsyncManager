@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+
 import { throwError, Observable, of, BehaviorSubject } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IUser } from '../shared/models/user.model';
 
 @Injectable({
@@ -29,32 +30,28 @@ export class UserService {
     this.callbackUrl = encodeURIComponent(this.callbackUrl);
     this.currentUserSubject = new BehaviorSubject<IUser>(
       JSON.parse(localStorage.getItem('currentUser'))
-      );
+    );
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
   public get currentUserValue(): IUser {
-    this.refreshToken();
     return this.currentUserSubject.value;
   }
 
 
   public refreshToken(): Observable<IUser> {
-    const now = new Date();
-    const refresh = new Date(this.currentUserSubject.value.RefreshDate);
-    if (refresh < now) {
-      // We must refresh the token before using the user
-      return this.RefreshTokenRequest()
-        .pipe(map(user => {
-          // login successful if there's a jwt token in the response
-          if (user && user.AccessToken) {
-            // store user details and jwt token in local storage to keep user logged in between page refreshes
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            this.currentUserSubject.next(user);
-          }
-          return user;
-        }));
-    }
+
+    // We must refresh the token before using the user
+    return this.RefreshTokenRequest()
+      .pipe(map(user => {
+        // login successful if there's a jwt token in the response
+        if (user && user.AccessToken) {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          this.currentUserSubject.next(user);
+        }
+        return user;
+      }));
   }
 
   private RefreshTokenRequest(): Observable<IUser> {
@@ -64,6 +61,26 @@ export class UserService {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')
       });
+  }
+
+  CreateUser(activatedRoute: ActivatedRoute): void {
+
+    let state = '';
+    let authorizationCode = '';
+    // subscribe to router event and retrive the callback code
+    activatedRoute.queryParams.subscribe((params: Params) => {
+      authorizationCode = params.code;
+      state = params.state;
+    });
+
+    // Get the connected user
+    if (state === 'api') {
+      this.Login(authorizationCode);
+    }
+
+    if (state === 'bcf') {
+      this.CreateBCFToken(authorizationCode);
+    }
   }
 
   Login(authorizationCode: string): Observable<IUser> {

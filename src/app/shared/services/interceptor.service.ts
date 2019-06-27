@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { filter, take, switchMap, catchError, finalize } from 'rxjs/operators';
 
 import { UserService } from 'src/app/user/user.service';
@@ -29,35 +29,40 @@ export class InterceptorService implements HttpInterceptor {
     private router: Router) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    request = this.addToken(request, this.userService.currentUserValue);
-    return next.handle(request).pipe(
-      catchError(error => {
-        if (error instanceof HttpErrorResponse) {
-          switch ((error as HttpErrorResponse).status) {
-            case 401:
-              return this.handle401Error(request, next);
-            default:
-              return this.handleError(request, next);
+
+    if (request.url.match(/api.bimsync.com\//)) {
+
+      request = this.addToken(request, this.userService.currentUserValue);
+
+      return next.handle(request).pipe(
+        catchError(error => {
+          if (error instanceof HttpErrorResponse) {
+            switch ((error as HttpErrorResponse).status) {
+              case 401:
+                return this.handle401Error(request, next);
+              default:
+                return this.handleError(request, next);
+            }
+          } else {
+            return Observable.throw(error);
           }
-        } else {
-          return Observable.throw(error);
-        }
-      })
-    );
+        })
+      );
+    }
+
   }
 
   addToken(request: HttpRequest<any>, user: IUser): HttpRequest<any> {
-    if (request.url.match(/api.bimsync.com\//)) {
-      return request = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${user.AccessToken.access_token}`
-        }
-      });
-    }
+
+    return request = request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${user.AccessToken.access_token}`
+      }
+    });
   }
 
   handleError(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return this.logoutUser();
+    return this.logoutUser('aie');
   }
 
   handle401Error(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -76,11 +81,11 @@ export class InterceptorService implements HttpInterceptor {
           }
 
           // If we don't get a new token, we are in trouble so logout.
-          return this.logoutUser();
+          return this.logoutUser('ouch');
         }),
         catchError(error => {
           // If there is an exception calling 'refreshToken', bad news so logout.
-          return this.logoutUser();
+          return this.logoutUser(error);
         }),
         finalize(() => {
           this.isRefreshingToken = false;
@@ -97,11 +102,12 @@ export class InterceptorService implements HttpInterceptor {
     }
   }
 
-  logoutUser() {
+  logoutUser(error: any) {
     // Route to the login page (implementation up to you)
-    this.userService.Logout();
-    this.router.navigate(['/home']);
+    // this.userService.Logout();
+    // this.router.navigate(['/home']);
 
-    return Observable.throw('');
+    return of(error);
+
   }
 }
