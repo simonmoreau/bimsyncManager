@@ -29,18 +29,43 @@ export class ProjectsComponent implements OnInit {
 
     this.createUser();
 
-    this.bimsyncService.getProjects().subscribe(
-      p => this.projects = p
-    );
   }
 
   createUser() {
     this.activatedRoute.url.pipe(first()).subscribe(
       url => {
         if (url[0].path !== 'projects') {
-          this.userService.CreateUser(this.activatedRoute);
+          this.ProcessCallback(this.activatedRoute).subscribe(
+            user => {
+              this.router.navigate(['/projects']);
+            }
+          );
+        } else {
+          this.bimsyncService.getProjects().subscribe(
+            p => this.projects = p
+          );
         }
       }
     );
+  }
+
+  ProcessCallback(activatedRoute: ActivatedRoute): Observable<IUser> {
+
+    let state = '';
+    let authorizationCode = '';
+    // subscribe to router event and retrive the callback code
+    activatedRoute.queryParams.subscribe((params: Params) => {
+      authorizationCode = params.code;
+      state = params.state;
+    });
+
+    // Get the connected user
+    if (state === 'api') {
+      return this.userService.Login(authorizationCode);
+    }
+
+    if (state === 'bcf') {
+      return this.userService.CreateBCFToken(authorizationCode);
+    }
   }
 }

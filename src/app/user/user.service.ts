@@ -63,26 +63,6 @@ export class UserService {
       });
   }
 
-  CreateUser(activatedRoute: ActivatedRoute): void {
-
-    let state = '';
-    let authorizationCode = '';
-    // subscribe to router event and retrive the callback code
-    activatedRoute.queryParams.subscribe((params: Params) => {
-      authorizationCode = params.code;
-      state = params.state;
-    });
-
-    // Get the connected user
-    if (state === 'api') {
-      this.Login(authorizationCode);
-    }
-
-    if (state === 'bcf') {
-      this.CreateBCFToken(authorizationCode);
-    }
-  }
-
   Login(authorizationCode: string): Observable<IUser> {
     return this.createUserRequest(authorizationCode)
       .pipe(map(user => {
@@ -114,10 +94,7 @@ export class UserService {
       {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/json')
-      }).pipe(
-        tap(data => console.log('All: ' + JSON.stringify(data))),
-        catchError(this.handleError)
-      );
+      });
   }
 
   CreateBCFToken(authorizationCode: string): Observable<IUser> {
@@ -140,25 +117,7 @@ export class UserService {
         params: new HttpParams().set('code', authorizationCode),
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')
-      }).pipe(
-        tap(data => console.log('All: ' + JSON.stringify(data))),
-        catchError(this.handleError)
-      );
+      });
   }
 
-  private handleError(err: HttpErrorResponse) {
-    // in a real world app, we may send the server to some remote logging infrastructure
-    // instead of just logging it to the console
-    let errorMessage = '';
-    if (err.error instanceof Error) {
-      // A client-side or network error occurred. Handle it accordingly.
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
-    }
-    console.log(errorMessage);
-    return throwError(errorMessage);
-  }
 }

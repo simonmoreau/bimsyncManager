@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of, throwError } from 'rxjs';
 import { filter, take, switchMap, catchError, finalize } from 'rxjs/operators';
 
 import { UserService } from 'src/app/user/user.service';
@@ -37,17 +37,21 @@ export class InterceptorService implements HttpInterceptor {
       return next.handle(request).pipe(
         catchError(error => {
           if (error instanceof HttpErrorResponse) {
-            switch ((error as HttpErrorResponse).status) {
+            const err: HttpErrorResponse = error as HttpErrorResponse;
+            switch (err.status) {
               case 401:
                 return this.handle401Error(request, next);
               default:
-                return this.handleError(request, next);
+                console.log(error);
+                return this.handleError(request, next, err);
             }
           } else {
             return Observable.throw(error);
           }
         })
       );
+    } else {
+      return next.handle(request);
     }
 
   }
@@ -61,8 +65,23 @@ export class InterceptorService implements HttpInterceptor {
     });
   }
 
-  handleError(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return this.logoutUser('aie');
+  private handleError(request: HttpRequest<any>, next: HttpHandler, err: HttpErrorResponse): Observable<HttpEvent<any>> {
+
+    // return this.logoutUser('aie');
+
+        // in a real world app, we may send the server to some remote logging infrastructure
+    // instead of just logging it to the console
+    let errorMessage = '';
+    if (err.error instanceof Error) {
+      // A client-side or network error occurred. Handle it accordingly.
+      errorMessage = `An error occurred: ${err.error.message}`;
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
+    }
+    console.log(errorMessage);
+    return throwError(errorMessage);
   }
 
   handle401Error(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
