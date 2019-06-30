@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
-import { Observable, empty, of } from 'rxjs';
-import { mergeMap, tap, catchError, map, expand, concatMap } from 'rxjs/operators';
+import { Observable, empty, of, from, concat } from 'rxjs';
+import { mergeMap, tap, catchError, map, expand, concatMap, toArray, first } from 'rxjs/operators';
 
 import { IProject } from '../shared/models/bimsync.model';
 import { UserService } from '../user/user.service';
@@ -20,29 +20,35 @@ export class BimsyncService {
     private http: HttpClient) { }
 
   getProjects(): Observable<IProject[]> {
-    return this.get(this.apiUrl + 'projects?pageSize=100').pipe(
-      map(response => response.body)
+    return this.gets<IProject>(this.apiUrl + 'projects?pageSize=100');
+  }
+
+  getProject(id: string): Observable<IProject> {
+    return this.gets<IProject>(this.apiUrl + `projects/${id}`)[0];
+  }
+
+  private gets<T>(url: string): Observable<T[]> {
+    return this.get(url).pipe(
+      expand(({ next }) => next ? this.get(next) : empty()),
+      concatMap(({ content }) => content as T[]),
+      toArray(),
     );
   }
 
-  private get(url: string): Observable<HttpResponse<any>> {
+  private get<T>(url: string): Observable<{
+    content: T[],
+    next: string | null
+  }> {
     return this.http.get<any>(
       url,
       {
         headers: new HttpHeaders().set('Content-Type', 'application/json'),
         observe: 'response'
       }).pipe(
-        expand(response => {
-          const next = this.next(response);
-          if (next) {
-            return this.get(next);
-          } else {
-            return empty();
-          }
-        }),
-        concatMap(response => {
-          return of(response);
-        })
+        map(response => ({
+          content: response.body,
+          next: this.next(response)
+        }))
       );
   }
 
