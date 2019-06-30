@@ -1,18 +1,24 @@
-<mat-list>
-  <div *ngIf="favorites">
-      <h3 mat-subheader>Favorites</h3>
-      <mat-list-item *ngFor="let favorite of favorites">
-        <mat-icon mat-list-icon>star</mat-icon>
-        <h4 mat-line>{{favorite.name}}</h4>
-        <p mat-line> {{favorite.updatedAt | date}} </p>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-  </div>
-
-  <h3 mat-subheader>Projects</h3>
-  <mat-list-item *ngFor="let project of projects">
-    <mat-icon mat-list-icon>star_border</mat-icon>
-    <h4 mat-line>{{project.name}}</h4>
-    <p mat-line> {{project.updatedAt | date}} </p>
-  </mat-list-item>
-</mat-list>
+<div class="flex-container">
+    <div *ngIf="loading" class="spinner">
+        <mat-spinner></mat-spinner>
+    </div>
+    <div *ngIf="!loading" class="content">
+      <mat-list>
+        <div *ngIf="favorites">
+          <h3 mat-subheader>Favorites</h3>
+          <mat-list-item *ngFor="let favorite of favorites">
+            <mat-icon mat-list-icon>star</mat-icon>
+            <h4 mat-line>{{favorite.name}}</h4>
+            <p mat-line> {{favorite.updatedAt | date}} </p>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        </div>
+        <h3 mat-subheader>Projects</h3>
+        <mat-list-item *ngFor="let project of projects">
+          <mat-icon mat-list-icon>star_border</mat-icon>
+          <h4 mat-line>{{project.name}}</h4>
+          <p mat-line> {{project.updatedAt | date}} </p>
+        </mat-list-item>
+      </mat-list>
+    </div>
+</div>

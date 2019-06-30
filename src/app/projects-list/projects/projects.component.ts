@@ -27,11 +27,7 @@ export class ProjectsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.createUser();
-
-  }
-
-  createUser() {
+    this.loading = true;
     this.activatedRoute.url.pipe(first()).subscribe(
       url => {
         if (url[0].path !== 'projects') {
@@ -42,11 +38,14 @@ export class ProjectsComponent implements OnInit {
           );
         } else {
           this.bimsyncService.getProjects().subscribe(
-            p => this.projects = p
+            p => this.projects = p,
+            null,
+            () => this.loading = false
           );
         }
       }
     );
+
   }
 
   ProcessCallback(activatedRoute: ActivatedRoute): Observable<IUser> {
