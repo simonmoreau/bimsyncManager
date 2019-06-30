@@ -9,7 +9,8 @@ import {
   MatIconModule,
   MatButtonModule,
   MatListModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatCardModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -20,6 +21,7 @@ import { UserComponent } from './user/user/user.component';
 import { ProjectsComponent } from './projects-list/projects/projects.component';
 import { Page404Component } from './shared/components/page404/page404.component';
 import { InterceptorService } from './shared/services/interceptor.service';
+import { ProjectComponent } from './projects-list/project/project.component';
 
 
 @NgModule({
@@ -29,7 +31,8 @@ import { InterceptorService } from './shared/services/interceptor.service';
     HomeComponent,
     UserComponent,
     ProjectsComponent,
-    Page404Component
+    Page404Component,
+    ProjectComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +44,7 @@ import { InterceptorService } from './shared/services/interceptor.service';
     MatListModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    MatCardModule,
     HttpClientModule
   ],
   providers: [

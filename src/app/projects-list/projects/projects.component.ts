@@ -38,7 +38,10 @@ export class ProjectsComponent implements OnInit {
           );
         } else {
           this.bimsyncService.getProjects().subscribe(
-            p => this.projects = p,
+            p => {
+              this.projects = p;
+              this.favorites =  [p[0], p[1], p[2]];
+            },
             null,
             () => this.loading = false
           );

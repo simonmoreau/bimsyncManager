@@ -1,0 +1,10 @@
+<mat-list-item>
+  <button mat-icon-button mat-list-icon (click)="remove($event)">
+    <mat-icon style="vertical-align: super;">star</mat-icon>
+  </button>
+  <h4 mat-line>{{project.name}}</h4>
+  <p mat-line> {{project.updatedAt | date}} </p>
+  <button mat-icon-button (click)="open($event)">
+    <mat-icon>info</mat-icon>
+  </button>
+</mat-list-item>
