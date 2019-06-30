@@ -7,6 +7,7 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
 import { HomeComponent } from 'src/app/home/home/home.component';
 import { ProjectsComponent } from 'src/app/projects-list/projects/projects.component';
 import { Page404Component } from 'src/app/shared/components/page404/page404.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('UserComponent', () => {
   let component: UserComponent;
@@ -21,7 +22,8 @@ describe('UserComponent', () => {
         MatButtonModule,
         HttpClientModule,
         AppRoutingModule
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   }));

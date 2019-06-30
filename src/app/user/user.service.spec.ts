@@ -6,6 +6,7 @@ import { AppRoutingModule } from '../app-routing.module';
 import { ProjectsComponent } from '../projects-list/projects/projects.component';
 import { HomeComponent } from '../home/home/home.component';
 import { Page404Component } from '../shared/components/page404/page404.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('UserService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -13,7 +14,8 @@ describe('UserService', () => {
     imports: [
       HttpClientModule,
       AppRoutingModule
-    ]
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
   }));
 
   it('should be created', () => {
