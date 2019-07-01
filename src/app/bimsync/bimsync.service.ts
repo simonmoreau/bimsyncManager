@@ -20,22 +20,24 @@ export class BimsyncService {
     private http: HttpClient) { }
 
   getProjects(): Observable<IProject[]> {
-    return this.gets<IProject>(this.apiUrl + 'projects?pageSize=100');
+    return this.getsPaginated<IProject>(this.apiUrl + 'projects?pageSize=100');
   }
 
   getProject(id: string): Observable<IProject> {
-    return this.gets<IProject>(this.apiUrl + `projects/${id}`)[0];
+    return this.getPaginated<IProject>(this.apiUrl + `projects/${id}`).pipe(
+      map(value => value.content[0])
+    );
   }
 
-  private gets<T>(url: string): Observable<T[]> {
-    return this.get(url).pipe(
-      expand(({ next }) => next ? this.get(next) : empty()),
+  private getsPaginated<T>(url: string): Observable<T[]> {
+    return this.getPaginated(url).pipe(
+      expand(({ next }) => next ? this.getPaginated(next) : empty()),
       concatMap(({ content }) => content as T[]),
       toArray(),
     );
   }
 
-  private get<T>(url: string): Observable<{
+  private getPaginated<T>(url: string): Observable<{
     content: T[],
     next: string | null
   }> {

@@ -1,15 +1,14 @@
 <div>
-  <div *ngIf="loading" class="spinner flex-container"> 
+  <div *ngIf="loading" class="spinner flex-container">
     <mat-spinner></mat-spinner>
   </div>
   <div *ngIf="!loading" class="content">
-
-      <mat-list>
-          <h3 mat-subheader>Favorites</h3>
-          <app-project *ngFor="let favorite of favorites" [project]="favorite" ></app-project>
-          <mat-divider></mat-divider>
-          <h3 mat-subheader>Projects</h3>
-          <app-project *ngFor="let project of projects" [project]="project" ></app-project>
-        </mat-list>
+    <mat-nav-list>
+      <h3 mat-subheader>Favorites</h3>
+      <app-project *ngFor="let favorite of favorites" [project]="favorite"></app-project>
+      <mat-divider></mat-divider>
+      <h3 mat-subheader>Projects</h3>
+      <app-project *ngFor="let project of projects" [project]="project"></app-project>
+    </mat-nav-list>
   </div>
 </div>

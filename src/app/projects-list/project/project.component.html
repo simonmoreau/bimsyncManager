@@ -1,10 +1,14 @@
 <mat-list-item>
-  <button mat-icon-button mat-list-icon (click)="remove($event)">
+
+  <button mat-icon-button mat-list-icon (click)="favorite($event)">
     <mat-icon style="vertical-align: super;">star</mat-icon>
   </button>
-  <h4 mat-line>{{project.name}}</h4>
+  <a matLine href="#" [routerLink]="['/takeoff', project.id]" routerLinkActive="active">
+    {{project.name}}
+  </a>
   <p mat-line> {{project.updatedAt | date}} </p>
-  <button mat-icon-button (click)="open($event)">
-    <mat-icon>info</mat-icon>
-  </button>
+  <a mat-icon-button matTooltip="Open in Bimsync" matTooltipPosition="left"
+    href="https://bimsync.com/project/{{project.id}}">
+    <mat-icon>launch</mat-icon>
+  </a>
 </mat-list-item>

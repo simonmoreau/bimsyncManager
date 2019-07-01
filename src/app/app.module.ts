@@ -10,7 +10,8 @@ import {
   MatButtonModule,
   MatListModule,
   MatProgressSpinnerModule,
-  MatCardModule
+  MatCardModule,
+  MatTooltipModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -22,6 +23,7 @@ import { ProjectsComponent } from './projects-list/projects/projects.component';
 import { Page404Component } from './shared/components/page404/page404.component';
 import { InterceptorService } from './shared/services/interceptor.service';
 import { ProjectComponent } from './projects-list/project/project.component';
+import { TakeoffComponent } from './takeoff/takeoff/takeoff.component';
 
 
 @NgModule({
@@ -32,7 +34,8 @@ import { ProjectComponent } from './projects-list/project/project.component';
     UserComponent,
     ProjectsComponent,
     Page404Component,
-    ProjectComponent
+    ProjectComponent,
+    TakeoffComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +48,7 @@ import { ProjectComponent } from './projects-list/project/project.component';
     MatButtonModule,
     MatProgressSpinnerModule,
     MatCardModule,
+    MatTooltipModule,
     HttpClientModule
   ],
   providers: [

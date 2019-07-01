@@ -23,12 +23,12 @@ export class ProjectComponent implements OnInit {
     alert('test');
   }
 
-  remove(event: Event) {
+  favorite(event: Event) {
     event.preventDefault();
     // EDIT: Looks like you also have to include Event#stopImmediatePropogation as well
     event.stopImmediatePropagation();
     // ...
-    alert('remove');
+    alert('favorite');
   }
 
 }
