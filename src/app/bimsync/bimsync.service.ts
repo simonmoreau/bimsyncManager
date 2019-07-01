@@ -20,12 +20,19 @@ export class BimsyncService {
     private http: HttpClient) { }
 
   getProjects(): Observable<IProject[]> {
-    return this.getsPaginated<IProject>(this.apiUrl + 'projects?pageSize=100');
+    return this.getsPaginated<IProject>(this.apiUrl + 'projects');
   }
 
   getProject(id: string): Observable<IProject> {
-    return this.getPaginated<IProject>(this.apiUrl + `projects/${id}`).pipe(
-      map(value => value.content[0])
+    return this.get<IProject>(this.apiUrl + `projects/${id}`);
+  }
+
+  private get<T>(url: string): Observable<T> {
+    return this.http.get<T>(
+      url,
+      {
+        headers: new HttpHeaders().set('Content-Type', 'application/json')
+      }
     );
   }
 

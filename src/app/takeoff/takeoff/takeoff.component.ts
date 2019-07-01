@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { IProject } from 'src/app/shared/models/bimsync.model';
 import { ActivatedRoute } from '@angular/router';
 import { BimsyncService } from 'src/app/bimsync/bimsync.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-takeoff',
@@ -10,7 +11,7 @@ import { BimsyncService } from 'src/app/bimsync/bimsync.service';
 })
 export class TakeoffComponent implements OnInit {
 
-  private project: IProject;
+  private project$: Observable<IProject>;
 
   constructor(
     private route: ActivatedRoute,
@@ -19,8 +20,6 @@ export class TakeoffComponent implements OnInit {
 
   ngOnInit() {
         const projectId = this.route.snapshot.paramMap.get('id');
-        this.bimsyncService.getProject(projectId).subscribe(
-          p => this.project = p
-        );
+        this.project$ = this.bimsyncService.getProject(projectId);
   }
 }

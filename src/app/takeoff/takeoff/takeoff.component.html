@@ -1,3 +1,6 @@
 <p>
-  takeoff works! {{project.name}}
+  takeoff works!
+</p>
+<p>
+  {{(project$ | async)?.name }}
 </p>
