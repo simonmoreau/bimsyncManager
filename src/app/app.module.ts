@@ -24,6 +24,7 @@ import { Page404Component } from './shared/components/page404/page404.component'
 import { InterceptorService } from './shared/services/interceptor.service';
 import { ProjectComponent } from './projects-list/project/project.component';
 import { TakeoffComponent } from './takeoff/takeoff/takeoff.component';
+import { BimsyncViewerComponent } from './bimsync/bimsync-viewer/bimsync-viewer.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { TakeoffComponent } from './takeoff/takeoff/takeoff.component';
     ProjectsComponent,
     Page404Component,
     ProjectComponent,
-    TakeoffComponent
+    TakeoffComponent,
+    BimsyncViewerComponent
   ],
   imports: [
     BrowserModule,
