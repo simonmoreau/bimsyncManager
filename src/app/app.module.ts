@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
+import * as $ from 'jquery';
+
 import {
   MatToolbarModule,
   MatMenuModule,
@@ -26,6 +28,8 @@ import { ProjectComponent } from './projects-list/project/project.component';
 import { TakeoffComponent } from './takeoff/takeoff/takeoff.component';
 import { BimsyncViewerComponent } from './bimsync/bimsync-viewer/bimsync-viewer.component';
 
+declare var window: any;
+window.$ = window.jQuery = $;
 
 @NgModule({
   declarations: [

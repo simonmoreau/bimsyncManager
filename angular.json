@@ -31,7 +31,11 @@
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
-            "scripts": ["./node_modules/jquery/dist/jquery.min.js"]
+            "scripts": [
+              "./node_modules/jquery/dist/jquery.min.js",
+              "./scripts/viewer.js",
+              "./scripts/viewer2d.js"
+            ]
           },
           "configurations": {
             "production": {
