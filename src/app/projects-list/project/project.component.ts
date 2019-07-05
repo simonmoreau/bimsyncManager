@@ -20,7 +20,7 @@ export class ProjectComponent implements OnInit {
     // EDIT: Looks like you also have to include Event#stopImmediatePropogation as well
     event.stopImmediatePropagation();
     // ...
-    alert('test');
+    alert('open');
   }
 
   favorite(event: Event) {

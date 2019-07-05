@@ -19,10 +19,10 @@ export class BimsyncViewerComponent implements OnInit {
 
   ViewModel() {
 
-    const projectId = '41384f17491b4c7a8edfc177993e9cbd';
+    const projectId = 'e43d8c79d1c6409eb3dd871170b4d6b0';
     const baseUrl = 'https://api.bimsync.com/v2/projects/' + projectId + '/viewer3d/data?token=';
 
-    const viewerToken = 'e943f2fa7b5a4bfdae23c7f0746a10ba';
+    const viewerToken = '60d8a1992870406b9d3f47e57956e984';
     const viewer3dUrl = baseUrl + viewerToken;
 
     this.EnableViewer(viewer3dUrl);

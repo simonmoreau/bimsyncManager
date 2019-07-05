@@ -32,11 +32,9 @@ export class ProjectsComponent implements OnInit {
     this.activatedRoute.url.pipe(first()).subscribe(
       url => {
         if (url[0].path !== 'projects') {
-          this.ProcessCallback(this.activatedRoute).subscribe(
-            user => {
-              this.router.navigate(['/projects']);
-            }
-          );
+          this.ProcessCallback(this.activatedRoute).subscribe({
+            next: user => this.router.navigate(['/projects'])
+          });
         } else {
           this.bimsyncService.getProjects().subscribe({
             next: p => {
