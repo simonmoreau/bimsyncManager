@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-panel',
@@ -7,15 +7,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PanelComponent implements OnInit {
 
-  constructor() { }
+  constructor(public elementRef: ElementRef) { }
 
   collapsed = false;
+
+  /** Whether the panel is left oriented. */
+  readonly isLeftOriented: boolean = this._hasHostAttributes('left');
 
   ngOnInit() {
   }
 
   collapse() {
     this.collapsed = !this.collapsed;
+  }
+
+  /** Gets whether the panel has one of the given attributes. */
+  _hasHostAttributes(...attributes: string[]) {
+    return attributes.some(attribute => this._getHostElement().hasAttribute(attribute));
+  }
+
+  _getHostElement() {
+    return this.elementRef.nativeElement;
   }
 
 }
