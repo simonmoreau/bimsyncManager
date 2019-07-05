@@ -1,12 +1,23 @@
-<p>
-  takeoff works!
-</p>
-<p>
-  {{(project$ | async)?.name }}
-</p>
-
 <app-bimsync-viewer class="viewer"></app-bimsync-viewer>
 
-<p>
-    takeoff works!
-  </p>
+
+<div class="flexbox">
+
+  <div class="panel side-panel" style="background: blue" *ngIf="visible">
+    <p>
+      takeoff works!
+    </p>
+    <p>
+      {{(project$ | async)?.name }}
+    </p>
+  </div>
+  <div class="panel bottom-panel" style="background: green">
+    <p> test</p>
+
+  </div>
+  <div class="panel side-panel" style="background: aqua">
+    <button mat-button (click)="view()">Click me!</button>
+    <p> test</p>
+  </div>
+
+</div>

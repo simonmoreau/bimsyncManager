@@ -18,8 +18,14 @@ export class TakeoffComponent implements OnInit {
     private bimsyncService: BimsyncService
   ) { }
 
+  visible = true;
+
   ngOnInit() {
         const projectId = this.route.snapshot.paramMap.get('id');
         this.project$ = this.bimsyncService.getProject(projectId);
+  }
+
+  view() {
+    this.visible = !this.visible;
   }
 }
