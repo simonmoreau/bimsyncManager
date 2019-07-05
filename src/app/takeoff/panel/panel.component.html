@@ -1,0 +1,18 @@
+<div class="panel mat-elevation-z6" *ngIf="!collapsed">
+  <div class="header">
+    <h4>Panel Title</h4>
+    <button mat-icon-button aria-label="Example icon-button with a heart icon" (click)="collapse()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div>
+    panel works! Place the content here!
+  </div>
+</div>
+<div class="panel mat-elevation-z6" *ngIf="collapsed">
+  <div class="collapsed-header">
+    <button mat-icon-button aria-label="Example icon-button with a heart icon" (click)="collapse()">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+</div>

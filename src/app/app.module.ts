@@ -27,6 +27,7 @@ import { InterceptorService } from './shared/services/interceptor.service';
 import { ProjectComponent } from './projects-list/project/project.component';
 import { TakeoffComponent } from './takeoff/takeoff/takeoff.component';
 import { BimsyncViewerComponent } from './bimsync/bimsync-viewer/bimsync-viewer.component';
+import { PanelComponent } from './takeoff/panel/panel.component';
 
 declare var window: any;
 window.$ = window.jQuery = $;
@@ -41,7 +42,8 @@ window.$ = window.jQuery = $;
     Page404Component,
     ProjectComponent,
     TakeoffComponent,
-    BimsyncViewerComponent
+    BimsyncViewerComponent,
+    PanelComponent
   ],
   imports: [
     BrowserModule,

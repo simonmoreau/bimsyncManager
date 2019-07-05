@@ -2,22 +2,13 @@
 
 
 <div class="flexbox">
-
-  <div class="panel side-panel" style="background: blue" *ngIf="visible">
-    <p>
-      takeoff works!
-    </p>
-    <p>
-      {{(project$ | async)?.name }}
-    </p>
+  <div class="panel" style="background: blue">
+    <app-panel></app-panel>
   </div>
   <div class="panel bottom-panel" style="background: green">
-    <p> test</p>
-
+    <app-panel></app-panel>
   </div>
-  <div class="panel side-panel" style="background: aqua">
-    <button mat-button (click)="view()">Click me!</button>
-    <p> test</p>
+  <div class="panel" style="background: aqua">
+    <app-panel></app-panel>
   </div>
-
 </div>
