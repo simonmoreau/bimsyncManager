@@ -1,8 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { IProject, IViewerToken } from 'src/app/shared/models/bimsync.model';
+import { IProject } from 'src/app/shared/models/bimsync.model';
 import { ActivatedRoute } from '@angular/router';
 import { BimsyncService } from 'src/app/bimsync/bimsync.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-takeoff',
@@ -12,8 +11,8 @@ import { Observable } from 'rxjs';
 export class TakeoffComponent implements OnInit {
 
   project: IProject;
-  viewerToken: IViewerToken;
-  viewerLoaded: boolean;
+  projectId: string;
+  revisionIds: string[];
 
   constructor(
     private route: ActivatedRoute,
@@ -21,18 +20,7 @@ export class TakeoffComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.viewerLoaded = false;
-    const projectId = this.route.snapshot.paramMap.get('id');
-
-    this.bimsyncService.getProject(projectId).subscribe({
-      next: project => {
-        this.project = project;
-        this.bimsyncService.getViewer3DTokenForRevision(
-          project.id, ['62483fd054ab42c294f6ed0ddb0e49cf']).subscribe(token => {
-            this.viewerToken = token;
-            this.viewerLoaded = true;
-          });
-      }
-    });
+    this.projectId = this.route.snapshot.paramMap.get('id');
+    this.revisionIds = ['dc22c89880e9488bba8b780261d362a3'];
   }
 }

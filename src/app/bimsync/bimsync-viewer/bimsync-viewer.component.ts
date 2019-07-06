@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import * as $ from 'jquery';
+import { BimsyncService } from '../bimsync.service';
 declare var bimsync: any;
 
 @Component({
@@ -9,7 +10,7 @@ declare var bimsync: any;
 })
 export class BimsyncViewerComponent implements OnInit, OnChanges {
 
-  @Input() viewerToken: string;
+  @Input() revisionIds: string[];
   @Input() spaceIds: number[];
   @Input() projectId: string;
   @Input() highlightedElements: any[];
@@ -18,14 +19,16 @@ export class BimsyncViewerComponent implements OnInit, OnChanges {
   private isLoaded: boolean;
   private selectedProductId: string;
 
-  constructor() { }
+  constructor(private bimsyncService: BimsyncService) { }
 
   ngOnInit() {
 
     this.isLoaded = false;
-    const viewer3dUrl = `https://api.bimsync.com/v2/projects/${this.projectId}/viewer3d/data?token=${this.viewerToken}`;
-    this.EnableViewer(viewer3dUrl);
 
+    this.bimsyncService.getViewer3DTokenForRevision(this.projectId, this.revisionIds).subscribe(token => {
+      const viewer3dUrl = `https://api.bimsync.com/v2/projects/${this.projectId}/viewer3d/data?token=${token.token}`;
+      this.EnableViewer(viewer3dUrl);
+    });
   }
 
   ngOnChanges() {
