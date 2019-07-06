@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 
-import { Observable, empty, of, from, concat } from 'rxjs';
-import { mergeMap, tap, catchError, map, expand, concatMap, toArray, first } from 'rxjs/operators';
+import { Observable, empty } from 'rxjs';
+import { map, expand, concatMap, toArray } from 'rxjs/operators';
 
-import { IProject } from '../shared/models/bimsync.model';
-import { UserService } from '../user/user.service';
+import { IProject, IUser, IViewerToken } from '../shared/models/bimsync.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +24,24 @@ export class BimsyncService {
 
   getProject(id: string): Observable<IProject> {
     return this.get<IProject>(this.apiUrl + `projects/${id}`);
+  }
+
+  getCurrentUser(): Observable<IUser> {
+    return this.get<IUser>(this.apiUrl + 'user');
+  }
+
+  getViewer3DTokenForRevision(projectId: string, revisionId: string[]): Observable<IViewerToken> {
+    const body = {revisions: revisionId};
+    return this.post<IViewerToken>(this.apiUrl + `projects/${projectId}/viewer3d/token`, body);
+  }
+
+  private post<T>(url: string, body: object): Observable<T> {
+    return this.http.post<T>(
+      url, body,
+      {
+        headers: new HttpHeaders().set('Content-Type', 'application/json')
+      }
+    );
   }
 
   private get<T>(url: string): Observable<T> {

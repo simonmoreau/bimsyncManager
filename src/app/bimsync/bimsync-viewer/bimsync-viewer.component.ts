@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import * as $ from 'jquery';
 declare var bimsync: any;
 
@@ -7,29 +7,46 @@ declare var bimsync: any;
   templateUrl: './bimsync-viewer.component.html',
   styleUrls: ['./bimsync-viewer.component.scss']
 })
-export class BimsyncViewerComponent implements OnInit {
+export class BimsyncViewerComponent implements OnInit, OnChanges {
+
+  @Input() viewerToken: string;
+  @Input() spaceIds: number[];
+  @Input() projectId: string;
+  @Input() highlightedElements: any[];
+
+
+  private isLoaded: boolean;
+  private selectedProductId: string;
 
   constructor() { }
 
   ngOnInit() {
 
-    this.ViewModel();
+    this.isLoaded = false;
+    const viewer3dUrl = `https://api.bimsync.com/v2/projects/${this.projectId}/viewer3d/data?token=${this.viewerToken}`;
+    this.EnableViewer(viewer3dUrl);
 
   }
 
-  ViewModel() {
+  ngOnChanges() {
 
-    const projectId = 'e43d8c79d1c6409eb3dd871170b4d6b0';
-    const baseUrl = 'https://api.bimsync.com/v2/projects/' + projectId + '/viewer3d/data?token=';
+    if (this.isLoaded) {
+      const $viewer = $('#viewer-3d') as any;
 
-    const viewerToken = 'c2edc6d249664bfb994b448a1475b242';
-    const viewer3dUrl = baseUrl + viewerToken;
-
-    this.EnableViewer(viewer3dUrl);
+      if (this.highlightedElements.length !== 0) {
+        $viewer.viewer('resetColors');
+        this.highlightedElements.forEach(highlightedElement => {
+          $viewer.viewer('color', highlightedElement.color, highlightedElement.ids);
+        });
+      } else {
+        $viewer.viewer('resetColors');
+      }
+    }
   }
 
   private EnableViewer(url3D: string): any {
 
+    const context = this;
     const $viewer = $('#viewer-3d') as any;
 
     bimsync.load(['viewer-ui']);
@@ -61,36 +78,36 @@ export class BimsyncViewerComponent implements OnInit {
 
     });
 
-    // $viewer.bind("viewer.load", function (event) {
+    $viewer.bind('viewer.load', (event): void => {
 
-    //   $('#viewer-container').focus();
+      $('#viewer-container').focus();
 
-    //   $viewer.viewer('clippingPlaneWidgetViewport', {
-    //     x: 0,
-    //     y: 350,
-    //     width: 150,
-    //     height: 150
-    //   });
+      $viewer.viewer('clippingPlaneWidgetViewport', {
+        x: 0,
+        y: 350,
+        width: 150,
+        height: 150
+      });
 
-    //   $viewer.viewerUI('setSpaces', context.spaceIds);
+      $viewer.viewerUI('setSpaces', context.spaceIds);
 
-    //   context.isLoaded = true;
+      context.isLoaded = true;
 
-    //   $viewer.viewer('modelInfo', function (modelInfos) {
-    //     // This will print model info for all loaded models
-    //     console.log(modelInfos);
-    //   });
-    // });
+      $viewer.viewer('modelInfo', (modelInfos): void => {
+        // This will print model info for all loaded models
+        console.log(modelInfos);
+      });
+    });
 
-    // $viewer.bind('viewer.select', function (event, selected) {
+    $viewer.bind('viewer.select', (event, selected): void => {
 
-    //   console.log(selected);
-    //   if (selected.length !== 0) {
-    //     context.selectedProductId = selected[0];
-    //   } else {
-    //     context.selectedProductId = null;
-    //   }
-    // });
+      console.log(selected);
+      if (selected.length !== 0) {
+        context.selectedProductId = selected[0];
+      } else {
+        context.selectedProductId = null;
+      }
+    });
   }
 
 }

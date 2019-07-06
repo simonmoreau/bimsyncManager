@@ -1,4 +1,7 @@
-<app-bimsync-viewer class="viewer"></app-bimsync-viewer>
+<app-bimsync-viewer class="viewer" *ngIf="viewerLoaded"
+[viewerToken]="viewerToken.token"
+[projectId]="project.id">
+</app-bimsync-viewer>
 
 
 <div class="flexbox">
