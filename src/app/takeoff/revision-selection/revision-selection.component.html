@@ -1,0 +1,34 @@
+<div class="container">
+  <mat-form-field>
+    <mat-label>Select app-projects model</mat-label>
+    <mat-select [(value)]="selectedModel" name="model" (selectionChange)="modelChange($event)">
+      <mat-option *ngFor="let model of (models$ | async)" [value]="model">
+        {{model.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Select a revision</mat-label>
+    <mat-select [(value)]="selectedRevision" name="revision" (selectionChange)="revisionChange($event)">
+      <mat-option *ngFor="let revision of (revisions$ | async)" [value]="revision">
+        {{revision.version}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Select a category</mat-label>
+    <mat-select [(value)]="selectedCategory" name="category" (selectionChange)="categoryChange($event)">
+      <mat-option *ngFor="let category of (categories$ | async)" [value]="category">
+        {{category.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+
+<p>
+  {{selectedModel?.name}}
+</p>
+<p>
+  {{selectedRevision?.version}} - {{selectedRevision?.createdAt | date}}
+</p>

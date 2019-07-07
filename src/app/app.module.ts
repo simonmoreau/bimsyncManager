@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import * as $ from 'jquery';
 
@@ -13,7 +14,8 @@ import {
   MatListModule,
   MatProgressSpinnerModule,
   MatCardModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatSelectModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -28,6 +30,7 @@ import { ProjectComponent } from './projects-list/project/project.component';
 import { TakeoffComponent } from './takeoff/takeoff/takeoff.component';
 import { BimsyncViewerComponent } from './bimsync/bimsync-viewer/bimsync-viewer.component';
 import { PanelComponent } from './takeoff/panel/panel.component';
+import { RevisionSelectionComponent } from './takeoff/revision-selection/revision-selection.component';
 
 declare var window: any;
 window.$ = window.jQuery = $;
@@ -43,7 +46,8 @@ window.$ = window.jQuery = $;
     ProjectComponent,
     TakeoffComponent,
     BimsyncViewerComponent,
-    PanelComponent
+    PanelComponent,
+    RevisionSelectionComponent
   ],
   imports: [
     BrowserModule,
@@ -57,6 +61,8 @@ window.$ = window.jQuery = $;
     MatProgressSpinnerModule,
     MatCardModule,
     MatTooltipModule,
+    MatSelectModule,
+    FormsModule,
     HttpClientModule
   ],
   providers: [

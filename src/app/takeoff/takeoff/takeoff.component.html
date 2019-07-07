@@ -6,7 +6,9 @@
 
 <div class="flexbox">
   <div class="panel">
-    <app-panel left></app-panel>
+    <app-panel left>
+      <app-revision-selection [projectId]="projectId"></app-revision-selection>
+    </app-panel>
   </div>
   <div class="panel bottom-panel">
     <app-panel left></app-panel>

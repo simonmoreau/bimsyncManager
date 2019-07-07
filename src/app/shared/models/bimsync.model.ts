@@ -50,3 +50,8 @@ export interface IViewerToken {
     token: string;
     url: string;
 }
+
+export interface ITypeSummary {
+    name: string;
+    quantity: number;
+}

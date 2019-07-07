@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, empty } from 'rxjs';
 import { map, expand, concatMap, toArray } from 'rxjs/operators';
 
-import { IProject, IUser, IViewerToken } from '../shared/models/bimsync.model';
+import { IProject, IUser, IViewerToken, IModel, IRevision, ITypeSummary } from '../shared/models/bimsync.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,14 @@ export class BimsyncService {
     return this.getsPaginated<IProject>(this.apiUrl + 'projects');
   }
 
+  getModels(projectId: string): Observable<IModel[]> {
+    return this.getsPaginated<IModel>(this.apiUrl + `projects/${projectId}/models`);
+  }
+
+  getRevisions(projectId: string, modelId: string): Observable<IRevision[]> {
+    return this.getsPaginated<IRevision>(this.apiUrl + `projects/${projectId}/revisions?model=${modelId}`);
+  }
+
   getProject(id: string): Observable<IProject> {
     return this.get<IProject>(this.apiUrl + `projects/${id}`);
   }
@@ -31,8 +39,20 @@ export class BimsyncService {
   }
 
   getViewer3DTokenForRevision(projectId: string, revisionId: string[]): Observable<IViewerToken> {
-    const body = {revisions: revisionId};
+    const body = { revisions: revisionId };
     return this.post<IViewerToken>(this.apiUrl + `projects/${projectId}/viewer3d/token`, body);
+  }
+
+  getProductsTypeSummary(projectId: string, revisionId: string): Observable<ITypeSummary[]> {
+    return this.get<object>(this.apiUrl + `projects/${projectId}/ifc/products/ifctypes?revision=${revisionId}`).pipe(
+      map(value => {
+        return Object.keys(value).map<ITypeSummary>(key => {
+          const typeSummary: ITypeSummary = { name: key, quantity: value[key] };
+          return typeSummary;
+        }
+        );
+      }
+      ));
   }
 
   private post<T>(url: string, body: object): Observable<T> {
