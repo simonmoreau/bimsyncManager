@@ -33,6 +33,7 @@ export class UserComponent implements OnInit {
     this.avatarUrl$ = this.bimsyncService.getCurrentUser().pipe(
       map(bimsyncUser => bimsyncUser.avatarUrl ? bimsyncUser.avatarUrl : '../../../../assets/logos/user_account.png' ),
       catchError(error => {
+        this.logout();
         return throwError(error);
       })
     );
