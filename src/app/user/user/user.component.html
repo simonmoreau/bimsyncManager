@@ -4,9 +4,10 @@
     <button mat-menu-item>Help</button>
     <button mat-menu-item (click)="logout()">Log out</button>
   </mat-menu>
-
-  <button mat-icon-button [matMenuTriggerFor]="appMenu">
-    <mat-icon>more_vert</mat-icon>
+  <button mat-button [matMenuTriggerFor]="appMenu">
+    <img class="avatar"
+      src="{{avatarUrl}}" >
+    <mat-icon>expand_more</mat-icon>
   </button>
 </div>
 <div *ngIf="!user">
