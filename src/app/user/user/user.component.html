@@ -1,12 +1,12 @@
 <div *ngIf="user">
   <mat-menu #appMenu="matMenu">
-    <button mat-menu-item>My account</button>
+    <a href="https://bimsync.com/account/profile" mat-menu-item>My account</a>
     <button mat-menu-item>Help</button>
     <button mat-menu-item (click)="logout()">Log out</button>
   </mat-menu>
   <button mat-button [matMenuTriggerFor]="appMenu">
     <img class="avatar"
-      src="{{avatarUrl}}" >
+      src="{{avatarUrl$ | async}}" >
     <mat-icon>expand_more</mat-icon>
   </button>
 </div>
