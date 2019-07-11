@@ -1,13 +1,13 @@
-<div class="header" *ngIf="projectName">
+<div class="header" *ngIf="project">
   <button [routerLink]="['/projects']" routerLinkActive="active" mat-button href="/projects" mat-icon-button
   matTooltip="Returns to all projects">
     <mat-icon>arrow_back</mat-icon>
   </button>
   <div class="projectName">
-    {{projectName}}
+    {{project.name}}
   </div>
   <mat-menu #appMenu="matMenu">
-    <button mat-menu-item>
+    <button mat-menu-item (click)="openShareDialog()">
         <mat-icon>share</mat-icon>
         <span>Share project</span>
       </button>

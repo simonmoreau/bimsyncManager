@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { IProject } from '../models/bimsync.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HeaderService {
 
-  projectName = new BehaviorSubject(null);
+  project = new BehaviorSubject(null);
 
   constructor() { }
 
-  setProjectName(title: string) {
-    this.projectName.next(title);
+  setProject(project: IProject) {
+    this.project.next(project);
   }
 }
 

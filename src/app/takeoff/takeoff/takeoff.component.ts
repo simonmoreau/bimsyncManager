@@ -25,10 +25,10 @@ export class TakeoffComponent implements OnInit, OnDestroy {
     this.projectId = this.route.snapshot.paramMap.get('id');
     this.revisionIds = ['dc22c89880e9488bba8b780261d362a3'];
 
-    this.bimsyncService.getProject(this.projectId).subscribe(project => this.headerService.setProjectName(project.name));
+    this.bimsyncService.getProject(this.projectId).subscribe(project => this.headerService.setProject(project));
   }
 
   ngOnDestroy() {
-    this.headerService.setProjectName(null);
+    this.headerService.setProject(null);
   }
 }

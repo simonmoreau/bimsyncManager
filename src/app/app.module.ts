@@ -17,6 +17,7 @@ import {
   MatTooltipModule,
   MatSelectModule
 } from '@angular/material';
+import {MatDialogModule} from '@angular/material/dialog';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -32,6 +33,7 @@ import { BimsyncViewerComponent } from './bimsync/bimsync-viewer/bimsync-viewer.
 import { PanelComponent } from './takeoff/panel/panel.component';
 import { RevisionSelectionComponent } from './takeoff/revision-selection/revision-selection.component';
 import { ProjectHeaderComponent } from './shared/components/project-header/project-header.component';
+import { ShareProjectDialogComponent } from './share-project/share-project-dialog/share-project-dialog.component';
 
 declare var window: any;
 window.$ = window.jQuery = $;
@@ -49,7 +51,8 @@ window.$ = window.jQuery = $;
     BimsyncViewerComponent,
     PanelComponent,
     RevisionSelectionComponent,
-    ProjectHeaderComponent
+    ProjectHeaderComponent,
+    ShareProjectDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -64,8 +67,12 @@ window.$ = window.jQuery = $;
     MatCardModule,
     MatTooltipModule,
     MatSelectModule,
+    MatDialogModule,
     FormsModule,
     HttpClientModule
+  ],
+  entryComponents: [
+    ShareProjectDialogComponent
   ],
   providers: [
     {
