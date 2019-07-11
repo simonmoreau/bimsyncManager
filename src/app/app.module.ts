@@ -31,6 +31,7 @@ import { TakeoffComponent } from './takeoff/takeoff/takeoff.component';
 import { BimsyncViewerComponent } from './bimsync/bimsync-viewer/bimsync-viewer.component';
 import { PanelComponent } from './takeoff/panel/panel.component';
 import { RevisionSelectionComponent } from './takeoff/revision-selection/revision-selection.component';
+import { ProjectHeaderComponent } from './shared/components/project-header/project-header.component';
 
 declare var window: any;
 window.$ = window.jQuery = $;
@@ -47,7 +48,8 @@ window.$ = window.jQuery = $;
     TakeoffComponent,
     BimsyncViewerComponent,
     PanelComponent,
-    RevisionSelectionComponent
+    RevisionSelectionComponent,
+    ProjectHeaderComponent
   ],
   imports: [
     BrowserModule,
