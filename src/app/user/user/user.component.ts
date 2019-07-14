@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { IUser } from '../../shared/models/user.model';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { BimsyncService } from 'src/app/bimsync/bimsync.service';
+import { map, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user',
@@ -14,19 +16,27 @@ export class UserComponent implements OnInit {
   user: IUser;
   clientId: string;
   callbackUrl: string;
-
-  private apiUrl = 'https://binsyncfunction-dev.azurewebsites.net/api';
-  // private apiUrl = 'https://binsyncfunction-dev.azurewebsites.net/api';
+  avatarUrl$: Observable<string>;
 
   constructor(
     private router: Router,
-    private userService: UserService) {
-    this.userService.currentUser.subscribe(u => this.user = u);
-    this.clientId = this.userService.clientId;
-    this.callbackUrl = this.userService.url + '/callback';
+    private userService: UserService,
+    private bimsyncService: BimsyncService) {
+      this.userService.currentUser.subscribe(u => this.user = u);
   }
 
   ngOnInit() {
+
+    this.clientId = this.userService.clientId;
+    this.callbackUrl = this.userService.url + '/callback';
+
+    this.avatarUrl$ = this.bimsyncService.getCurrentUser().pipe(
+      map(bimsyncUser => bimsyncUser.avatarUrl ? bimsyncUser.avatarUrl : '../../../../assets/logos/user_account.png' ),
+      catchError(error => {
+        this.logout();
+        return throwError(error);
+      })
+    );
   }
 
   logout() {

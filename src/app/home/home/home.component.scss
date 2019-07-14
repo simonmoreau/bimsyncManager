@@ -95,6 +95,7 @@ app-home .homepage-row {
 
 .homepage-promo-desc, .homepage-promo-img {
     width: 50%;
+    height: auto;
 }
 
 .homepage-promo h2 {
@@ -114,4 +115,6 @@ app-home .homepage-row {
 
 .image {
     vertical-align: middle;
+    width: 100%;
+    height: auto;
 }
