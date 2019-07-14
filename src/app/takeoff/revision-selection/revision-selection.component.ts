@@ -21,31 +21,42 @@ export class RevisionSelectionComponent implements OnInit {
   categories$: Observable<ITypeSummary[]>;
   selectedModel: IModel;
   selectedRevision: IRevision;
-  selectedCategory: any;
+  selectedCategory: ITypeSummary;
 
   ngOnInit() {
     this.models$ = this.bimsyncService.getModels(this.projectId);
 
     this.categories$ = this.models$.pipe(
+      tap(models => this.selectedModel = models[0]),
       mergeMap(models => {
-        this.revisions$ = this.bimsyncService.getRevisions(this.projectId, models[0].id);
-        return this.revisions$; }),
-        mergeMap(revisions => {
-          return this.bimsyncService.getProductsTypeSummary(this.projectId, revisions[0].id);
-        })
+        this.revisions$ = this.bimsyncService.getRevisions(this.projectId, this.selectedModel.id);
+        return this.revisions$;
+      }),
+      tap(revisions => this.selectedRevision = revisions[0]),
+      mergeMap(revisions => {
+        return this.bimsyncService.getProductsTypeSummary(this.projectId, this.selectedRevision.id);
+      }),
+      tap(summary => this.selectedCategory = summary[0])
     );
   }
 
   modelChange(event: MatSelectChange) {
-    this.categories$ = this.bimsyncService.getRevisions(this.projectId, (event.value as IModel).id).pipe(
-        mergeMap(revisions => {
-          return this.bimsyncService.getProductsTypeSummary(this.projectId, revisions[0].id);
-        })
+    this.revisions$ = this.bimsyncService.getRevisions(this.projectId, (event.value as IModel).id);
+
+    this.categories$ = this.revisions$.pipe(
+      tap(revisions => this.selectedRevision = revisions[0]),
+      mergeMap(revisions => {
+        this.selectedRevision = revisions[0];
+        return this.bimsyncService.getProductsTypeSummary(this.projectId, revisions[0].id);
+      }),
+      tap(summary => this.selectedCategory = summary[0])
     );
   }
 
   revisionChange(event: MatSelectChange) {
-    this.categories$ = this.bimsyncService.getProductsTypeSummary(this.projectId, (event.value as IRevision).id);
+    this.categories$ = this.bimsyncService.getProductsTypeSummary(this.projectId, (event.value as IRevision).id).pipe(
+      tap(summary => this.selectedCategory = summary[0])
+    );
   }
 
   categoryChange(event: MatSelectChange) {

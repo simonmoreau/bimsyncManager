@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
 
 import * as $ from 'jquery';
 
@@ -62,7 +61,6 @@ window.$ = window.jQuery = $;
     MatCardModule,
     MatTooltipModule,
     MatSelectModule,
-    FormsModule,
     HttpClientModule
   ],
   providers: [
