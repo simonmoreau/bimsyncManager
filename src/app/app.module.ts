@@ -67,7 +67,6 @@ window.$ = window.jQuery = $;
     MatTooltipModule,
     MatSelectModule,
     MatDialogModule,
-    FormsModule,
     HttpClientModule
   ],
   entryComponents: [
