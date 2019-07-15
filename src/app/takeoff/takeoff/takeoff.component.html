@@ -1,13 +1,17 @@
-<app-bimsync-viewer class="viewer"
+<app-bimsync-viewer class="viewer" *ngIf="revisionIds"
 [revisionIds]="revisionIds"
-[projectId]="projectId">
+[projectId]="projectId"
+[highlightedElements]="highlightedElements">
 </app-bimsync-viewer>
 
 
 <div class="flexbox">
   <div class="panel">
     <app-panel left>
-      <app-revision-selection [projectId]="projectId"></app-revision-selection>
+      <app-revision-selection [projectId]="projectId"
+      (revisionChange)='revisionChange($event)'
+      (categoryChange)='categoryChange($event)'>
+    </app-revision-selection>
     </app-panel>
   </div>
   <div class="panel bottom-panel">

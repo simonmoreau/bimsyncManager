@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { IProject } from 'src/app/shared/models/bimsync.model';
+import { IProject, IRevision, ITypeSummary } from 'src/app/shared/models/bimsync.model';
 import { ActivatedRoute } from '@angular/router';
 import { BimsyncService } from 'src/app/bimsync/bimsync.service';
 import { HeaderService } from 'src/app/shared/services/header.service';
@@ -14,6 +14,7 @@ export class TakeoffComponent implements OnInit, OnDestroy {
   project: IProject;
   projectId: string;
   revisionIds: string[];
+  highlightedElements: string[];
 
   constructor(
     private route: ActivatedRoute,
@@ -23,12 +24,21 @@ export class TakeoffComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.projectId = this.route.snapshot.paramMap.get('id');
-    this.revisionIds = ['dc22c89880e9488bba8b780261d362a3'];
+    this.revisionIds = null;
 
     this.bimsyncService.getProject(this.projectId).subscribe(project => this.headerService.setProject(project));
   }
 
   ngOnDestroy() {
     this.headerService.setProject(null);
+  }
+
+  revisionChange(revision: IRevision) {
+    // alert(revision.version);
+    this.revisionIds = [revision.id];
+  }
+
+  categoryChange(category: ITypeSummary) {
+    // alert(category.name);
   }
 }

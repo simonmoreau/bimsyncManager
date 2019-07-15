@@ -36,7 +36,7 @@ export class BimsyncViewerComponent implements OnInit, OnChanges {
     if (this.isLoaded) {
       const $viewer = $('#viewer-3d') as any;
 
-      if (this.highlightedElements.length !== 0) {
+      if (this.highlightedElements && this.highlightedElements.length) {
         $viewer.viewer('resetColors');
         this.highlightedElements.forEach(highlightedElement => {
           $viewer.viewer('color', highlightedElement.color, highlightedElement.ids);
