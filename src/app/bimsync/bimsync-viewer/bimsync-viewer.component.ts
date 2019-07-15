@@ -32,7 +32,6 @@ export class BimsyncViewerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-
     if (this.isLoaded) {
       const $viewer = $('#viewer-3d') as any;
 
@@ -51,6 +50,7 @@ export class BimsyncViewerComponent implements OnInit, OnChanges {
 
     const context = this;
     const $viewer = $('#viewer-3d') as any;
+    let loading = true;
 
     bimsync.load(['viewer-ui']);
 
@@ -77,7 +77,10 @@ export class BimsyncViewerComponent implements OnInit, OnChanges {
         set2dLockedNavigationMode: false
       });
 
-      $viewer.viewer('loadUrl', url3D);
+      if (loading) {
+        $viewer.viewer('loadUrl', url3D);
+        loading = false;
+      }
 
     });
 
@@ -94,12 +97,12 @@ export class BimsyncViewerComponent implements OnInit, OnChanges {
 
       $viewer.viewerUI('setSpaces', context.spaceIds);
 
-      context.isLoaded = true;
-
       $viewer.viewer('modelInfo', (modelInfos): void => {
         // This will print model info for all loaded models
         console.log(modelInfos);
       });
+
+      context.isLoaded = true;
     });
 
     $viewer.bind('viewer.select', (event, selected): void => {

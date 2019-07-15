@@ -33,6 +33,7 @@ import { PanelComponent } from './takeoff/panel/panel.component';
 import { RevisionSelectionComponent } from './takeoff/revision-selection/revision-selection.component';
 import { ProjectHeaderComponent } from './shared/components/project-header/project-header.component';
 import { ShareProjectDialogComponent } from './share-project/share-project-dialog/share-project-dialog.component';
+import { ViewerHostComponent } from './bimsync/viewer-host/viewer-host.component';
 
 declare var window: any;
 window.$ = window.jQuery = $;
@@ -51,7 +52,8 @@ window.$ = window.jQuery = $;
     PanelComponent,
     RevisionSelectionComponent,
     ProjectHeaderComponent,
-    ShareProjectDialogComponent
+    ShareProjectDialogComponent,
+    ViewerHostComponent
   ],
   imports: [
     BrowserModule,
