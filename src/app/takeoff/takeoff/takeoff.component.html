@@ -6,17 +6,17 @@
 
 <div class="flexbox">
   <div class="panel">
-    <app-panel left>
+    <app-panel left title="Models">
       <app-revision-selection [projectId]="projectId"
-      (revisionChange)='revisionChange($event)'
-      (categoryChange)='categoryChange($event)'>
+      (revisionChange)="revisionChange($event)"
+      (categoryChange)="categoryChange($event)">
     </app-revision-selection>
     </app-panel>
   </div>
   <div class="panel bottom-panel">
-    <app-panel left></app-panel>
+    <app-panel left title="Quantities"></app-panel>
   </div>
   <div class="panel">
-    <app-panel></app-panel>
+    <app-panel title="Properties"></app-panel>
   </div>
 </div>

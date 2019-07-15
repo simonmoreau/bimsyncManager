@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, Input } from '@angular/core';
 
 @Component({
   selector: 'app-panel',
@@ -8,6 +8,8 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 export class PanelComponent implements OnInit {
 
   constructor(public elementRef: ElementRef) { }
+
+  @Input() title: string;
 
   collapsed = false;
 
