@@ -2,7 +2,7 @@
   <mat-form-field>
     <mat-label>Select a model</mat-label>
     <mat-select [(value)]="selectedModel" name="models" (selectionChange)="modelChange($event)">
-      <mat-option *ngFor="let model of models$ | async" [value]="model">
+      <mat-option *ngFor="let model of models" [value]="model">
         {{model.name}}
       </mat-option>
     </mat-select>
@@ -10,7 +10,7 @@
   <mat-form-field>
     <mat-label>Select a revision</mat-label>
     <mat-select [(value)]="selectedRevision" name="revisions" (selectionChange)="revisionChange($event)">
-      <mat-option *ngFor="let revision of revisions$ | async" [value]="revision">
+      <mat-option *ngFor="let revision of revisions" [value]="revision">
         {{revision.version}}
       </mat-option>
     </mat-select>
@@ -18,7 +18,7 @@
   <mat-form-field>
     <mat-label>Select a category</mat-label>
     <mat-select [(value)]="selectedCategory" name="categories" (selectionChange)="categoryChange($event)">
-      <mat-option *ngFor="let category of categories$ | async" [value]="category">
+      <mat-option *ngFor="let category of categories" [value]="category">
         {{category.name}}
       </mat-option>
     </mat-select>

@@ -16,46 +16,72 @@ export class RevisionSelectionComponent implements OnInit {
 
   @Input() projectId: string;
 
-  models$: Observable<IModel[]>;
-  revisions$: Observable<IRevision[]>;
-  categories$: Observable<ITypeSummary[]>;
+  models: IModel[];
+  revisions: IRevision[];
+  categories: ITypeSummary[];
   selectedModel: IModel;
   selectedRevision: IRevision;
   selectedCategory: ITypeSummary;
 
   ngOnInit() {
-    this.models$ = this.bimsyncService.getModels(this.projectId);
 
-    this.categories$ = this.models$.pipe(
-      tap(models => this.selectedModel = models[0]),
-      mergeMap(models => {
-        this.revisions$ = this.bimsyncService.getRevisions(this.projectId, this.selectedModel.id);
-        return this.revisions$;
-      }),
-      tap(revisions => this.selectedRevision = revisions[0]),
-      mergeMap(revisions => {
-        return this.bimsyncService.getProductsTypeSummary(this.projectId, this.selectedRevision.id);
-      }),
-      tap(summary => this.selectedCategory = summary[0])
+    this.bimsyncService.getModels(this.projectId).subscribe(
+      m => {
+        this.models = m;
+        if (m.length !== 0 ) {
+          this.selectedModel = m[0];
+          this.bimsyncService.getRevisions(this.projectId, this.selectedModel.id).subscribe(
+            r => {
+              this.revisions = r;
+              if (r.length !== 0) {
+                this.selectedRevision = r[0];
+                this.bimsyncService.getProductsTypeSummary(this.projectId, this.selectedRevision.id).subscribe(
+                  s => {
+                    this.categories = s;
+                    if (s.length !== 0) { this.selectedCategory = s[0]; }
+                  }
+                );
+              } else {
+                this.selectedRevision = null;
+                this.categories = null;
+                this.selectedCategory = null;
+              }
+            }
+          );
+        }
+      }
     );
   }
 
   modelChange(event: MatSelectChange) {
-    this.revisions$ = this.bimsyncService.getRevisions(this.projectId, (event.value as IModel).id);
+    // (event.value as IModel).id
 
-    this.categories$ = this.revisions$.pipe(
-      tap(revisions => this.selectedRevision = revisions[0]),
-      mergeMap(revisions => {
-        this.selectedRevision = revisions[0];
-        return this.bimsyncService.getProductsTypeSummary(this.projectId, revisions[0].id);
-      }),
-      tap(summary => this.selectedCategory = summary[0])
+    this.bimsyncService.getRevisions(this.projectId, (event.value as IModel).id).subscribe(
+      r => {
+        this.revisions = r;
+        if (r.length !== 0) {
+          this.selectedRevision = r[0];
+          this.bimsyncService.getProductsTypeSummary(this.projectId, this.selectedRevision.id).subscribe(
+            s => {
+              this.categories = s;
+              if (s.length !== 0) { this.selectedCategory = s[0]; }
+            }
+          );
+        } else {
+          this.selectedRevision = null;
+          this.categories = null;
+          this.selectedCategory = null;
+        }
+      }
     );
   }
 
   revisionChange(event: MatSelectChange) {
-    this.categories$ = this.bimsyncService.getProductsTypeSummary(this.projectId, (event.value as IRevision).id).pipe(
-      tap(summary => this.selectedCategory = summary[0])
+    this.bimsyncService.getProductsTypeSummary(this.projectId, (event.value as IRevision).id).subscribe(
+      s => {
+        this.categories = s;
+        if (s.length !== 0) { this.selectedCategory = s[0]; }
+      }
     );
   }
 
