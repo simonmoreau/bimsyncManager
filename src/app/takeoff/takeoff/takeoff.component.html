@@ -1,8 +1,4 @@
-<app-viewer-host class="viewer" *ngIf="revisionIds"
-[revisionIds]="revisionIds"
-[projectId]="projectId"
-[highlightedElements]="highlightedElements">
-</app-viewer-host>
+
 
 <div class="flexbox">
   <div class="panel">
@@ -14,10 +10,25 @@
     <app-property-tree></app-property-tree>
     </app-panel>
   </div>
-  <div class="panel bottom-panel">
-    <app-panel left title="Quantities"></app-panel>
+  <div class="center" >
+    <div class="viewer">
+        <app-viewer-host *ngIf="revisionIds"
+        [revisionIds]="revisionIds"
+        [projectId]="projectId"
+        [highlightedElements]="highlightedElements">
+        </app-viewer-host>
+    </div>
+    <div class="bottom-panel panel">
+        <app-panel left title="Quantities" >
+            <div style="height: 10rem">
+                <P>
+                  test
+                </P></div>
+          </app-panel>
+    </div>
   </div>
   <div class="panel">
-    <app-panel title="Properties"></app-panel>
+    <app-panel title="Properties">
+    </app-panel>
   </div>
 </div>
