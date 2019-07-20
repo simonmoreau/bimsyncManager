@@ -14,7 +14,9 @@ import {
   MatProgressSpinnerModule,
   MatCardModule,
   MatTooltipModule,
-  MatSelectModule
+  MatSelectModule,
+  MatTreeModule,
+  MatCheckboxModule
 } from '@angular/material';
 import {MatDialogModule} from '@angular/material/dialog';
 
@@ -34,6 +36,7 @@ import { RevisionSelectionComponent } from './takeoff/revision-selection/revisio
 import { ProjectHeaderComponent } from './shared/components/project-header/project-header.component';
 import { ShareProjectDialogComponent } from './share-project/share-project-dialog/share-project-dialog.component';
 import { ViewerHostComponent } from './bimsync/viewer-host/viewer-host.component';
+import { PropertyTreeComponent } from './takeoff/property-tree/property-tree.component';
 
 declare var window: any;
 window.$ = window.jQuery = $;
@@ -53,7 +56,8 @@ window.$ = window.jQuery = $;
     RevisionSelectionComponent,
     ProjectHeaderComponent,
     ShareProjectDialogComponent,
-    ViewerHostComponent
+    ViewerHostComponent,
+    PropertyTreeComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +73,8 @@ window.$ = window.jQuery = $;
     MatTooltipModule,
     MatSelectModule,
     MatDialogModule,
+    MatTreeModule,
+    MatCheckboxModule,
     HttpClientModule
   ],
   entryComponents: [
