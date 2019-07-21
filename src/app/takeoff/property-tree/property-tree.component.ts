@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
+import { PropertyTreeService } from './property-tree.service';
+import { PropertyNode } from './property-tree.model';
 
 @Component({
   selector: 'app-property-tree',
@@ -9,7 +11,6 @@ import { SelectionModel } from '@angular/cdk/collections';
   styleUrls: ['./property-tree.component.scss']
 })
 export class PropertyTreeComponent {
-
 
   /** The selection for checklist */
   checklistSelection = new SelectionModel<PropertyFlatNode>(true /* multiple */);
@@ -26,19 +27,22 @@ export class PropertyTreeComponent {
 
   dataSource: MatTreeFlatDataSource<PropertyNode, PropertyFlatNode>;
 
-  constructor() {
+  constructor(private database: PropertyTreeService) {
 
     this.treeControl = new FlatTreeControl<PropertyFlatNode>(node => node.level, node => node.expandable);
     this.treeFlattener = new MatTreeFlattener(this.transformFunction, this.getLevel, this.isExpandable, this.getChildren);
 
-    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-    this.dataSource.data = TREE_DATA;
+    this.dataSource = new MatTreeFlatDataSource<PropertyNode, PropertyFlatNode>(this.treeControl, this.treeFlattener);
+
+    database.dataChange.subscribe(data => {
+      this.dataSource.data = data;
+    });
   }
 
   /**
    * Transformer to convert nested node to flat node. Record the nodes in maps for later use.
    */
-  private transformFunction = (node: PropertyNode, level: number) => {
+  private transformFunction = (node: PropertyNode, level: number): PropertyFlatNode => {
     const existingNode = this.nestedNodeMap.get(node);
     const flatNode = existingNode && existingNode.name === node.name
         ? existingNode
@@ -52,11 +56,11 @@ export class PropertyTreeComponent {
   }
 
 
-  hasChild = (_: number, node: PropertyFlatNode) => node.expandable;
+  hasChild = (_: number, node: PropertyFlatNode): boolean => node.expandable;
 
-  getLevel = (node: PropertyFlatNode) => node.level;
+  getLevel = (node: PropertyFlatNode): number => node.level;
 
-  isExpandable = (node: PropertyFlatNode) => node.expandable;
+  isExpandable = (node: PropertyFlatNode): boolean => node.expandable;
 
   getChildren = (node: PropertyNode): PropertyNode[] => node.children;
 
@@ -149,36 +153,3 @@ export class PropertyFlatNode {
   level: number;
 }
 
-
-interface PropertyNode {
-  name: string;
-  children?: PropertyNode[];
-}
-
-const TREE_DATA: PropertyNode[] = [
-  {
-    name: 'Fruit',
-    children: [
-      { name: 'Apple' },
-      { name: 'Banana' },
-      { name: 'Fruit loops' },
-    ]
-  }, {
-    name: 'Vegetables',
-    children: [
-      {
-        name: 'Green',
-        children: [
-          { name: 'Broccoli' },
-          { name: 'Brussel sprouts' },
-        ]
-      }, {
-        name: 'Orange',
-        children: [
-          { name: 'Pumpkins' },
-          { name: 'Carrots' },
-        ]
-      },
-    ]
-  },
-];

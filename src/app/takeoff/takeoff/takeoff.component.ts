@@ -3,6 +3,7 @@ import { IProject, IRevision, ITypeSummary } from 'src/app/shared/models/bimsync
 import { ActivatedRoute } from '@angular/router';
 import { BimsyncService } from 'src/app/bimsync/bimsync.service';
 import { HeaderService } from 'src/app/shared/services/header.service';
+import { PropertyTreeService } from '../property-tree/property-tree.service';
 
 @Component({
   selector: 'app-takeoff',
@@ -19,7 +20,8 @@ export class TakeoffComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private bimsyncService: BimsyncService,
-    private headerService: HeaderService
+    private headerService: HeaderService,
+    private propertyTreeService: PropertyTreeService
   ) { }
 
   ngOnInit() {
@@ -27,6 +29,7 @@ export class TakeoffComponent implements OnInit, OnDestroy {
     this.revisionIds = null;
 
     this.bimsyncService.getProject(this.projectId).subscribe(project => this.headerService.setProject(project));
+
   }
 
   ngOnDestroy() {

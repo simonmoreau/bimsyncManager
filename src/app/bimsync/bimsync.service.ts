@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, empty } from 'rxjs';
 import { map, expand, concatMap, toArray } from 'rxjs/operators';
 
-import { IProject, IUser, IViewerToken, IModel, IRevision, ITypeSummary } from '../shared/models/bimsync.model';
+import { IProject, IUser, IViewerToken, IModel, IRevision, ITypeSummary, Product } from '../shared/models/bimsync.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +36,10 @@ export class BimsyncService {
 
   getCurrentUser(): Observable<IUser> {
     return this.get<IUser>(this.apiUrl + 'user');
+  }
+
+  listProducts(projectId: string, ifcType: string, revisionId: string): Observable<Product[]> {
+    return this.getsPaginated<Product>(this.apiUrl + `projects/${projectId}/ifc/products?ifcType=${ifcType}&revision=${revisionId}`);
   }
 
   getViewer3DTokenForRevision(projectId: string, revisionId: string[]): Observable<IViewerToken> {

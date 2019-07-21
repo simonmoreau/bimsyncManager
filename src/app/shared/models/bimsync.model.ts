@@ -55,3 +55,83 @@ export interface ITypeSummary {
     name: string;
     quantity: number;
 }
+
+class Entity {
+    objectId: string;
+    ifcType: string;
+    attributes: ValueMap[];
+}
+
+class Value {
+    ifcType: string;
+    type: string;
+    unit: string;
+    value: object;
+}
+
+class ValueMap {
+    [name: string]: Value;
+}
+
+class Property {
+    description: string;
+    ifcType: string;
+    nominalValue: Value;
+    enumerationValues: Value[];
+    listValues: Value[];
+    lowerBoundValue: Value;
+    upperBoundValue: Value;
+    propertyReference: Value;
+    properties: PropertyMap[];
+}
+
+class PropertyMap {
+    [name: string]: Property
+}
+
+class PropertySet extends Entity {
+    revisionId: string;
+    properties: PropertyMap[];
+}
+
+class PropertySetMap {
+    [name: string]: PropertySet;
+}
+
+class Quantity {
+    description: string;
+    ifcType: string;
+    value: Value;
+}
+
+class QuantityMap {
+    [name: string]: Quantity
+}
+
+class QuantitySet extends Entity {
+    revisionId: string;
+    properties: QuantityMap[];
+}
+
+class QuantitySetMap {
+    [name: string]: QuantitySet
+}
+
+class Type extends Entity {
+    revisionId: string;
+    propertySets: PropertySetMap[];
+    quantitySets: QuantitySetMap[];
+    materials: Entity[];
+}
+
+export class Product extends Entity {
+    revisionId: string;
+    propertySets: PropertySetMap[];
+    quantitySets: QuantitySetMap[];
+    materials: Entity[];
+    type: Type;
+}
+
+
+
+
