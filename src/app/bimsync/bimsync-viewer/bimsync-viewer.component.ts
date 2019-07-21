@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import * as $ from 'jquery';
 import { BimsyncService } from '../bimsync.service';
+import { interval } from 'rxjs';
 declare var bimsync: any;
 
 @Component({
@@ -8,7 +9,7 @@ declare var bimsync: any;
   templateUrl: './bimsync-viewer.component.html',
   styleUrls: ['./bimsync-viewer.component.scss']
 })
-export class BimsyncViewerComponent implements OnInit, OnChanges {
+export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input() revisionIds: string[];
   @Input() spaceIds: number[];
@@ -19,6 +20,8 @@ export class BimsyncViewerComponent implements OnInit, OnChanges {
   private isLoaded: boolean;
   private selectedProductId: string;
 
+  @ViewChild('page', { static: false }) page: ElementRef;
+
   constructor(private bimsyncService: BimsyncService) { }
 
   ngOnInit() {
@@ -28,6 +31,20 @@ export class BimsyncViewerComponent implements OnInit, OnChanges {
     this.bimsyncService.getViewer3DTokenForRevision(this.projectId, this.revisionIds).subscribe(token => {
       const viewer3dUrl = `https://api.bimsync.com/v2/projects/${this.projectId}/viewer3d/data?token=${token.token}`;
       this.EnableViewer(viewer3dUrl);
+    });
+  }
+
+  ngAfterViewInit() {
+
+    let width = this.page.nativeElement.offsetWidth;
+
+    // Loop for size changes
+    interval(100).subscribe((val) => {
+      if (width !== this.page.nativeElement.offsetWidth) {
+        width = this.page.nativeElement.offsetWidth;
+        window.dispatchEvent(new Event('resize'));
+        console.log('called');
+      }
     });
   }
 
@@ -45,6 +62,8 @@ export class BimsyncViewerComponent implements OnInit, OnChanges {
       }
     }
   }
+
+
 
   private EnableViewer(url3D: string): any {
 

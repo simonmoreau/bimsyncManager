@@ -1,10 +1,10 @@
-<div class="full-page">
-  <div class='viewer-container'>
+<div class="full-page" >
+  <div class='viewer-container' #page>
     <div id='viewer-3d' tabindex='-1'></div>
   </div>
 </div>
 <div class="full-page" *ngIf="!isLoaded">
-    <div class="spinner flex-container">
-        <mat-spinner></mat-spinner>
-      </div>
+  <div class="spinner flex-container">
+    <mat-spinner></mat-spinner>
+  </div>
 </div>
