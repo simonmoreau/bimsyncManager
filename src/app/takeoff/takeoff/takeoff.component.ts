@@ -29,7 +29,7 @@ export class TakeoffComponent implements OnInit, OnDestroy {
     this.revisionIds = null;
 
     this.bimsyncService.getProject(this.projectId).subscribe(project => this.headerService.setProject(project));
-
+    this.propertyTreeService.UpdateProjectId(this.projectId);
   }
 
   ngOnDestroy() {
@@ -39,9 +39,10 @@ export class TakeoffComponent implements OnInit, OnDestroy {
   revisionChange(revision: IRevision) {
     // alert(revision.version);
     this.revisionIds = [revision.id];
+    this.propertyTreeService.UpdateRevisionId(revision.id);
   }
 
   categoryChange(category: ITypeSummary) {
-    // alert(category.name);
+    this.propertyTreeService.UpdateIfcType(category.name);
   }
 }

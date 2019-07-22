@@ -38,19 +38,74 @@ export class PropertyTreeService {
   private ifcType: string;
 
   constructor(private bimsyncService: BimsyncService) {
-    // this.projectId = ProjectId;
-    // this.revisionId = RevisionId;
-    // this.ifcType = IfcType;
+  }
+
+  public UpdateProjectId(id: string) {
+    this.projectId = id;
+  }
+
+  public UpdateRevisionId(id: string) {
+    this.revisionId = id;
+  }
+
+  public UpdateIfcType(type: string) {
+    this.ifcType = type;
     this.initialize();
   }
 
   initialize() {
     // Build the tree nodes from Json object. The result is a list of `PropertyNode` with nested
     //     file node as children.
-    const data = this.buildFileTree(TREE_DATA, 0);
+    let data = null; // this.buildFileTree(TREE_DATA, 0);
 
-    // Notify the change.
-    this.dataChange.next(data);
+    if (this.projectId && this.revisionId && this.ifcType) {
+      this.bimsyncService.listProducts(this.projectId, this.ifcType, this.revisionId).subscribe(products => {
+        console.log(products);
+
+        const nodes: PropertyNode[] = new Array();
+
+        const pSet = products[0].propertySets;
+
+        Object.keys(pSet).forEach(propertySetKey => {
+          const node: PropertyNode = new PropertyNode();
+          node.name = propertySetKey;
+          const childrenNodes: PropertyNode[] = new Array();
+
+          Object.keys(pSet[propertySetKey].properties).forEach(propertyKey => {
+            const childrenNode: PropertyNode = new PropertyNode();
+            childrenNode.name = propertyKey;
+            childrenNodes.push(childrenNode);
+          });
+          node.children = childrenNodes;
+          nodes.push(node);
+        });
+
+        const qSet = products[0].quantitySets;
+
+        Object.keys(qSet).forEach(propertySetKey => {
+          const node: PropertyNode = new PropertyNode();
+          node.name = propertySetKey;
+          const childrenNodes: PropertyNode[] = new Array();
+
+          Object.keys(qSet[propertySetKey].quantities).forEach(propertyKey => {
+            const childrenNode: PropertyNode = new PropertyNode();
+            childrenNode.name = propertyKey;
+            childrenNodes.push(childrenNode);
+          });
+          node.children = childrenNodes;
+          nodes.push(node);
+        });
+
+        console.log(nodes);
+        data = nodes;
+
+        // Notify the change.
+        this.dataChange.next(data);
+
+      });
+    }
+
+
   }
 
   /**
