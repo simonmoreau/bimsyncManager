@@ -27,6 +27,11 @@
     margin-right: 1rem;
 }
 
-.viewer {
+.flexgrow {
     flex-grow: 1;
+}
+
+.tree-panel {
+    overflow: auto;
+    margin-right: -0.5rem;
 }

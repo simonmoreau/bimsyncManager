@@ -22,3 +22,10 @@
     margin: 0.5rem 0 0.5rem 0;
 }
 
+.content {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 2.75rem);
+    width: 100%;
+}
+

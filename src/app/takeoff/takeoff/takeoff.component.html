@@ -1,30 +1,30 @@
-
-
 <div class="flexbox">
   <div class="panel">
     <app-panel left title="Models">
-      <app-revision-selection [projectId]="projectId"
-      (revisionChange)="revisionChange($event)"
-      (categoryChange)="categoryChange($event)">
-    </app-revision-selection>
-    <app-property-tree></app-property-tree>
+      <app-revision-selection [projectId]="projectId" (revisionChange)="revisionChange($event)"
+        (categoryChange)="categoryChange($event)">
+      </app-revision-selection>
+      <div style="width:400px">
+        <p>Drop zone</p>
+      </div>
+      <app-property-tree class="flexgrow tree-panel">
+        </app-property-tree>
     </app-panel>
   </div>
-  <div class="center" >
-    <div class="viewer">
-        <app-viewer-host *ngIf="revisionIds"
-        [revisionIds]="revisionIds"
-        [projectId]="projectId"
+  <div class="center">
+    <div class="flexgrow">
+      <app-viewer-host *ngIf="revisionIds" [revisionIds]="revisionIds" [projectId]="projectId"
         [highlightedElements]="highlightedElements">
-        </app-viewer-host>
+      </app-viewer-host>
     </div>
     <div class="bottom-panel panel">
-        <app-panel left title="Quantities" >
-            <div style="height: 10rem">
-                <P>
-                  test
-                </P></div>
-          </app-panel>
+      <app-panel left title="Quantities">
+        <div style="height: 10rem">
+          <P>
+            test
+          </P>
+        </div>
+      </app-panel>
     </div>
   </div>
   <div class="panel">
