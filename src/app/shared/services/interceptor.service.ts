@@ -125,7 +125,8 @@ export class InterceptorService implements HttpInterceptor {
     // Route to the login page (implementation up to you)
     // this.userService.Logout();
     // this.router.navigate(['/home']);
-
+    this.userService.Logout();
+    this.router.navigate(['/home']);
     return of(error);
 
   }
