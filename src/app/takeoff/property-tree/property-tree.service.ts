@@ -2,27 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { BimsyncService } from 'src/app/bimsync/bimsync.service';
 import { PropertyNode } from './property-tree.model';
-
-/**
- * The Json object for to-do list data.
- */
-export const TREE_DATA = {
-  Groceries: {
-    'Almond Meal flour': null,
-    'Organic eggs': null,
-    'Protein Powder': null,
-    Fruits: {
-      Apple: null,
-      Berries: ['Blueberry', 'Raspberry'],
-      Orange: null
-    }
-  },
-  Reminders: [
-    'Cook dinner',
-    'Read the Material Design spec',
-    'Upgrade Application to Angular'
-  ]
-};
+import { SelectedPropertiesService } from '../selected-properties.service';
+import { Property } from '../selected-properties.model';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +18,8 @@ export class PropertyTreeService {
   private revisionId: string;
   private ifcType: string;
 
-  constructor(private bimsyncService: BimsyncService) {
+  constructor(private bimsyncService: BimsyncService,
+              private selectedPropertiesService: SelectedPropertiesService) {
   }
 
   public UpdateProjectId(id: string) {
@@ -73,6 +55,7 @@ export class PropertyTreeService {
           Object.keys(pSet[propertySetKey].properties).forEach(propertyKey => {
             const childrenNode: PropertyNode = new PropertyNode();
             childrenNode.name = propertyKey;
+            childrenNode.property = new Property(propertyKey);
             childrenNodes.push(childrenNode);
           });
           node.children = childrenNodes;
@@ -81,14 +64,15 @@ export class PropertyTreeService {
 
         const qSet = products[0].quantitySets;
 
-        Object.keys(qSet).forEach(propertySetKey => {
+        Object.keys(qSet).forEach(quantitySetKey => {
           const node: PropertyNode = new PropertyNode();
-          node.name = propertySetKey;
+          node.name = quantitySetKey;
           const childrenNodes: PropertyNode[] = new Array();
 
-          Object.keys(qSet[propertySetKey].quantities).forEach(propertyKey => {
+          Object.keys(qSet[quantitySetKey].quantities).forEach(propertyKey => {
             const childrenNode: PropertyNode = new PropertyNode();
             childrenNode.name = propertyKey;
+            childrenNode.property = new Property(propertyKey);
             childrenNodes.push(childrenNode);
           });
           node.children = childrenNodes;

@@ -4,11 +4,9 @@
       <app-revision-selection [projectId]="projectId" (revisionChange)="revisionChange($event)"
         (categoryChange)="categoryChange($event)">
       </app-revision-selection>
-      <div style="width:400px">
-        <p>Drop zone</p>
-      </div>
+      <app-drop-zone></app-drop-zone>
       <app-property-tree class="flexgrow tree-panel">
-        </app-property-tree>
+      </app-property-tree>
     </app-panel>
   </div>
   <div class="center">

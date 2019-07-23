@@ -4,6 +4,8 @@ import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PropertyTreeService } from './property-tree.service';
 import { PropertyNode } from './property-tree.model';
+import { SelectedPropertiesService } from '../selected-properties.service';
+import { Property } from '../selected-properties.model';
 
 @Component({
   selector: 'app-property-tree',
@@ -15,10 +17,10 @@ export class PropertyTreeComponent {
   /** The selection for checklist */
   checklistSelection = new SelectionModel<PropertyFlatNode>(true /* multiple */);
 
-    /** Map from nested node to flattened node. This helps us to keep the same object for selection */
-    nestedNodeMap = new Map<PropertyNode, PropertyFlatNode>();
+  /** Map from nested node to flattened node. This helps us to keep the same object for selection */
+  nestedNodeMap = new Map<PropertyNode, PropertyFlatNode>();
 
-      /** Map from flat node to nested node. This helps us finding the nested node to be modified */
+  /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<PropertyFlatNode, PropertyNode>();
 
   treeControl: FlatTreeControl<PropertyFlatNode>;
@@ -27,7 +29,7 @@ export class PropertyTreeComponent {
 
   dataSource: MatTreeFlatDataSource<PropertyNode, PropertyFlatNode>;
 
-  constructor(private database: PropertyTreeService) {
+  constructor(private database: PropertyTreeService, private selectedPropertiesService: SelectedPropertiesService) {
 
     this.treeControl = new FlatTreeControl<PropertyFlatNode>(node => node.level, node => node.expandable);
     this.treeFlattener = new MatTreeFlattener(this.transformFunction, this.getLevel, this.isExpandable, this.getChildren);
@@ -43,13 +45,14 @@ export class PropertyTreeComponent {
    * Transformer to convert nested node to flat node. Record the nodes in maps for later use.
    */
   private transformFunction = (node: PropertyNode, level: number): PropertyFlatNode => {
-    const existingNode = this.nestedNodeMap.get(node);
+    const existingNode: PropertyFlatNode = this.nestedNodeMap.get(node);
     const flatNode = existingNode && existingNode.name === node.name
-        ? existingNode
-        : new PropertyFlatNode();
+      ? existingNode
+      : new PropertyFlatNode();
     flatNode.name = node.name;
     flatNode.level = level;
     flatNode.expandable = !!node.children;
+    flatNode.property = node.property;
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node, flatNode);
     return flatNode;
@@ -88,6 +91,16 @@ export class PropertyTreeComponent {
       ? this.checklistSelection.select(...descendants)
       : this.checklistSelection.deselect(...descendants);
 
+    if (this.checklistSelection.isSelected(node)) {
+      descendants.forEach(child =>
+        this.selectedPropertiesService.insertItem(child.property)
+        );
+    } else {
+      descendants.forEach(child =>
+        this.selectedPropertiesService.removeItem(child.property)
+        );
+    }
+
     // Force update for the parent
     descendants.every(child =>
       this.checklistSelection.isSelected(child)
@@ -98,6 +111,11 @@ export class PropertyTreeComponent {
   /** Toggle a leaf to-do item selection. Check all the parents to see if they changed */
   todoLeafItemSelectionToggle(node: PropertyFlatNode): void {
     this.checklistSelection.toggle(node);
+    if (this.checklistSelection.isSelected(node)) {
+      this.selectedPropertiesService.insertItem(node.property);
+    } else {
+      this.selectedPropertiesService.removeItem(node.property);
+    }
     this.checkAllParentsSelection(node);
   }
 
@@ -151,5 +169,6 @@ export class PropertyFlatNode {
   expandable: boolean;
   name: string;
   level: number;
+  property: Property;
 }
 

@@ -19,6 +19,7 @@ import {
   MatCheckboxModule
 } from '@angular/material';
 import {MatDialogModule} from '@angular/material/dialog';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -37,6 +38,7 @@ import { ProjectHeaderComponent } from './shared/components/project-header/proje
 import { ShareProjectDialogComponent } from './share-project/share-project-dialog/share-project-dialog.component';
 import { ViewerHostComponent } from './bimsync/viewer-host/viewer-host.component';
 import { PropertyTreeComponent } from './takeoff/property-tree/property-tree.component';
+import { DropZoneComponent } from './takeoff/drop-zone/drop-zone.component';
 
 declare var window: any;
 window.$ = window.jQuery = $;
@@ -58,6 +60,7 @@ window.$ = window.jQuery = $;
     ShareProjectDialogComponent,
     ViewerHostComponent,
     PropertyTreeComponent,
+    DropZoneComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,6 +78,7 @@ window.$ = window.jQuery = $;
     MatDialogModule,
     MatTreeModule,
     MatCheckboxModule,
+    DragDropModule,
     HttpClientModule
   ],
   entryComponents: [
