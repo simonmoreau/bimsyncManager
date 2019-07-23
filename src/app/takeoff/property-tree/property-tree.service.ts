@@ -60,7 +60,6 @@ export class PropertyTreeService {
 
     if (this.projectId && this.revisionId && this.ifcType) {
       this.bimsyncService.listProducts(this.projectId, this.ifcType, this.revisionId).subscribe(products => {
-        console.log(products);
 
         const nodes: PropertyNode[] = new Array();
 
@@ -96,7 +95,6 @@ export class PropertyTreeService {
           nodes.push(node);
         });
 
-        console.log(nodes);
         data = nodes;
 
         // Notify the change.

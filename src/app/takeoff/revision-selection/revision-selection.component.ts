@@ -100,7 +100,6 @@ export class RevisionSelectionComponent implements OnInit {
   }
 
   onCategoryChange(event: MatSelectChange) {
-    console.log(event);
     this.categoryChange.emit(event.value as ITypeSummary);
   }
 

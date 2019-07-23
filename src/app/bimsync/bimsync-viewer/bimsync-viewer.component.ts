@@ -43,7 +43,6 @@ export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit 
       if (width !== this.page.nativeElement.offsetWidth) {
         width = this.page.nativeElement.offsetWidth;
         window.dispatchEvent(new Event('resize'));
-        console.log('called');
       }
     });
   }
@@ -118,7 +117,7 @@ export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit 
 
       $viewer.viewer('modelInfo', (modelInfos): void => {
         // This will print model info for all loaded models
-        console.log(modelInfos);
+        // console.log(modelInfos);
       });
 
       context.isLoaded = true;
