@@ -16,7 +16,8 @@ import {
   MatTooltipModule,
   MatSelectModule,
   MatTreeModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatChipsModule
 } from '@angular/material';
 import {MatDialogModule} from '@angular/material/dialog';
 import {DragDropModule} from '@angular/cdk/drag-drop';
@@ -79,6 +80,7 @@ window.$ = window.jQuery = $;
     MatTreeModule,
     MatCheckboxModule,
     DragDropModule,
+    MatChipsModule,
     HttpClientModule
   ],
   entryComponents: [
