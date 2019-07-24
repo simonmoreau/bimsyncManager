@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SelectedPropertiesService } from '../selected-properties.service';
 import { Property } from '../selected-properties.model';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-drop-zone',
@@ -10,13 +11,11 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 })
 export class DropZoneComponent implements OnInit {
 
-  propertiesList: Property[];
+  propertiesList$: BehaviorSubject<Property[]>;
 
   constructor( propertiesService: SelectedPropertiesService) {
 
-    propertiesService.propertiesListChange.subscribe(data => {
-      this.propertiesList = data;
-    });
+    this.propertiesList$ = propertiesService.propertiesListChange;
   }
 
   ngOnInit() {

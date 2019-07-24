@@ -1,8 +1,10 @@
 <div style="width:400px;   border-style: solid; border-width: 5px; ">
   <div cdkDropList id="selectedPropertyList" cdkDropListConnectedTo="propertyTree" (cdkDropListDropped)="drop($event)">
-    <div *ngIf="propertiesList?.length == 0">
-      <p>Drop properties here ...</p>
+    <div *ngIf="(propertiesList$ | async)?.length > 0; else emptyDropZone">
+      <div *ngFor="let property of (propertiesList$ | async)" cdkDrag>{{ property.name }}</div>
     </div>
-    <div *ngFor="let property of propertiesList" cdkDrag>{{ property.name }}</div>
-</div>
+    <ng-template #emptyDropZone>
+      <p>Drop properties here ...</p>
+    </ng-template>
+  </div>
 </div>
