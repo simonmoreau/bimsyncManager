@@ -13,7 +13,7 @@ export class DropZoneComponent implements OnInit {
 
   propertiesList$: BehaviorSubject<Property[]>;
 
-  constructor( propertiesService: SelectedPropertiesService) {
+  constructor(private propertiesService: SelectedPropertiesService) {
 
     this.propertiesList$ = propertiesService.propertiesListChange;
   }
@@ -23,7 +23,7 @@ export class DropZoneComponent implements OnInit {
   }
 
   public drop(event: CdkDragDrop<Property[]>) {
-    console.log(event);
+    this.propertiesService.changePropertyRank(event.previousIndex, event.currentIndex);
   }
 
 }

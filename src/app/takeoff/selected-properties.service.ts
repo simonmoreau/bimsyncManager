@@ -18,11 +18,10 @@ export class SelectedPropertiesService {
 
   /** Add an item to the list of selected properties */
   insertItem(property: Property) {
-    // if (parent.children) {
-    //   parent.children.push({ name: Name } as Property);
-    //   this.dataChange.next(this.data);
-    // }
-    this.propertiesList.push(property);
+    const index = this.propertiesList.indexOf(property, 0);
+    if (index === -1) {
+      this.propertiesList.push(property);
+    }
     this.propertiesListChange.next(this.propertiesList);
   }
 
@@ -35,8 +34,11 @@ export class SelectedPropertiesService {
     this.propertiesListChange.next(this.propertiesList);
   }
 
-  updateItem(property: Property, Name: string) {
-    property.name = Name;
+  changePropertyRank(previousIndex: number, newIndex: number) {
+    const property: Property = this.propertiesList[previousIndex];
+    this.propertiesList.splice(previousIndex, 1);
+    this.propertiesList.splice(newIndex, 0, property);
     this.propertiesListChange.next(this.propertiesList);
   }
+
 }
