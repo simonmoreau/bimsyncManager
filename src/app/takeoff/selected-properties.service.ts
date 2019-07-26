@@ -34,6 +34,13 @@ export class SelectedPropertiesService {
     this.propertiesListChange.next(this.propertiesList);
   }
 
+  removeItemAtIndex(index: number) {
+    if (index > -1 && index < this.propertiesList.length) {
+      this.propertiesList.splice(index, 1);
+    }
+    this.propertiesListChange.next(this.propertiesList);
+  }
+
   changePropertyRank(previousIndex: number, newIndex: number) {
     const property: Property = this.propertiesList[previousIndex];
     this.propertiesList.splice(previousIndex, 1);

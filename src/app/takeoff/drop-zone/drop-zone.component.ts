@@ -23,7 +23,12 @@ export class DropZoneComponent implements OnInit {
   }
 
   public drop(event: CdkDragDrop<Property[]>) {
-    this.propertiesService.changePropertyRank(event.previousIndex, event.currentIndex);
+    if (event.isPointerOverContainer) {
+      this.propertiesService.changePropertyRank(event.previousIndex, event.currentIndex);
+    } else {
+      this.propertiesService.removeItemAtIndex(event.previousIndex);
+    }
+    console.log(event);
   }
 
 }
