@@ -6,6 +6,7 @@ import { PropertyTreeService } from './property-tree.service';
 import { PropertyNode } from './property-tree.model';
 import { SelectedPropertiesService } from '../selected-properties.service';
 import { Property } from '../selected-properties.model';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-property-tree',
@@ -29,15 +30,20 @@ export class PropertyTreeComponent {
 
   dataSource: MatTreeFlatDataSource<PropertyNode, PropertyFlatNode>;
 
+  loading: boolean;
+
   constructor(private database: PropertyTreeService, private selectedPropertiesService: SelectedPropertiesService) {
 
+    this.loading = true;
     this.treeControl = new FlatTreeControl<PropertyFlatNode>(node => node.level, node => node.expandable);
     this.treeFlattener = new MatTreeFlattener(this.transformFunction, this.getLevel, this.isExpandable, this.getChildren);
 
     this.dataSource = new MatTreeFlatDataSource<PropertyNode, PropertyFlatNode>(this.treeControl, this.treeFlattener);
 
     database.dataChange.subscribe(data => {
+      this.loading = true;
       this.dataSource.data = data;
+      this.loading = false;
     });
   }
 
