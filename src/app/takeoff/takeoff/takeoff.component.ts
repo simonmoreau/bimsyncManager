@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { IProject, IRevision, ITypeSummary } from 'src/app/shared/models/bimsync.model';
+import { IProject, IRevision, ITypeSummary, Product } from 'src/app/shared/models/bimsync.model';
 import { ActivatedRoute } from '@angular/router';
 import { BimsyncService } from 'src/app/bimsync/bimsync.service';
 import { HeaderService } from 'src/app/shared/services/header.service';
@@ -16,6 +16,7 @@ export class TakeoffComponent implements OnInit, OnDestroy {
   projectId: string;
   revisionIds: string[];
   highlightedElements: string[];
+  selectedElements: Product[];
 
   constructor(
     private route: ActivatedRoute,

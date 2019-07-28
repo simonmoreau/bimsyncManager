@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, OnChanges, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import * as $ from 'jquery';
 import { BimsyncService } from '../bimsync.service';
-import { interval } from 'rxjs';
+import { interval, BehaviorSubject } from 'rxjs';
+import { PropertyPanelService } from '../property-panel/property-panel.service';
 declare var bimsync: any;
 
 @Component({
@@ -22,7 +23,7 @@ export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit 
 
   @ViewChild('page', { static: false }) page: ElementRef;
 
-  constructor(private bimsyncService: BimsyncService) { }
+  constructor(private bimsyncService: BimsyncService, private propertyPanelService: PropertyPanelService) { }
 
   ngOnInit() {
 
@@ -123,13 +124,12 @@ export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit 
       context.isLoaded = true;
     });
 
-    $viewer.bind('viewer.select', (event, selected): void => {
-
-      console.log(selected);
+    $viewer.bind('viewer.select', (event: any, selected: string[]): void => {
       if (selected.length !== 0) {
-        context.selectedProductId = selected[0];
+        context.propertyPanelService.AddProducts(selected);
+        // context.selectedProductId = selected[0];
       } else {
-        context.selectedProductId = null;
+        context.propertyPanelService.AddProducts(null);
       }
     });
   }

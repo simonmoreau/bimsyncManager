@@ -42,6 +42,20 @@ export class BimsyncService {
     return this.getsPaginated<Product>(this.apiUrl + `projects/${projectId}/ifc/products?ifcType=${ifcType}&revision=${revisionId}`);
   }
 
+  queryProductsById(projectId: string, ids: string[]): Observable<Product[]> {
+
+    const idNumbers = ids.map(id => +id);
+    const body = {
+      query: {
+        objectId: {
+          $in: idNumbers
+        }
+      }
+    };
+
+    return this.post<Product[]>(this.apiUrl + `projects/${projectId}/ifc/products`, body);
+  }
+
   getViewer3DTokenForRevision(projectId: string, revisionId: string[]): Observable<IViewerToken> {
     const body = { revisions: revisionId };
     return this.post<IViewerToken>(this.apiUrl + `projects/${projectId}/viewer3d/token`, body);

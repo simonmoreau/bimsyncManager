@@ -40,6 +40,7 @@ import { ShareProjectDialogComponent } from './share-project/share-project-dialo
 import { ViewerHostComponent } from './bimsync/viewer-host/viewer-host.component';
 import { PropertyTreeComponent } from './takeoff/property-tree/property-tree.component';
 import { DropZoneComponent } from './takeoff/drop-zone/drop-zone.component';
+import { PropertyPanelComponent } from './bimsync/property-panel/property-panel.component';
 
 declare var window: any;
 window.$ = window.jQuery = $;
@@ -62,6 +63,7 @@ window.$ = window.jQuery = $;
     ViewerHostComponent,
     PropertyTreeComponent,
     DropZoneComponent,
+    PropertyPanelComponent,
   ],
   imports: [
     BrowserModule,
