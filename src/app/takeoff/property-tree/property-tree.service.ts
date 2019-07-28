@@ -11,8 +11,10 @@ import { Property } from '../selected-properties.model';
 export class PropertyTreeService {
 
   dataChange = new BehaviorSubject<PropertyNode[]>([]);
+  loading = new BehaviorSubject<boolean>(false);
 
   get data(): PropertyNode[] { return this.dataChange.value; }
+  get isLoading(): boolean { return this.loading.value; }
 
   private projectId: string;
   private revisionId: string;
@@ -36,6 +38,9 @@ export class PropertyTreeService {
   }
 
   initialize() {
+    // Notify start of the loading process.
+    this.loading.next(true);
+
     // Build the tree nodes from Json object. The result is a list of `PropertyNode` with nested
     //     file node as children.
     let data = null; // this.buildFileTree(TREE_DATA, 0);
@@ -45,8 +50,18 @@ export class PropertyTreeService {
 
         const nodes: PropertyNode[] = new Array();
 
+        const identificationNode: PropertyNode = new PropertyNode();
+        identificationNode.name = 'Identification';
+        const identificationChildrenNodes: PropertyNode[] = new Array();
+        identificationChildrenNodes.push(this.CreateAChildNode('Name'));
+        identificationChildrenNodes.push(this.CreateAChildNode('GUID'));
+        identificationChildrenNodes.push(this.CreateAChildNode('Entity'));
+        identificationNode.children = identificationChildrenNodes;
+        nodes.push(identificationNode);
+
         const pSet = products[0].propertySets;
 
+        // Create PropertySets nodes
         Object.keys(pSet).forEach(propertySetKey => {
           const node: PropertyNode = new PropertyNode();
           node.name = propertySetKey;
@@ -64,6 +79,7 @@ export class PropertyTreeService {
 
         const qSet = products[0].quantitySets;
 
+        // Create QuantitySets nodes
         Object.keys(qSet).forEach(quantitySetKey => {
           const node: PropertyNode = new PropertyNode();
           node.name = quantitySetKey;
@@ -84,10 +100,22 @@ export class PropertyTreeService {
         // Notify the change.
         this.dataChange.next(data);
 
+        // Notify start of the loading process.
+        this.loading.next(false);
+
       });
     }
+  }
 
-
+  /**
+   * Create a children node
+   * @param name The name of the children node
+   */
+  CreateAChildNode(name: string): PropertyNode {
+    const childrenNode: PropertyNode = new PropertyNode();
+    childrenNode.name = name;
+    childrenNode.property = new Property(name);
+    return childrenNode;
   }
 
   /**

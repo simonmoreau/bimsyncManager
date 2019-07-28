@@ -35,16 +35,17 @@ export class PropertyTreeComponent {
   constructor(private database: PropertyTreeService, private selectedPropertiesService: SelectedPropertiesService) {
 
     this.loading = true;
+
     this.treeControl = new FlatTreeControl<PropertyFlatNode>(node => node.level, node => node.expandable);
     this.treeFlattener = new MatTreeFlattener(this.transformFunction, this.getLevel, this.isExpandable, this.getChildren);
 
     this.dataSource = new MatTreeFlatDataSource<PropertyNode, PropertyFlatNode>(this.treeControl, this.treeFlattener);
 
     database.dataChange.subscribe(data => {
-      this.loading = true;
       this.dataSource.data = data;
-      this.loading = false;
     });
+
+    database.loading.subscribe(l => this.loading = l);
   }
 
   /**
