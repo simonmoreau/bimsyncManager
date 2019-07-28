@@ -13,6 +13,8 @@ export class RevisionSelectionComponent implements OnInit {
   constructor(private bimsyncService: BimsyncService) { }
 
   @Input() projectId: string;
+  @Output() revisionChange: EventEmitter<IRevision> = new EventEmitter<IRevision>();
+  @Output() categoryChange: EventEmitter<ITypeSummary> = new EventEmitter<ITypeSummary>();
 
   models: IModel[];
   revisions: IRevision[];
@@ -20,12 +22,16 @@ export class RevisionSelectionComponent implements OnInit {
   selectedModel: IModel;
   selectedRevision: IRevision;
   selectedCategory: ITypeSummary;
-
-  @Output() revisionChange: EventEmitter<IRevision> = new EventEmitter<IRevision>();
-  @Output() categoryChange: EventEmitter<ITypeSummary> = new EventEmitter<ITypeSummary>();
+  isLoading: boolean;
+  sortAlphabetically = (a: ITypeSummary, b: ITypeSummary) => {
+    if (a.name < b.name) { return -1; }
+    if (a.name > b.name) { return 1; }
+    return 0;
+  }
 
   ngOnInit() {
 
+    this.isLoading = true;
     this.bimsyncService.getModels(this.projectId).subscribe(
       m => {
         this.models = m;
@@ -39,10 +45,11 @@ export class RevisionSelectionComponent implements OnInit {
                 this.revisionChange.emit(this.selectedRevision);
                 this.bimsyncService.getProductsTypeSummary(this.projectId, this.selectedRevision.id).subscribe(
                   s => {
-                    this.categories = s;
+                    this.categories = s.sort(this.sortAlphabetically);
                     if (s.length !== 0) {
                       this.selectedCategory = s[0];
                       this.categoryChange.emit(this.selectedCategory as ITypeSummary);
+                      this.isLoading = false;
                     }
                   }
                 );
@@ -50,6 +57,7 @@ export class RevisionSelectionComponent implements OnInit {
                 this.selectedRevision = null;
                 this.categories = null;
                 this.selectedCategory = null;
+                this.isLoading = false;
               }
             }
           );
@@ -59,7 +67,8 @@ export class RevisionSelectionComponent implements OnInit {
   }
 
   onModelChange(event: MatSelectChange) {
-    // (event.value as IModel).id
+
+    this.isLoading = true;
 
     this.bimsyncService.getRevisions(this.projectId, (event.value as IModel).id).subscribe(
       r => {
@@ -69,10 +78,11 @@ export class RevisionSelectionComponent implements OnInit {
           this.revisionChange.emit(this.selectedRevision);
           this.bimsyncService.getProductsTypeSummary(this.projectId, this.selectedRevision.id).subscribe(
             s => {
-              this.categories = s;
+              this.categories = s.sort(this.sortAlphabetically);
               if (s.length !== 0) {
                 this.selectedCategory = s[0];
                 this.categoryChange.emit(this.selectedCategory as ITypeSummary);
+                this.isLoading = false;
               }
             }
           );
@@ -80,6 +90,7 @@ export class RevisionSelectionComponent implements OnInit {
           this.selectedRevision = null;
           this.categories = null;
           this.selectedCategory = null;
+          this.isLoading = false;
         }
       }
     );
@@ -87,13 +98,16 @@ export class RevisionSelectionComponent implements OnInit {
 
   onRevisionChange(event: MatSelectChange) {
 
+    this.isLoading = true;
+
     this.revisionChange.emit(event.value as IRevision);
     this.bimsyncService.getProductsTypeSummary(this.projectId, (event.value as IRevision).id).subscribe(
       s => {
-        this.categories = s;
+        this.categories = s.sort(this.sortAlphabetically);
         if (s.length !== 0) {
           this.selectedCategory = s[0];
           this.categoryChange.emit(this.selectedCategory as ITypeSummary);
+          this.isLoading = false;
         }
       }
     );

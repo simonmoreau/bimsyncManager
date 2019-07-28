@@ -1,4 +1,7 @@
-<div class="container">
+<div class="spinner flex-container" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>
+<div class="container" *ngIf="!isLoading">
   <mat-form-field>
     <mat-label>Select a model</mat-label>
     <mat-select [(value)]="selectedModel" name="models" (selectionChange)="onModelChange($event)">

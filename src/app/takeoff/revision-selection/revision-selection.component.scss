@@ -2,3 +2,13 @@
     display: flex;
     flex-direction: column;
 }
+
+.flex-container {
+    display: flex;
+    justify-content: center;
+    min-height: 180.5px
+}
+
+.spinner {
+    margin-top: 1rem;
+}
