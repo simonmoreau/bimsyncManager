@@ -1,9 +1,10 @@
 
-<div *ngFor="let product of products">
+<div *ngIf="data">
   <p>
-    {{product.objectId}}
+    {{data.name}}
   </p>
   <p>
-    {{product.ifcType}}
+    {{data.entity}}
   </p>
+  <mat-divider></mat-divider>
 </div>

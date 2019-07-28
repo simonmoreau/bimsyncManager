@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Product } from 'src/app/shared/models/bimsync.model';
 import { PropertyPanelService } from './property-panel.service';
+import { IPanelData } from './property-panel.model';
 
 @Component({
   selector: 'app-property-panel',
@@ -9,13 +10,18 @@ import { PropertyPanelService } from './property-panel.service';
 })
 export class PropertyPanelComponent implements OnInit {
 
-  products: Product[];
+  data: IPanelData;
 
   constructor(private propertyPanelService: PropertyPanelService) {
 
-    propertyPanelService.productsList.subscribe(data => {
-      this.products = data;
-      console.log(this.products);
+    propertyPanelService.productsList.subscribe(products => {
+
+      if (products) {
+        this.data = new IPanelData(products);
+        console.log(this.data);
+      } else {
+        this.data = null;
+      }
     });
   }
 
