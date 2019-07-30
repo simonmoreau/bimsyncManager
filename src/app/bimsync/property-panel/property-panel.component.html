@@ -1,10 +1,36 @@
-
-<div *ngIf="data">
-  <p>
-    {{data.name}}
-  </p>
-  <p>
-    {{data.entity}}
-  </p>
-  <mat-divider></mat-divider>
+<div class="container">
+  <div *ngIf="data">
+    <div class="property">
+      <div class="mat-body-strong">Identification</div>
+    </div>
+    <div class="property" *ngFor="let property of data.identification">
+      <div class="id-label mat-body">{{property.name}} :</div>
+      <div class="id-value mat-body">{{property.value}} {{property.unit}}</div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="property" *ngIf="data.properties.length > 0">
+      <div class="mat-body-strong">Properties</div>
+    </div>
+    <div *ngFor="let set of data.properties">
+        <div class="mat-body" style="font-style: italic;">{{set.name}}</div>
+      <div class="property" *ngFor="let property of set.properties">
+        <div class="item-label mat-body">{{property.name}} :</div>
+        <div class="item-value mat-body">{{property.value}} {{property.unit}}</div>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="property" *ngIf="data.quantities.length > 0">
+      <div class="mat-body-strong">Quantities</div>
+    </div>
+    <div *ngFor="let set of data.quantities">
+      <div class="mat-body" style="font-style: italic;">{{set.name}}</div>
+      <div class="property" *ngFor="let property of set.properties">
+        <div class="item-label mat-body">{{property.name}} :</div>
+        <div class="item-value mat-body">{{property.value}} {{property.unit}}</div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!data">
+    <p class="mat-body">No object have been selected</p>
+  </div>
 </div>

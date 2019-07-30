@@ -66,14 +66,14 @@ class Value {
     ifcType: string;
     type: string;
     unit: string;
-    value: object;
+    value: any;
 }
 
 class ValueMap {
     [name: string]: Value;
 }
 
-class Property {
+export class Property {
     description: string;
     ifcType: string;
     nominalValue: Value;
@@ -98,7 +98,7 @@ class PropertySetMap {
     [name: string]: PropertySet;
 }
 
-class Quantity {
+export class Quantity {
     description: string;
     ifcType: string;
     value: Value;

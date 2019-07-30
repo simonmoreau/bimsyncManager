@@ -1,0 +1,45 @@
+.item-label {
+    width: 130px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.item-value  {
+    width: calc(100% - 130px);
+    word-wrap: break-word;
+    white-space: normal;
+    text-align: right;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    margin-top: 5px;
+    padding-right: 2px;
+}
+
+.id-label {
+    width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.id-value  {
+    width: calc(100% - 100px);
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.property {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+mat-divider {
+    margin-top: 1rem;
+}
+
+.container {
+    width: 250px;
+    margin-right: 0.5rem;
+}

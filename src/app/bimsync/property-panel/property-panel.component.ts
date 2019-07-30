@@ -26,6 +26,7 @@ export class PropertyPanelComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.data = null;
   }
 
 }
