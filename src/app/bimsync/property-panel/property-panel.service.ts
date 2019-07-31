@@ -9,21 +9,14 @@ import { HeaderService } from 'src/app/shared/services/header.service';
 })
 export class PropertyPanelService {
 
-  productsList = new BehaviorSubject<Product[]>([]);
+  productsIdList = new BehaviorSubject<string[]>([]);
 
-  get products(): Product[] { return this.productsList.value; }
+  get productIds(): string[] { return this.productsIdList.value; }
 
-  constructor(private bimsyncService: BimsyncService, private headerService: HeaderService) { }
+  constructor() { }
 
   /** Add products to the list of selected products */
   AddProducts(ids: string[]) {
-    if (ids) {
-      const projectId: string = (this.headerService.project.value as IProject).id;
-      this.bimsyncService.queryProductsById(projectId, ids).subscribe(products => {
-        this.productsList.next(products);
-      });
-    } else {
-      this.productsList.next(null);
-    }
+    this.productsIdList.next(ids);
   }
 }

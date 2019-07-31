@@ -8,8 +8,6 @@ export class IPanelData {
 
     constructor(products: Product[]) {
         if (products.length === 1) {
-            
-
             const product = products[0];
             console.log(product);
             const identificationProps: Property[] = new Array();
