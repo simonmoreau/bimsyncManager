@@ -24,7 +24,7 @@ export class PropertyPanelComponent implements OnInit {
     propertyPanelService.productsIdList.subscribe(productsIds => {
       this.loading = true;
       const project = this.headerService.project.value as IProject;
-      if (productsIds != null && project != null) {
+      if (productsIds.length === 1 && project != null) {
         const projectId: string = project.id;
         this.bimsyncService.queryProductsById(projectId, productsIds).subscribe(products => {
           this.data = new IPanelData(products);

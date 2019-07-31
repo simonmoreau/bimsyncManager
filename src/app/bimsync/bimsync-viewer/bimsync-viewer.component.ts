@@ -129,7 +129,7 @@ export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit 
         context.propertyPanelService.AddProducts(selected);
         // context.selectedProductId = selected[0];
       } else {
-        context.propertyPanelService.AddProducts(null);
+        context.propertyPanelService.AddProducts(new Array());
       }
     });
   }
