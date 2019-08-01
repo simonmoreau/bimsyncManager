@@ -17,7 +17,8 @@ import {
   MatSelectModule,
   MatTreeModule,
   MatCheckboxModule,
-  MatChipsModule
+  MatChipsModule,
+  MatButtonToggleModule
 } from '@angular/material';
 import {MatDialogModule} from '@angular/material/dialog';
 import {DragDropModule} from '@angular/cdk/drag-drop';
@@ -41,6 +42,7 @@ import { ViewerHostComponent } from './bimsync/viewer-host/viewer-host.component
 import { PropertyTreeComponent } from './takeoff/property-tree/property-tree.component';
 import { DropZoneComponent } from './takeoff/drop-zone/drop-zone.component';
 import { PropertyPanelComponent } from './bimsync/property-panel/property-panel.component';
+import { ViewerMenuComponent } from './bimsync/viewer-menu/viewer-menu.component';
 
 declare var window: any;
 window.$ = window.jQuery = $;
@@ -64,6 +66,7 @@ window.$ = window.jQuery = $;
     PropertyTreeComponent,
     DropZoneComponent,
     PropertyPanelComponent,
+    ViewerMenuComponent,
   ],
   imports: [
     BrowserModule,
@@ -83,6 +86,7 @@ window.$ = window.jQuery = $;
     MatCheckboxModule,
     DragDropModule,
     MatChipsModule,
+    MatButtonToggleModule,
     HttpClientModule
   ],
   entryComponents: [

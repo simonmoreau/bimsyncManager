@@ -1,0 +1,16 @@
+.button-bar {
+    position: absolute;
+    top: 0.5rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+button.button {
+    min-width: 50px;
+    padding: 0 8px;
+}
+
+.button {
+    margin: 0 3px;
+}
