@@ -1,10 +1,10 @@
-import { Product, Property as BimsyncProperty, Quantity as BimsyncQuantity } from 'src/app/shared/models/bimsync.model';
+import { Product, Property as BimsyncProperty, Quantity as BimsyncQuantity, Value } from 'src/app/shared/models/bimsync.model';
 
 export class IPanelData {
     identification: Property[];
     properties: Set[];
     quantities: Set[];
-    materials: string;
+    materials: Set[];
 
     constructor(products: Product[]) {
         if (products.length === 1) {
@@ -31,15 +31,15 @@ export class IPanelData {
                             num = Math.round(num * 1000) / 1000;
                             displayedValue = num.toString();
                         }
-                        propertiesList.push({name: propertyKey, value: displayedValue, unit: property.nominalValue.unit });
+                        propertiesList.push({ name: propertyKey, value: displayedValue, unit: property.nominalValue.unit });
                     }
                 });
                 if (propertiesList.length > 0) {
-                    PropSets.push({name: propertySetKey, properties: propertiesList});
+                    PropSets.push({ name: propertySetKey, properties: propertiesList });
                 }
             });
 
-            if (PropSets.length > 0 ) { this.properties = PropSets;}
+            this.properties = PropSets;
 
             // Create QuantitySets properties
             const qSet = products[0].quantitySets;
@@ -54,13 +54,54 @@ export class IPanelData {
                         num = Math.round(num * 1000) / 1000;
                         displayedValue = num.toString();
                     }
-                    quantitiesList.push({name: quantityKey, value: displayedValue, unit: quantity.value.unit });
+                    quantitiesList.push({ name: quantityKey, value: displayedValue, unit: quantity.value.unit });
                 });
-                QuantSets.push({name: quantitySetKey, properties: quantitiesList});
+                QuantSets.push({ name: quantitySetKey, properties: quantitiesList });
             });
 
             this.quantities = QuantSets;
 
+            // Create materials properties
+            const bimsyncMaterials = products[0].materials;
+            const materialSets: Set[] = new Array();
+            bimsyncMaterials.forEach(bimsyncMaterial => {
+                if (bimsyncMaterial.attributes['ForLayerSet']) {
+                    const layerSetName = bimsyncMaterial.attributes['ForLayerSet'].value.attributes.LayerSetName.value;
+                    const materialLayers: Value[] = bimsyncMaterial.attributes['ForLayerSet'].value.attributes.MaterialLayers.value;
+                    const materialList: Property[] = new Array();
+                    materialLayers.forEach(materialLayer => {
+                        materialList.push({
+                            name: materialLayer.value.attributes['Material'].value.attributes['Name'].value,
+                            value: materialLayer.value.attributes['LayerThickness'].value,
+                            unit: materialLayer.value.attributes['LayerThickness'].unit }
+                        );
+                    });
+                    materialSets.push({ name: layerSetName, properties: materialList });
+                } else if (bimsyncMaterial.attributes['Name']) {
+                    const materialList: Property[] = new Array();
+                    materialList.push({
+                        name: 'Name',
+                        value: bimsyncMaterial.attributes['Name'].value,
+                        unit: ''
+                    });
+                    materialSets.push({ name: 'Material', properties: materialList });
+                } else if (bimsyncMaterial.attributes['Materials']) {
+                    const materialList: Property[] = new Array();
+                    const materials: Value[] = bimsyncMaterial.attributes['Materials'].value;
+                    let i = 1;
+                    materials.forEach(material => {
+                        materialList.push({
+                            name: 'Material ' + i,
+                            value: material.value.attributes['Name'].value,
+                            unit: ''
+                        });
+                        i++;
+                    });
+                    materialSets.push({ name: 'Materials', properties: materialList });
+                }
+            });
+
+            this.materials = materialSets;
         }
     }
 }

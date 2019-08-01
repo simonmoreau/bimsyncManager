@@ -9,25 +9,42 @@
         <div class="id-value mat-body">{{property.value}} {{property.unit}}</div>
       </div>
       <mat-divider></mat-divider>
-      <div class="property" *ngIf="data.properties.length > 0">
-        <div class="mat-body-strong">Properties</div>
-      </div>
-      <div *ngFor="let set of data.properties">
-        <div class="mat-body" style="font-style: italic;">{{set.name}}</div>
-        <div class="property" *ngFor="let property of set.properties">
-          <div class="item-label mat-body">{{property.name}} :</div>
-          <div class="item-value mat-body">{{property.value}} {{property.unit}}</div>
+      <div *ngIf="data.properties.length > 0">
+        <div class="property">
+          <div class="mat-body-strong">Properties</div>
         </div>
+        <div *ngFor="let set of data.properties">
+          <div class="mat-body" style="font-style: italic;">{{set.name}}</div>
+          <div class="property" *ngFor="let property of set.properties">
+            <div class="item-label mat-body">{{property.name}} :</div>
+            <div class="item-value mat-body">{{property.value}} {{property.unit}}</div>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
       </div>
-      <mat-divider></mat-divider>
-      <div class="property" *ngIf="data.quantities.length > 0">
-        <div class="mat-body-strong">Quantities</div>
+      <div *ngIf="data.quantities.length > 0">
+        <div class="property">
+          <div class="mat-body-strong">Quantities</div>
+        </div>
+        <div *ngFor="let set of data.quantities">
+          <div class="mat-body" style="font-style: italic;">{{set.name}}</div>
+          <div class="property" *ngFor="let property of set.properties">
+            <div class="item-label mat-body">{{property.name}} :</div>
+            <div class="item-value mat-body">{{property.value}} {{property.unit}}</div>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
       </div>
-      <div *ngFor="let set of data.quantities">
-        <div class="mat-body" style="font-style: italic;">{{set.name}}</div>
-        <div class="property" *ngFor="let property of set.properties">
-          <div class="item-label mat-body">{{property.name}} :</div>
-          <div class="item-value mat-body">{{property.value}} {{property.unit}}</div>
+      <div *ngIf="data.materials.length > 0">
+        <div class="property">
+          <div class="mat-body-strong">Materials</div>
+        </div>
+        <div *ngFor="let set of data.materials">
+          <div class="mat-body" style="font-style: italic;">{{set.name}}</div>
+          <div class="property" *ngFor="let property of set.properties">
+            <div class="item-label mat-body">{{property.name}} :</div>
+            <div class="item-value mat-body">{{property.value}} {{property.unit}}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -36,8 +53,8 @@
     </div>
   </div>
   <div *ngIf="loading">
-      <div class="spinner flex-container">
-          <mat-spinner></mat-spinner>
-        </div>
+    <div class="spinner flex-container">
+      <mat-spinner></mat-spinner>
+    </div>
   </div>
 </div>

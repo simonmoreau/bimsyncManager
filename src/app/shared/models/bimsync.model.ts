@@ -62,7 +62,7 @@ class Entity {
     attributes: ValueMap[];
 }
 
-class Value {
+export class Value {
     ifcType: string;
     type: string;
     unit: string;
