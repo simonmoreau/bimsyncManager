@@ -19,6 +19,11 @@ export class IPanelData {
 
             // Create PropertySets properties
             const pSet = products[0].propertySets;
+            if (products[0].type) {
+                const typePSet = products[0].type.propertySets;
+                Object.keys(typePSet).forEach(key => { pSet[key] = products[0].type.propertySets[key]; });
+            }
+            console.log(pSet);
             const PropSets: Set[] = new Array();
             Object.keys(pSet).forEach(propertySetKey => {
                 const propertiesList: Property[] = new Array();
@@ -43,6 +48,10 @@ export class IPanelData {
 
             // Create QuantitySets properties
             const qSet = products[0].quantitySets;
+            if (products[0].type) {
+                const typeQSet = products[0].type.quantitySets;
+                Object.keys(typeQSet).forEach(key => { qSet[key] = products[0].type.quantitySets[key]; });
+            }
             const QuantSets: Set[] = new Array();
             Object.keys(qSet).forEach(quantitySetKey => {
                 const quantitiesList: Property[] = new Array();
