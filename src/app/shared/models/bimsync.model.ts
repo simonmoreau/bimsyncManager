@@ -59,7 +59,7 @@ export interface ITypeSummary {
 class Entity {
     objectId: string;
     ifcType: string;
-    attributes: ValueMap[];
+    attributes: ValueMap;
 }
 
 export class Value {
@@ -82,7 +82,7 @@ export class Property {
     lowerBoundValue: Value;
     upperBoundValue: Value;
     propertyReference: Value;
-    properties: PropertyMap[];
+    properties: PropertyMap;
 }
 
 class PropertyMap {
@@ -91,7 +91,7 @@ class PropertyMap {
 
 class PropertySet extends Entity {
     revisionId: string;
-    properties: PropertyMap[];
+    properties: PropertyMap;
 }
 
 class PropertySetMap {
@@ -110,7 +110,7 @@ class QuantityMap {
 
 class QuantitySet extends Entity {
     revisionId: string;
-    properties: QuantityMap[];
+    quantities: QuantityMap;
 }
 
 class QuantitySetMap {
@@ -119,15 +119,15 @@ class QuantitySetMap {
 
 class Type extends Entity {
     revisionId: string;
-    propertySets: PropertySetMap[];
-    quantitySets: QuantitySetMap[];
+    propertySets: PropertySetMap;
+    quantitySets: QuantitySetMap;
     materials: Entity[];
 }
 
 export class Product extends Entity {
     revisionId: string;
-    propertySets: PropertySetMap[];
-    quantitySets: QuantitySetMap[];
+    propertySets: PropertySetMap;
+    quantitySets: QuantitySetMap;
     materials: Entity[];
     type: Type;
 }

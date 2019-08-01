@@ -11,19 +11,17 @@ export class IPanelData {
             const product = products[0];
             console.log(product);
             const identificationProps: Property[] = new Array();
-            identificationProps.push({ name: 'Name', value: product.attributes['Name'].value, unit: '' });
             identificationProps.push({ name: 'Entity', value: product.ifcType, unit: '' });
-            identificationProps.push({ name: 'GlobalId', value: product.attributes['GlobalId'].value, unit: '' });
-            identificationProps.push({ name: 'ObjectType', value: product.attributes['ObjectType'].value, unit: '' });
+
+            Object.keys(product.attributes).forEach(valueKey => {
+                const value: Value = product.attributes[valueKey];
+                identificationProps.push({ name: valueKey, value: value.value, unit: value.unit });
+            });
+
             this.identification = identificationProps;
 
             // Create PropertySets properties
             const pSet = products[0].propertySets;
-            if (products[0].type) {
-                const typePSet = products[0].type.propertySets;
-                Object.keys(typePSet).forEach(key => { pSet[key] = products[0].type.propertySets[key]; });
-            }
-            console.log(pSet);
             const PropSets: Set[] = new Array();
             Object.keys(pSet).forEach(propertySetKey => {
                 const propertiesList: Property[] = new Array();
@@ -39,6 +37,7 @@ export class IPanelData {
                         propertiesList.push({ name: propertyKey, value: displayedValue, unit: property.nominalValue.unit });
                     }
                 });
+
                 if (propertiesList.length > 0) {
                     PropSets.push({ name: propertySetKey, properties: propertiesList });
                 }
@@ -48,10 +47,6 @@ export class IPanelData {
 
             // Create QuantitySets properties
             const qSet = products[0].quantitySets;
-            if (products[0].type) {
-                const typeQSet = products[0].type.quantitySets;
-                Object.keys(typeQSet).forEach(key => { qSet[key] = products[0].type.quantitySets[key]; });
-            }
             const QuantSets: Set[] = new Array();
             Object.keys(qSet).forEach(quantitySetKey => {
                 const quantitiesList: Property[] = new Array();
@@ -82,7 +77,8 @@ export class IPanelData {
                         materialList.push({
                             name: materialLayer.value.attributes['Material'].value.attributes['Name'].value,
                             value: materialLayer.value.attributes['LayerThickness'].value,
-                            unit: materialLayer.value.attributes['LayerThickness'].unit }
+                            unit: materialLayer.value.attributes['LayerThickness'].unit
+                        }
                         );
                     });
                     materialSets.push({ name: layerSetName, properties: materialList });
