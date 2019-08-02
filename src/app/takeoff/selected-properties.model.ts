@@ -44,7 +44,6 @@ export class IPropertiesList {
             this.propertiesList.splice(index, 1);
         }
         this.propertiesListChange.next(this.propertiesList);
-        this.deletedProperty.emit(property);
     }
 
     removeItemAtIndex(index: number) {
