@@ -1,8 +1,10 @@
 import { Component, OnInit, Input, OnChanges, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import * as $ from 'jquery';
 import { BimsyncService } from '../bimsync.service';
-import { interval, BehaviorSubject } from 'rxjs';
+import { interval, BehaviorSubject, from, Observable, of } from 'rxjs';
 import { PropertyPanelService } from '../property-panel/property-panel.service';
+import { map, mergeAll, mergeMap } from 'rxjs/operators';
+import { Product } from 'src/app/shared/models/bimsync.model';
 declare var bimsync: any;
 
 @Component({
@@ -13,13 +15,14 @@ declare var bimsync: any;
 export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input() revisionIds: string[];
-  @Input() spaceIds: number[];
   @Input() projectId: string;
-  @Input() highlightedElements: any[];
-
+  @Input() highlightedProductsIds: string[] = new Array();
 
   private isLoaded: boolean;
-  private selectedProductId: string;
+  private areSpacesVisible = false;
+  private areOtherVisible = true;
+  private areOtherOpaque = true;
+  private selectedProductsIds: string[] = new Array();
 
   @ViewChild('page', { static: false }) page: ElementRef;
 
@@ -31,7 +34,14 @@ export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit 
 
     this.bimsyncService.getViewer3DTokenForRevision(this.projectId, this.revisionIds).subscribe(token => {
       const viewer3dUrl = `https://api.bimsync.com/v2/projects/${this.projectId}/viewer3d/data?token=${token.token}`;
-      this.EnableViewer(viewer3dUrl);
+      const revisionIds$: Observable<string> = from(this.revisionIds);
+      revisionIds$.pipe(
+        map(revisionId => this.bimsyncService.listProducts(this.projectId, 'IfcSpace', revisionId)),
+        mergeAll(),
+        map(products => products.map(product => product.objectId))
+      ).subscribe(spaceIds => {
+        this.EnableViewer(viewer3dUrl, spaceIds);
+      });
     });
   }
 
@@ -52,10 +62,10 @@ export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit 
     if (this.isLoaded) {
       const $viewer = $('#viewer-3d') as any;
 
-      if (this.highlightedElements && this.highlightedElements.length) {
+      if (this.highlightedProductsIds && this.highlightedProductsIds.length) {
         $viewer.viewer('resetColors');
-        this.highlightedElements.forEach(highlightedElement => {
-          $viewer.viewer('color', highlightedElement.color, highlightedElement.ids);
+        this.highlightedProductsIds.forEach(highlightedElementId => {
+          $viewer.viewer('color', 'highlightedElement.color', highlightedElementId);
         });
       } else {
         $viewer.viewer('resetColors');
@@ -63,9 +73,88 @@ export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit 
     }
   }
 
+  public ToogleSpaceVisibility() {
+    const $viewer = $('#viewer-3d') as any;
+    this.areSpacesVisible = !this.areSpacesVisible;
+    $viewer.viewerUI('setSpacesVisible', this.areSpacesVisible);
+  }
 
+  public FocusModel() {
+    const $viewer = $('#viewer-3d') as any;
+    $viewer.viewer('viewpoint', 'home');
+    $viewer.viewer('viewpoint', null, viewpoint => console.log(viewpoint));
+  }
 
-  private EnableViewer(url3D: string): any {
+  public ToogleOthersVisibility() {
+    const $viewer = $('#viewer-3d') as any;
+
+    if (this.areOtherVisible) {
+      // hide other
+      $viewer.viewer('hideAll');
+      this.areOtherVisible = false;
+      const visibleProductdIds = this.highlightedProductsIds.concat(this.selectedProductsIds);
+
+      if (visibleProductdIds.length !== 0) {
+        visibleProductdIds.forEach(id => {
+          $viewer.viewer('show', id);
+        });
+      } else {
+        $viewer.viewer('hideAll');
+      }
+    } else {
+      this.areOtherVisible = true;
+      $viewer.viewer('showAll');
+      // Don't show the spaces if they should be hidden
+      if (!this.areSpacesVisible) { $viewer.viewerUI('setSpacesVisible', false); }
+    }
+  }
+  public ToogleOtherTransparency() {
+    const $viewer = $('#viewer-3d') as any;
+
+    if (this.areOtherOpaque) {
+      // hide other
+      $viewer.viewer('translucentAll');
+      this.areOtherOpaque = false;
+      const visibleProductdIds = this.highlightedProductsIds.concat(this.selectedProductsIds);
+
+      if (visibleProductdIds.length !== 0) {
+        visibleProductdIds.forEach(id => {
+          $viewer.viewer('show', id);
+        });
+      } else {
+        $viewer.viewer('translucentAll');
+      }
+    } else {
+      this.areOtherOpaque = true;
+      $viewer.viewer('showAll');
+      // Don't show the spaces if they should be hidden
+      if (!this.areSpacesVisible) { $viewer.viewerUI('setSpacesVisible', false); }
+    }
+  }
+
+  // ToogleOtherTransparency() {
+  //   let $viewer = $("#viewer-3d") as any;
+
+  //   if (this.otherDimmed) {
+  //     // hide other
+  //     $viewer.viewer("translucentAll");
+
+  //     if (this.highlightedProductsIds.length !== 0) {
+  //       this.highlightedProductsIds.forEach(highlightedElement => {
+  //         $viewer.viewer("show", highlightedElement.ids);
+  //       });
+  //     } else {
+  //       $viewer.viewer("translucentAll");
+  //     }
+  //     console.log(this.spacesVisibility);
+  //   } else {
+  //     $viewer.viewer("showAll");
+  //   }
+
+  //   this.ToogleSpaceVisibility();
+  // }
+
+  private EnableViewer(url3D: string, spacesIds: string[]): any {
 
     const context = this;
     const $viewer = $('#viewer-3d') as any;
@@ -114,7 +203,7 @@ export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit 
         height: 150
       });
 
-      $viewer.viewerUI('setSpaces', context.spaceIds);
+      $viewer.viewerUI('setSpaces', spacesIds);
 
       $viewer.viewer('modelInfo', (modelInfos): void => {
         // This will print model info for all loaded models
@@ -125,6 +214,7 @@ export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit 
     });
 
     $viewer.bind('viewer.select', (event: any, selected: string[]): void => {
+      this.selectedProductsIds = selected;
       if (selected.length !== 0) {
         context.propertyPanelService.AddProducts(selected);
         // context.selectedProductId = selected[0];

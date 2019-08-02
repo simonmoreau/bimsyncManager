@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { MatIconRegistry } from '@angular/material';
+import { Component, OnInit, EventEmitter } from '@angular/core';
+import { MatIconRegistry, MatButtonToggleChange } from '@angular/material';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { BimsyncViewerComponent } from '../bimsync-viewer/bimsync-viewer.component';
 
 @Component({
   selector: 'app-viewer-menu',
@@ -11,7 +12,8 @@ export class ViewerMenuComponent implements OnInit {
 
   constructor(
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer) {
+    private domSanitizer: DomSanitizer,
+    private bimsyncViewer: BimsyncViewerComponent) {
 
       this.matIconRegistry.addSvgIcon(
         'hide_space',
@@ -24,6 +26,22 @@ export class ViewerMenuComponent implements OnInit {
     }
 
   ngOnInit() {
+  }
+
+  ToogleSpaceVisibility(event: EventEmitter<MatButtonToggleChange>) {
+    this.bimsyncViewer.ToogleSpaceVisibility();
+  }
+
+  FocusModel() {
+    this.bimsyncViewer.FocusModel();
+  }
+
+  ToogleOthersVisibility(event: EventEmitter<MatButtonToggleChange>) {
+    this.bimsyncViewer.ToogleOthersVisibility();
+  }
+
+  ToogleOtherTransparency(event: EventEmitter<MatButtonToggleChange>) {
+    this.bimsyncViewer.ToogleOtherTransparency();
   }
 
 }

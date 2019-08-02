@@ -1,14 +1,14 @@
 <div class="button-bar">
-    <mat-button-toggle value="showSpaces" matTooltip="Show/Hide Spaces" class="button">
+    <mat-button-toggle (change)="ToogleSpaceVisibility($event)" value="showSpaces" matTooltip="Show/Hide Spaces" class="button">
         <mat-icon svgIcon="hide_space"></mat-icon>
     </mat-button-toggle>
-    <button mat-stroked-button matTooltip="Center model" class="button">
+    <button (click)="FocusModel()" mat-stroked-button matTooltip="Center model" class="button">
         <mat-icon >zoom_out_map</mat-icon>
     </button>
-    <mat-button-toggle value="showOther" matTooltip="Show/Hide Other Objects" class="button">
+    <mat-button-toggle (change)="ToogleOthersVisibility($event)" value="showOther" matTooltip="Show/Hide Other Objects" class="button">
         <mat-icon>remove_red_eye</mat-icon>
     </mat-button-toggle>
-    <mat-button-toggle value="dimOther" matTooltip="Make Other Objects Transparent" class="button">
+    <mat-button-toggle (change)="ToogleOtherTransparency($event)" value="dimOther" matTooltip="Make Other Objects Transparent" class="button">
         <mat-icon svgIcon="eye"></mat-icon>
     </mat-button-toggle>
 </div>
