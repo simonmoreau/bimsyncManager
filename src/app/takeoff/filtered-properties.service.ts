@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
+import { IPropertiesListService, Property } from './selected-properties.model';
 import { BehaviorSubject } from 'rxjs';
-import { Property, IPropertiesListService } from './selected-properties.model';
-import { inherits } from 'util';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SelectedPropertiesService extends IPropertiesListService  {
+export class FilteredPropertiesService extends IPropertiesListService  {
 
   constructor() {
     super();

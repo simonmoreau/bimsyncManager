@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SelectedPropertiesService } from '../selected-properties.service';
-import { Property } from '../selected-properties.model';
+import { Property, IPropertiesListService } from '../selected-properties.model';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { BehaviorSubject } from 'rxjs';
 
@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class DropZoneComponent implements OnInit {
 
+  @Input() propertiesList: IPropertiesListService;
   propertiesList$: BehaviorSubject<Property[]>;
 
   constructor(private propertiesService: SelectedPropertiesService) {
