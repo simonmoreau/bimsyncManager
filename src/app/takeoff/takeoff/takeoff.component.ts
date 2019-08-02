@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { BimsyncService } from 'src/app/bimsync/bimsync.service';
 import { HeaderService } from 'src/app/shared/services/header.service';
 import { PropertyTreeService } from '../property-tree/property-tree.service';
+import { SelectedPropertiesService } from '../selected-properties.service';
+import { IPropertiesList } from '../selected-properties.model';
 
 @Component({
   selector: 'app-takeoff',
@@ -17,13 +19,19 @@ export class TakeoffComponent implements OnInit, OnDestroy {
   revisionIds: string[];
   highlightedElements: string[];
   selectedElements: Product[];
+  selectedProps: IPropertiesList;
+  filteredProps: IPropertiesList;
 
   constructor(
     private route: ActivatedRoute,
     private bimsyncService: BimsyncService,
     private headerService: HeaderService,
-    private propertyTreeService: PropertyTreeService
-  ) { }
+    private propertyTreeService: PropertyTreeService,
+    private selectedPropertiesService: SelectedPropertiesService
+  ) {
+    this.selectedProps = selectedPropertiesService.selectedProperties;
+    this.filteredProps = selectedPropertiesService.filteredProperties;
+  }
 
   ngOnInit() {
     this.projectId = this.route.snapshot.paramMap.get('id');

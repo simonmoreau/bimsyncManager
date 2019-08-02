@@ -1,4 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
+import { PropertyTreeComponent } from './property-tree/property-tree.component';
+import { EventEmitter } from '@angular/core';
 
 export class Property {
 
@@ -8,15 +10,17 @@ export class Property {
     name: string;
 }
 
-export class IPropertiesListService {
+export class IPropertiesList {
 
     private propertiesList: Property[];
     propertiesListChange: BehaviorSubject<Property[]>;
+    deletedProperty: EventEmitter<Property> = new EventEmitter();
 
     get data(): Property[] { return this.propertiesListChange.value; }
 
     constructor() {
         this.propertiesList = new Array();
+        this.propertiesListChange = new BehaviorSubject<Property[]>([]);
     }
 
     /** Add an item to the list of selected properties */
@@ -40,10 +44,13 @@ export class IPropertiesListService {
             this.propertiesList.splice(index, 1);
         }
         this.propertiesListChange.next(this.propertiesList);
+        this.deletedProperty.emit(property);
     }
 
     removeItemAtIndex(index: number) {
+
         if (index > -1 && index < this.propertiesList.length) {
+            this.deletedProperty.emit(this.propertiesList[index]);
             this.propertiesList.splice(index, 1);
         }
         this.propertiesListChange.next(this.propertiesList);

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SelectedPropertiesService } from '../selected-properties.service';
-import { Property, IPropertiesListService } from '../selected-properties.model';
+import { Property, IPropertiesList } from '../selected-properties.model';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { BehaviorSubject } from 'rxjs';
+import { SelectedPropertiesService } from '../selected-properties.service';
 
 @Component({
   selector: 'app-drop-zone',
@@ -11,23 +11,20 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class DropZoneComponent implements OnInit {
 
-  @Input() propertiesList: IPropertiesListService;
   propertiesList$: BehaviorSubject<Property[]>;
+  @Input() propertiesList: IPropertiesList;
 
-  constructor(private propertiesService: SelectedPropertiesService) {
-
-    this.propertiesList$ = propertiesService.propertiesListChange;
-  }
+  constructor( ) { }
 
   ngOnInit() {
-
+    this.propertiesList$ = this.propertiesList.propertiesListChange;
   }
 
   public drop(event: CdkDragDrop<Property[]>) {
     if (event.isPointerOverContainer) {
-      this.propertiesService.changePropertyRank(event.previousIndex, event.currentIndex);
+      this.propertiesList.changePropertyRank(event.previousIndex, event.currentIndex);
     } else {
-      this.propertiesService.removeItemAtIndex(event.previousIndex);
+      this.propertiesList.removeItemAtIndex(event.previousIndex);
     }
     console.log(event);
   }

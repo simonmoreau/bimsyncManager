@@ -50,7 +50,7 @@ export class RevisionSelectionComponent implements OnInit {
                     if (s.length !== 0) {
                       this.selectedCategory = s[0];
                       this.categoryChange.emit(this.selectedCategory as ITypeSummary);
-                      this.selectedPropertiesService.ClearList();
+                      this.selectedPropertiesService.selectedProperties.ClearList();
                       this.isLoading = false;
                     }
                   }
@@ -59,7 +59,7 @@ export class RevisionSelectionComponent implements OnInit {
                 this.selectedRevision = null;
                 this.categories = null;
                 this.selectedCategory = null;
-                this.selectedPropertiesService.ClearList();
+                this.selectedPropertiesService.selectedProperties.ClearList();
                 this.isLoading = false;
               }
             }
@@ -85,7 +85,7 @@ export class RevisionSelectionComponent implements OnInit {
               if (s.length !== 0) {
                 this.selectedCategory = s[0];
                 this.categoryChange.emit(this.selectedCategory as ITypeSummary);
-                this.selectedPropertiesService.ClearList();
+                this.selectedPropertiesService.selectedProperties.ClearList();
                 this.isLoading = false;
               }
             }
@@ -94,7 +94,7 @@ export class RevisionSelectionComponent implements OnInit {
           this.selectedRevision = null;
           this.categories = null;
           this.selectedCategory = null;
-          this.selectedPropertiesService.ClearList();
+          this.selectedPropertiesService.selectedProperties.ClearList();
           this.isLoading = false;
         }
       }
@@ -112,7 +112,7 @@ export class RevisionSelectionComponent implements OnInit {
         if (s.length !== 0) {
           this.selectedCategory = s[0];
           this.categoryChange.emit(this.selectedCategory as ITypeSummary);
-          this.selectedPropertiesService.ClearList();
+          this.selectedPropertiesService.selectedProperties.ClearList();
           this.isLoading = false;
         }
       }
@@ -121,7 +121,7 @@ export class RevisionSelectionComponent implements OnInit {
 
   onCategoryChange(event: MatSelectChange) {
     this.categoryChange.emit(event.value as ITypeSummary);
-    this.selectedPropertiesService.ClearList();
+    this.selectedPropertiesService.selectedProperties.ClearList();
   }
 
 }

@@ -6,7 +6,6 @@ import { PropertyTreeService } from './property-tree.service';
 import { PropertyNode } from './property-tree.model';
 import { SelectedPropertiesService } from '../selected-properties.service';
 import { Property } from '../selected-properties.model';
-import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-property-tree',
@@ -46,6 +45,10 @@ export class PropertyTreeComponent {
     });
 
     database.loading.subscribe(l => this.loading = l);
+
+    selectedPropertiesService.selectedProperties.deletedProperty.subscribe(property => {
+      this.propertySelectionToggle(property);
+    });
   }
 
   /**
@@ -100,11 +103,11 @@ export class PropertyTreeComponent {
 
     if (this.checklistSelection.isSelected(node)) {
       descendants.forEach(child =>
-        this.selectedPropertiesService.insertItem(child.property)
+        this.selectedPropertiesService.selectedProperties.insertItem(child.property)
         );
     } else {
       descendants.forEach(child =>
-        this.selectedPropertiesService.removeItem(child.property)
+        this.selectedPropertiesService.selectedProperties.removeItem(child.property)
         );
     }
 
@@ -119,9 +122,9 @@ export class PropertyTreeComponent {
   todoLeafItemSelectionToggle(node: PropertyFlatNode): void {
     this.checklistSelection.toggle(node);
     if (this.checklistSelection.isSelected(node)) {
-      this.selectedPropertiesService.insertItem(node.property);
+      this.selectedPropertiesService.selectedProperties.insertItem(node.property);
     } else {
-      this.selectedPropertiesService.removeItem(node.property);
+      this.selectedPropertiesService.selectedProperties.removeItem(node.property);
     }
     this.checkAllParentsSelection(node);
   }
@@ -133,6 +136,14 @@ export class PropertyTreeComponent {
       this.checkRootNodeSelection(parent);
       parent = this.getParentNode(parent);
     }
+  }
+
+  propertySelectionToggle(property: Property) {
+    // find the node
+    const nodes: PropertyNode[] = Array.from(this.nestedNodeMap.keys());
+    const node: PropertyNode = nodes.filter(x => x.property === property)[0];
+    //Toggle it
+    this.todoItemSelectionToggle(this.nestedNodeMap.get(node));
   }
 
   /** Check root node checked state and change it accordingly */

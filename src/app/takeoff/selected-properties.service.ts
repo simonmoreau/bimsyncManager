@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Property, IPropertiesListService } from './selected-properties.model';
+import { Property, IPropertiesList } from './selected-properties.model';
 import { inherits } from 'util';
+import { PropertyTreeComponent } from './property-tree/property-tree.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SelectedPropertiesService extends IPropertiesListService  {
+export class SelectedPropertiesService  {
+
+  selectedProperties: IPropertiesList;
+  filteredProperties: IPropertiesList;
 
   constructor() {
-    super();
-    this.propertiesListChange = new BehaviorSubject<Property[]>([]);
+    this.selectedProperties = new IPropertiesList();
+    this.filteredProperties = new IPropertiesList();
   }
 }
