@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BimsyncService } from 'src/app/bimsync/bimsync.service';
 import { IModel, IRevision, ITypeSummary } from 'src/app/shared/models/bimsync.model';
 import { MatSelectChange } from '@angular/material';
+import { SelectedPropertiesService } from '../selected-properties.service';
 
 @Component({
   selector: 'app-revision-selection',
@@ -10,7 +11,7 @@ import { MatSelectChange } from '@angular/material';
 })
 export class RevisionSelectionComponent implements OnInit {
 
-  constructor(private bimsyncService: BimsyncService) { }
+  constructor(private bimsyncService: BimsyncService, private selectedPropertiesService: SelectedPropertiesService) { }
 
   @Input() projectId: string;
   @Output() revisionChange: EventEmitter<IRevision> = new EventEmitter<IRevision>();
@@ -49,6 +50,7 @@ export class RevisionSelectionComponent implements OnInit {
                     if (s.length !== 0) {
                       this.selectedCategory = s[0];
                       this.categoryChange.emit(this.selectedCategory as ITypeSummary);
+                      this.selectedPropertiesService.ClearList();
                       this.isLoading = false;
                     }
                   }
@@ -57,6 +59,7 @@ export class RevisionSelectionComponent implements OnInit {
                 this.selectedRevision = null;
                 this.categories = null;
                 this.selectedCategory = null;
+                this.selectedPropertiesService.ClearList();
                 this.isLoading = false;
               }
             }
@@ -82,6 +85,7 @@ export class RevisionSelectionComponent implements OnInit {
               if (s.length !== 0) {
                 this.selectedCategory = s[0];
                 this.categoryChange.emit(this.selectedCategory as ITypeSummary);
+                this.selectedPropertiesService.ClearList();
                 this.isLoading = false;
               }
             }
@@ -90,6 +94,7 @@ export class RevisionSelectionComponent implements OnInit {
           this.selectedRevision = null;
           this.categories = null;
           this.selectedCategory = null;
+          this.selectedPropertiesService.ClearList();
           this.isLoading = false;
         }
       }
@@ -107,6 +112,7 @@ export class RevisionSelectionComponent implements OnInit {
         if (s.length !== 0) {
           this.selectedCategory = s[0];
           this.categoryChange.emit(this.selectedCategory as ITypeSummary);
+          this.selectedPropertiesService.ClearList();
           this.isLoading = false;
         }
       }
@@ -115,6 +121,7 @@ export class RevisionSelectionComponent implements OnInit {
 
   onCategoryChange(event: MatSelectChange) {
     this.categoryChange.emit(event.value as ITypeSummary);
+    this.selectedPropertiesService.ClearList();
   }
 
 }

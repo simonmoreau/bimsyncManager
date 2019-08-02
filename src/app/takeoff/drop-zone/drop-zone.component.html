@@ -1,5 +1,5 @@
 <div class="drop-zone">
-  <div>
+  <div class="zone">
     <div *ngIf="(propertiesList$ | async)?.length > 0; else emptyDropZone">
       <mat-chip-list class="mat-chip-list-stacked" cdkDropList id="selectedPropertyList"
         cdkDropListConnectedTo="propertyTree" (cdkDropListDropped)="drop($event)">

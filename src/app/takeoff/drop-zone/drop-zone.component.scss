@@ -3,6 +3,12 @@
     box-sizing: border-box;
     border: 2px dashed rgba(0,0,0,.87);;
     border-radius: 5px;
-    padding: 1rem 1rem 1rem 0.5rem;
     margin-bottom: 1rem;
+}
+
+.zone {
+    max-height: 10rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem 1rem 1rem 0.5rem;
 }

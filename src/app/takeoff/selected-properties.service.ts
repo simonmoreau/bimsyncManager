@@ -25,6 +25,11 @@ export class SelectedPropertiesService {
     this.propertiesListChange.next(this.propertiesList);
   }
 
+  ClearList() {
+    this.propertiesList = new Array();
+    this.propertiesListChange.next(this.propertiesList);
+  }
+
   removeItem(property: Property) {
 
     const index = this.propertiesList.indexOf(property, 0);
