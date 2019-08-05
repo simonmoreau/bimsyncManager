@@ -21,17 +21,22 @@ export class SelectedPropertiesService {
     this.FilterProperties = new IPropertiesList();
     this.SelectedPropertiesChange = new BehaviorSubject<Property[]>([]);
 
-    this.ValueProperties.propertiesListChange.subscribe(properties => {
-      this.UpdateSelectedProperties(properties);
+    this.ValueProperties.propertiesListChange.subscribe(valueProperties => {
+      console.log('ValueProperties changed');
+      this.UpdateSelectedProperties(valueProperties);
     });
-    this.FilterProperties.propertiesListChange.subscribe(properties => {
-      this.UpdateSelectedProperties(properties);
+    this.FilterProperties.propertiesListChange.subscribe(filterProperties => {
+      console.log('FilterProperties changed');
+      this.UpdateSelectedProperties(filterProperties);
+    });
+    this.SelectedPropertiesChange.subscribe(selectedProperties => {
+      console.log('SelectedPropertiesChange changed');
     });
   }
 
   private UpdateSelectedProperties(list: Property[]): void {
 
-    // Add new propoerties to the common list
+    // Add new properties to the common list
     list.forEach(property => {
       const index = this.SelectedProperties.indexOf(property, 0);
       if (index === -1) {
@@ -45,14 +50,38 @@ export class SelectedPropertiesService {
       if (index === -1) {
         const index2 = this.SelectedProperties.indexOf(property, 0);
         if (index2 > -1) {
-            this.SelectedProperties.splice(index, 1);
+          this.SelectedProperties.splice(index, 1);
         }
       }
     });
 
     // Publish the list of currently selected properties
     this.SelectedPropertiesChange.next(this.SelectedProperties);
-    console.log(this.SelectedProperties);
+  }
+
+  /** Add an item to the list of selected properties */
+  insertItem(property: Property) {
+    const index = this.SelectedProperties.indexOf(property, 0);
+    if (index === -1) {
+      this.SelectedProperties.push(property);
+    }
+    this.SelectedPropertiesChange.next(this.SelectedProperties);
+  }
+
+  removeItem(property: Property) {
+
+    const index = this.SelectedProperties.indexOf(property, 0);
+    if (index > -1) {
+      this.SelectedProperties.splice(index, 1);
+    }
+    this.SelectedPropertiesChange.next(this.SelectedProperties);
+  }
+
+  removeItemAtIndex(index: number) {
+    if (index > -1 && index < this.SelectedProperties.length) {
+      this.SelectedProperties.splice(index, 1);
+    }
+    this.SelectedPropertiesChange.next(this.SelectedProperties);
   }
 }
 

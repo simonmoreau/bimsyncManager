@@ -58,7 +58,7 @@ export class PropertyTreeComponent {
 
     propertyTreeService.loading.subscribe(l => this.loading = l);
 
-    selectedPropertiesService.SelectedPropertiesChange.subscribe((selectedProperties: Property[]) => {
+    selectedPropertiesService.SelectedPropertiesChange.subscribe(selectedProperties => {
       this.UpdateTreeSelection(selectedProperties);
     });
   }
@@ -136,11 +136,11 @@ export class PropertyTreeComponent {
 
     if (this.checklistSelection.isSelected(node)) {
       descendants.forEach(child =>
-        this.selectedPropertiesService.ValueProperties.insertItem(child.property)
+        this.selectedPropertiesService.insertItem(child.property)
       );
     } else {
       descendants.forEach(child =>
-        this.selectedPropertiesService.ValueProperties.removeItem(child.property)
+        this.selectedPropertiesService.removeItem(child.property)
       );
     }
 
@@ -155,9 +155,9 @@ export class PropertyTreeComponent {
   todoLeafItemSelectionToggle(node: PropertyFlatNode): void {
     this.checklistSelection.toggle(node);
     if (this.checklistSelection.isSelected(node)) {
-      this.selectedPropertiesService.ValueProperties.insertItem(node.property);
+      this.selectedPropertiesService.insertItem(node.property);
     } else {
-      this.selectedPropertiesService.ValueProperties.removeItem(node.property);
+      this.selectedPropertiesService.removeItem(node.property);
     }
     this.checkAllParentsSelection(node);
   }

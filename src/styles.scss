@@ -10,3 +10,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .app app-takeoff {
     height: 100%;
 }
+
+mat-tree-node.cdk-drag {
+    min-height: inherit;
+}

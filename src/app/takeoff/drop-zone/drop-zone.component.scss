@@ -14,5 +14,12 @@
 }
 
 .no-property {
-    padding: 10px 1rem 10px 0.5rem;
+    padding: 0.625rem 1rem 0.625rem 0.5rem;
 }
+
+.cdk-drop-list-dragging .no-property {
+    display: none;
+}
+
+
+

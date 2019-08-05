@@ -29,6 +29,7 @@ export class IPropertiesList {
             this.propertiesList.push(property);
         }
         this.propertiesListChange.next(this.propertiesList);
+        console.log('a local list changed');
     }
 
     ClearList() {

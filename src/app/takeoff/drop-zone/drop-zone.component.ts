@@ -29,7 +29,9 @@ export class DropZoneComponent implements OnInit {
         this.propertiesList.changePropertyRank(event.previousIndex, event.currentIndex);
       } else {
         // move between lists
+        console.log('move between lists before');
         this.propertiesList.insertItem(event.item.data);
+        console.log('move between lists');
       }
     } else {
       // Remove from the list

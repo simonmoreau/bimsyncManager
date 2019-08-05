@@ -1,8 +1,8 @@
 <div class="drop-zone">
   <div class="zone">
-    <mat-chip-list class="mat-chip-list-stacked" cdkDropList id="{{zoneId}}" 
+    <mat-chip-list class="mat-chip-list-stacked" cdkDropList id="{{zoneId}}"
     cdkDropListConnectedTo="propertyTree" (cdkDropListDropped)="drop($event)">
-      <mat-chip *ngFor="let property of (propertiesList$ | async)" cdkDrag [cdkDragData]="property">{{ property.name }}</mat-chip>
+      <mat-chip *ngFor="let property of (propertiesList$ | async)" cdkDrag [cdkDragData]="property" style="height: 100%">{{ property.name }}</mat-chip>
       <div class="mat-body no-property" *ngIf="(propertiesList$ | async)?.length == 0">
         Add properties here...
       </div>
