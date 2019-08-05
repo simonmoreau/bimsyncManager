@@ -4,7 +4,7 @@
   </div>
 </div>
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" *ngIf="!loading" cdkDropList id="propertyTree"
-[cdkDropListConnectedTo]="linkedListsIds" (cdkDropListDropped)="drop($event)">
+[cdkDropListConnectedTo]="linkedListsIds" (cdkDropListDropped)="drop($event)" cdkDropListSortingDisabled>
   <!-- This is the tree node template for leaf nodes -->
   <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding cdkDrag [cdkDragData]="node.property">
     <!-- use a disabled button to provide padding for tree leaf -->
