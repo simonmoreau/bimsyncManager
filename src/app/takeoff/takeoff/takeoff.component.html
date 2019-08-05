@@ -4,8 +4,8 @@
       <app-revision-selection [projectId]="projectId" (revisionChange)="revisionChange($event)"
         (categoryChange)="categoryChange($event)">
       </app-revision-selection>
-      <app-drop-zone [propertiesList]="selectedProps"></app-drop-zone>
-      <app-drop-zone [propertiesList]="filteredProps"></app-drop-zone>
+      <app-drop-zone [propertiesList]="selectedProps" [zoneId]="'selectedPropsId'"></app-drop-zone>
+      <app-drop-zone [propertiesList]="filteredProps" [zoneId]="'filteredPropsId'"></app-drop-zone>
       <app-property-tree class="flexgrow tree-panel">
       </app-property-tree>
     </app-panel>

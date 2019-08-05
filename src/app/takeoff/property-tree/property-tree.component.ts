@@ -6,6 +6,7 @@ import { PropertyTreeService } from './property-tree.service';
 import { PropertyNode } from './property-tree.model';
 import { SelectedPropertiesService } from '../selected-properties.service';
 import { Property } from '../selected-properties.model';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-property-tree',
@@ -30,6 +31,8 @@ export class PropertyTreeComponent {
   dataSource: MatTreeFlatDataSource<PropertyNode, PropertyFlatNode>;
 
   loading: boolean;
+
+  linkedListsIds: string[] = ['selectedPropsId', 'filteredPropsId'];
 
   constructor(private database: PropertyTreeService, private selectedPropertiesService: SelectedPropertiesService) {
 
@@ -178,6 +181,11 @@ export class PropertyTreeComponent {
       }
     }
     return null;
+  }
+
+  public drop(event: CdkDragDrop<Property[]>) {
+    console.log('drop in tree');
+    console.log(event);
   }
 
 }

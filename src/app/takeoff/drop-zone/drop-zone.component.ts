@@ -13,8 +13,10 @@ export class DropZoneComponent implements OnInit {
 
   propertiesList$: BehaviorSubject<Property[]>;
   @Input() propertiesList: IPropertiesList;
+  @Input() zoneId: string;
 
-  constructor( ) { }
+  constructor( ) {
+   }
 
   ngOnInit() {
     this.propertiesList$ = this.propertiesList.propertiesListChange;
@@ -22,8 +24,16 @@ export class DropZoneComponent implements OnInit {
 
   public drop(event: CdkDragDrop<Property[]>) {
     if (event.isPointerOverContainer) {
-      this.propertiesList.changePropertyRank(event.previousIndex, event.currentIndex);
+      if (event.container.id === event.previousContainer.id) {
+        // move inside same list
+        this.propertiesList.changePropertyRank(event.previousIndex, event.currentIndex);
+      } else {
+        // move between lists
+        console.log(event.item);
+        this.propertiesList.insertItem(event.item.data);
+      }
     } else {
+      // Remove from the list
       this.propertiesList.removeItemAtIndex(event.previousIndex);
     }
     console.log(event);
