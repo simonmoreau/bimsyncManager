@@ -8,11 +8,20 @@ import { SelectedPropertiesService } from '../selected-properties.service';
 import { Property } from '../selected-properties.model';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
+/** Flat to-do item node with expandable and level information */
+export class PropertyFlatNode {
+  expandable: boolean;
+  name: string;
+  level: number;
+  property: Property;
+}
+
 @Component({
   selector: 'app-property-tree',
   templateUrl: './property-tree.component.html',
   styleUrls: ['./property-tree.component.scss']
 })
+
 export class PropertyTreeComponent {
 
   /** The selection for checklist */
@@ -34,7 +43,7 @@ export class PropertyTreeComponent {
 
   linkedListsIds: string[] = ['selectedPropsId', 'filteredPropsId'];
 
-  constructor(private database: PropertyTreeService, private selectedPropertiesService: SelectedPropertiesService) {
+  constructor(private propertyTreeService: PropertyTreeService, private selectedPropertiesService: SelectedPropertiesService) {
 
     this.loading = true;
 
@@ -43,14 +52,35 @@ export class PropertyTreeComponent {
 
     this.dataSource = new MatTreeFlatDataSource<PropertyNode, PropertyFlatNode>(this.treeControl, this.treeFlattener);
 
-    database.dataChange.subscribe(data => {
+    propertyTreeService.dataChange.subscribe(data => {
       this.dataSource.data = data;
     });
 
-    database.loading.subscribe(l => this.loading = l);
+    propertyTreeService.loading.subscribe(l => this.loading = l);
 
-    selectedPropertiesService.selectedProperties.deletedProperty.subscribe(property => {
-      this.propertySelectionToggle(property);
+    selectedPropertiesService.SelectedPropertiesChange.subscribe((selectedProperties: Property[]) => {
+      this.UpdateTreeSelection(selectedProperties);
+    });
+  }
+
+  /**
+   * Update the selection to match the list of selected properties
+   */
+  private UpdateTreeSelection(selectedProperties: Property[]) {
+
+    // get all the nodes in the tree
+    const nodes: PropertyNode[] = Array.from(this.nestedNodeMap.keys());
+    // Check if these nodes must be selected
+    nodes.forEach((node: PropertyNode) => {
+      const flatNode = this.nestedNodeMap.get(node);
+      const index = selectedProperties.indexOf(node.property, 0);
+      if (index !== -1) { // The property must be selected
+        // Toggle it if necessary
+        if (!this.checklistSelection.isSelected(flatNode)) { this.todoLeafItemSelectionToggle(flatNode); }
+      } else { // The property must not be selected
+        // Toggle it if necessary
+        if (this.checklistSelection.isSelected(flatNode)) { this.todoLeafItemSelectionToggle(flatNode); }
+      }
     });
   }
 
@@ -106,12 +136,12 @@ export class PropertyTreeComponent {
 
     if (this.checklistSelection.isSelected(node)) {
       descendants.forEach(child =>
-        this.selectedPropertiesService.selectedProperties.insertItem(child.property)
-        );
+        this.selectedPropertiesService.ValueProperties.insertItem(child.property)
+      );
     } else {
       descendants.forEach(child =>
-        this.selectedPropertiesService.selectedProperties.removeItem(child.property)
-        );
+        this.selectedPropertiesService.ValueProperties.removeItem(child.property)
+      );
     }
 
     // Force update for the parent
@@ -125,9 +155,9 @@ export class PropertyTreeComponent {
   todoLeafItemSelectionToggle(node: PropertyFlatNode): void {
     this.checklistSelection.toggle(node);
     if (this.checklistSelection.isSelected(node)) {
-      this.selectedPropertiesService.selectedProperties.insertItem(node.property);
+      this.selectedPropertiesService.ValueProperties.insertItem(node.property);
     } else {
-      this.selectedPropertiesService.selectedProperties.removeItem(node.property);
+      this.selectedPropertiesService.ValueProperties.removeItem(node.property);
     }
     this.checkAllParentsSelection(node);
   }
@@ -139,14 +169,6 @@ export class PropertyTreeComponent {
       this.checkRootNodeSelection(parent);
       parent = this.getParentNode(parent);
     }
-  }
-
-  propertySelectionToggle(property: Property) {
-    // find the node
-    const nodes: PropertyNode[] = Array.from(this.nestedNodeMap.keys());
-    const node: PropertyNode = nodes.filter(x => x.property === property)[0];
-    //Toggle it
-    this.todoItemSelectionToggle(this.nestedNodeMap.get(node));
   }
 
   /** Check root node checked state and change it accordingly */
@@ -190,11 +212,4 @@ export class PropertyTreeComponent {
 
 }
 
-/** Flat to-do item node with expandable and level information */
-export class PropertyFlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
-  property: Property;
-}
 

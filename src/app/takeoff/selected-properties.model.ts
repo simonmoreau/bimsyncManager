@@ -14,7 +14,6 @@ export class IPropertiesList {
 
     private propertiesList: Property[];
     propertiesListChange: BehaviorSubject<Property[]>;
-    deletedProperty: EventEmitter<Property> = new EventEmitter();
 
     get data(): Property[] { return this.propertiesListChange.value; }
 
@@ -47,9 +46,7 @@ export class IPropertiesList {
     }
 
     removeItemAtIndex(index: number) {
-
         if (index > -1 && index < this.propertiesList.length) {
-            this.deletedProperty.emit(this.propertiesList[index]);
             this.propertiesList.splice(index, 1);
         }
         this.propertiesListChange.next(this.propertiesList);

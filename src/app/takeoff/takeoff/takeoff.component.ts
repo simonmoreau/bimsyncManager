@@ -29,8 +29,8 @@ export class TakeoffComponent implements OnInit, OnDestroy {
     private propertyTreeService: PropertyTreeService,
     private selectedPropertiesService: SelectedPropertiesService
   ) {
-    this.selectedProps = selectedPropertiesService.selectedProperties;
-    this.filteredProps = selectedPropertiesService.filteredProperties;
+    this.selectedProps = selectedPropertiesService.ValueProperties;
+    this.filteredProps = selectedPropertiesService.FilterProperties;
   }
 
   ngOnInit() {
