@@ -58,8 +58,8 @@ export class PropertyTreeComponent {
 
     propertyTreeService.loading.subscribe(l => this.loading = l);
 
-    selectedPropertiesService.SelectedPropertiesChange.subscribe(selectedProperties => {
-      this.UpdateTreeSelection(selectedProperties);
+    selectedPropertiesService.ValueProperties.propertiesListChange.subscribe(valueProperties => {
+      this.UpdateTreeSelection(valueProperties);
     });
   }
 
@@ -73,13 +73,19 @@ export class PropertyTreeComponent {
     // Check if these nodes must be selected
     nodes.forEach((node: PropertyNode) => {
       const flatNode = this.nestedNodeMap.get(node);
-      const index = selectedProperties.indexOf(node.property, 0);
-      if (index !== -1) { // The property must be selected
+      const indexInSelectedProps = selectedProperties.indexOf(node.property, 0);
+      if (indexInSelectedProps !== -1) { // The property must not be selected
         // Toggle it if necessary
-        if (!this.checklistSelection.isSelected(flatNode)) { this.todoLeafItemSelectionToggle(flatNode); }
-      } else { // The property must not be selected
+        if (!this.checklistSelection.isSelected(flatNode)) {
+           this.todoLeafItemSelectionToggle(flatNode);
+           console.log('The property must not be selected');
+          }
+      } else { // The property must be selected
         // Toggle it if necessary
-        if (this.checklistSelection.isSelected(flatNode)) { this.todoLeafItemSelectionToggle(flatNode); }
+        if (this.checklistSelection.isSelected(flatNode)) {
+          this.todoLeafItemSelectionToggle(flatNode);
+          console.log('The property must be selected');
+        }
       }
     });
   }
@@ -136,11 +142,11 @@ export class PropertyTreeComponent {
 
     if (this.checklistSelection.isSelected(node)) {
       descendants.forEach(child =>
-        this.selectedPropertiesService.insertItem(child.property)
+        this.selectedPropertiesService.ValueProperties.insertItem(child.property)
       );
     } else {
       descendants.forEach(child =>
-        this.selectedPropertiesService.removeItem(child.property)
+        this.selectedPropertiesService.ValueProperties.removeItem(child.property)
       );
     }
 
@@ -155,9 +161,11 @@ export class PropertyTreeComponent {
   todoLeafItemSelectionToggle(node: PropertyFlatNode): void {
     this.checklistSelection.toggle(node);
     if (this.checklistSelection.isSelected(node)) {
-      this.selectedPropertiesService.insertItem(node.property);
+      this.selectedPropertiesService.ValueProperties.insertItem(node.property);
+      console.log('insert prop');
     } else {
-      this.selectedPropertiesService.removeItem(node.property);
+      this.selectedPropertiesService.ValueProperties.removeItem(node.property);
+      console.log('remove prop');
     }
     this.checkAllParentsSelection(node);
   }

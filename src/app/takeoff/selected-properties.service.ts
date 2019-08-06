@@ -11,77 +11,101 @@ export class SelectedPropertiesService {
 
   ValueProperties: IPropertiesList;
   FilterProperties: IPropertiesList;
-  private SelectedProperties: Property[] = new Array();
-  SelectedPropertiesChange: BehaviorSubject<Property[]>;
+  // private SelectedProperties: Property[] = new Array<Property>();
+  // SelectedPropertiesChange: BehaviorSubject<Property[]>;
+  updateSelectedProperties: boolean = true;
 
-  get selectedProperties(): Property[] { return this.SelectedPropertiesChange.value; }
+  // get selectedProperties(): Property[] { return this.SelectedPropertiesChange.value; }
 
   constructor() {
     this.ValueProperties = new IPropertiesList();
     this.FilterProperties = new IPropertiesList();
-    this.SelectedPropertiesChange = new BehaviorSubject<Property[]>([]);
+    // this.SelectedPropertiesChange = new BehaviorSubject<Property[]>([]);
 
-    this.ValueProperties.propertiesListChange.subscribe(valueProperties => {
-      console.log('ValueProperties changed');
-      this.UpdateSelectedProperties(valueProperties);
-    });
+    // this.ValueProperties.propertiesListChange.subscribe(valueProperties => {
+    //   console.log('ValueProperties changed');
+    //   if (this.updateSelectedProperties) {
+    //     this.UpdateSelectedProperties();
+    //   }
+    // });
     this.FilterProperties.propertiesListChange.subscribe(filterProperties => {
-      console.log('FilterProperties changed');
-      this.UpdateSelectedProperties(filterProperties);
+      // console.log('FilterProperties changed');
+      // if (this.updateSelectedProperties) {
+      //   this.UpdateSelectedProperties();
+      // }
     });
-    this.SelectedPropertiesChange.subscribe(selectedProperties => {
-      console.log('SelectedPropertiesChange changed');
-    });
+    // this.SelectedPropertiesChange.subscribe(selectedProperties => {
+    //   console.log('SelectedPropertiesChange changed');
+    //   console.log(selectedProperties);
+    //   this.UpdateValueList();
+    // });
   }
 
-  private UpdateSelectedProperties(list: Property[]): void {
+  // /** Sync the SelectedProperties with the content of the Value and Filtered list */
+  // private UpdateSelectedProperties(): void {
 
-    // Add new properties to the common list
-    list.forEach(property => {
-      const index = this.SelectedProperties.indexOf(property, 0);
-      if (index === -1) {
-        this.SelectedProperties.push(property);
-      }
-    });
+  //   // Empty the SelectedProperties
+  //   this.SelectedProperties = new Array<Property>();
 
-    // Remove properties from the common list
-    this.SelectedProperties.forEach(property => {
-      const index = list.indexOf(property, 0);
-      if (index === -1) {
-        const index2 = this.SelectedProperties.indexOf(property, 0);
-        if (index2 > -1) {
-          this.SelectedProperties.splice(index, 1);
-        }
-      }
-    });
+  //   // this.UpdateCommonList(this.FilterProperties.data);
+  //   this.UpdateCommonList(this.ValueProperties.data);
 
-    // Publish the list of currently selected properties
-    this.SelectedPropertiesChange.next(this.SelectedProperties);
-  }
+  //   // Publish the list of currently selected properties
+  //   this.SelectedPropertiesChange.next(this.SelectedProperties);
+  // }
 
-  /** Add an item to the list of selected properties */
-  insertItem(property: Property) {
-    const index = this.SelectedProperties.indexOf(property, 0);
-    if (index === -1) {
-      this.SelectedProperties.push(property);
-    }
-    this.SelectedPropertiesChange.next(this.SelectedProperties);
-  }
+  // private UpdateCommonList(sourceList: Property[]) {
+  //   sourceList.forEach(property => {
+  //     const index = this.SelectedProperties.indexOf(property, 0);
+  //     if (index === -1) {
+  //       this.SelectedProperties.push(property);
+  //     }
+  //   });
+  // }
 
-  removeItem(property: Property) {
+  // /** Sync the Value list with the content of the SelectedProperties */
+  // private UpdateValueList() {
+  //   // Pause the update
+  //   this.updateSelectedProperties = false;
 
-    const index = this.SelectedProperties.indexOf(property, 0);
-    if (index > -1) {
-      this.SelectedProperties.splice(index, 1);
-    }
-    this.SelectedPropertiesChange.next(this.SelectedProperties);
-  }
+  //   // List the properties that must be present in the ValueList
+  //   this.ValueProperties.ClearList();
+  //   this.selectedProperties.forEach((property: Property) => {
+  //     // const indexInFilteredList = this.FilterProperties.data.indexOf(property, 0);
+  //     const indexInValueList = this.ValueProperties.data.indexOf(property, 0);
+  //     // If the property is not in the Value list, add it
+  //     if (indexInValueList === -1) {
+  //       this.ValueProperties.insertItem(property);
+  //     }
+  //   });
 
-  removeItemAtIndex(index: number) {
-    if (index > -1 && index < this.SelectedProperties.length) {
-      this.SelectedProperties.splice(index, 1);
-    }
-    this.SelectedPropertiesChange.next(this.SelectedProperties);
-  }
+  //   // Restart the update when the Values have been updated
+  //   this.updateSelectedProperties = true;
+  // }
+
+  // /** Add an item to the list of selected properties */
+  // insertItem(property: Property) {
+  //   const index = this.SelectedProperties.indexOf(property, 0);
+  //   if (index === -1) {
+  //     this.SelectedProperties.push(property);
+  //   }
+  //   this.SelectedPropertiesChange.next(this.SelectedProperties);
+  // }
+
+  // removeItem(property: Property) {
+
+  //   const index = this.SelectedProperties.indexOf(property, 0);
+  //   if (index > -1) {
+  //     this.SelectedProperties.splice(index, 1);
+  //   }
+  //   this.SelectedPropertiesChange.next(this.SelectedProperties);
+  // }
+
+  // removeItemAtIndex(index: number) {
+  //   if (index > -1 && index < this.SelectedProperties.length) {
+  //     this.SelectedProperties.splice(index, 1);
+  //   }
+  //   this.SelectedPropertiesChange.next(this.SelectedProperties);
+  // }
 }
 

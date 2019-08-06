@@ -18,32 +18,38 @@ export class IPropertiesList {
     get data(): Property[] { return this.propertiesListChange.value; }
 
     constructor() {
-        this.propertiesList = new Array();
+        this.propertiesList = new Array<Property>();
         this.propertiesListChange = new BehaviorSubject<Property[]>([]);
     }
 
     /** Add an item to the list of selected properties */
-    insertItem(property: Property) {
+    insertItem(property: Property, notify?: boolean) {
         const index = this.propertiesList.indexOf(property, 0);
         if (index === -1) {
             this.propertiesList.push(property);
         }
-        this.propertiesListChange.next(this.propertiesList);
+        if (notify == null || notify === true) {
+            this.propertiesListChange.next(this.propertiesList);
+        }
         console.log('a local list changed');
     }
 
-    ClearList() {
-        this.propertiesList = new Array();
-        this.propertiesListChange.next(this.propertiesList);
+    ClearList(notify?: boolean) {
+        this.propertiesList = new Array<Property>();
+        if (notify == null || notify === true) {
+            this.propertiesListChange.next(this.propertiesList);
+        }
     }
 
-    removeItem(property: Property) {
+    removeItem(property: Property, notify?: boolean) {
 
         const index = this.propertiesList.indexOf(property, 0);
         if (index > -1) {
             this.propertiesList.splice(index, 1);
         }
-        this.propertiesListChange.next(this.propertiesList);
+        if (notify == null || notify === true) {
+            this.propertiesListChange.next(this.propertiesList);
+        }
     }
 
     removeItemAtIndex(index: number) {
