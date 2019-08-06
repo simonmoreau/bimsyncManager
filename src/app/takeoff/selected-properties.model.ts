@@ -31,7 +31,6 @@ export class IPropertiesList {
         if (notify == null || notify === true) {
             this.propertiesListChange.next(this.propertiesList);
         }
-        console.log('a local list changed');
     }
 
     ClearList(notify?: boolean) {

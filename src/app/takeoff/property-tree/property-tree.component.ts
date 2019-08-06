@@ -78,13 +78,11 @@ export class PropertyTreeComponent {
         // Toggle it if necessary
         if (!this.checklistSelection.isSelected(flatNode)) {
            this.todoLeafItemSelectionToggle(flatNode);
-           console.log('The property must not be selected');
           }
       } else { // The property must be selected
         // Toggle it if necessary
         if (this.checklistSelection.isSelected(flatNode)) {
           this.todoLeafItemSelectionToggle(flatNode);
-          console.log('The property must be selected');
         }
       }
     });
@@ -162,10 +160,8 @@ export class PropertyTreeComponent {
     this.checklistSelection.toggle(node);
     if (this.checklistSelection.isSelected(node)) {
       this.selectedPropertiesService.ValueProperties.insertItem(node.property);
-      console.log('insert prop');
     } else {
       this.selectedPropertiesService.ValueProperties.removeItem(node.property);
-      console.log('remove prop');
     }
     this.checkAllParentsSelection(node);
   }
@@ -214,8 +210,7 @@ export class PropertyTreeComponent {
   }
 
   public drop(event: CdkDragDrop<Property[]>) {
-    console.log('drop in tree');
-    console.log(event);
+
   }
 
 }
