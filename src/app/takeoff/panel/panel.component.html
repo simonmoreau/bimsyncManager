@@ -1,26 +1,26 @@
 <div class="panel mat-elevation-z6" *ngIf="!collapsed">
-  <div class="header" *ngIf="isLeftOriented">
-      <h3 class="mat-h3">{{title}}</h3>
+  <div class="header" *ngIf="isLeftOriented" [class.hidden]="noHeader">
+    <h3 class="mat-h3">{{title}}</h3>
     <button mat-icon-button aria-label="Example icon-button with a heart icon" (click)="collapse()">
       <mat-icon>close</mat-icon>
     </button>
   </div>
   <div class="header" *ngIf="!isLeftOriented">
-      <button mat-icon-button aria-label="Example icon-button with a heart icon" (click)="collapse()">
-          <mat-icon>close</mat-icon>
-        </button>
-      <h3 class="mat-h3">{{title}}</h3>
-    </div>
+    <button mat-icon-button aria-label="Example icon-button with a heart icon" (click)="collapse()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <h3 class="mat-h3">{{title}}</h3>
+  </div>
   <div class="content">
-      <ng-content></ng-content>
+    <ng-content></ng-content>
   </div>
 </div>
 <div class="panel mat-elevation-z3" *ngIf="collapsed">
-    <div class="collapsed-header" *ngIf="isLeftOriented">
-        <button mat-icon-button aria-label="Example icon-button with a heart icon" (click)="collapse()">
-          <mat-icon>chevron_right</mat-icon>
-        </button>
-      </div>
+  <div class="collapsed-header" *ngIf="isLeftOriented">
+    <button mat-icon-button aria-label="Example icon-button with a heart icon" (click)="collapse()">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
   <div class="collapsed-header" *ngIf="!isLeftOriented">
     <button mat-icon-button aria-label="Example icon-button with a heart icon" (click)="collapse()">
       <mat-icon>chevron_left</mat-icon>

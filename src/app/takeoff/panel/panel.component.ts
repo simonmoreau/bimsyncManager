@@ -16,6 +16,9 @@ export class PanelComponent implements OnInit {
   /** Whether the panel is left oriented. */
   readonly isLeftOriented: boolean = this._hasHostAttributes('left');
 
+  /** Whether the panel need a header. */
+  readonly noHeader: boolean = this._hasHostAttributes('noHeader');
+
   ngOnInit() {
   }
 
