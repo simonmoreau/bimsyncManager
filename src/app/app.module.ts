@@ -45,7 +45,7 @@ import { PropertyTreeComponent } from './takeoff/property-tree/property-tree.com
 import { DropZoneComponent } from './takeoff/drop-zone/drop-zone.component';
 import { PropertyPanelComponent } from './bimsync/property-panel/property-panel.component';
 import { ViewerMenuComponent } from './bimsync/viewer-menu/viewer-menu.component';
-import { QuantitesComponent } from './takeoff/quantites/quantites.component';
+import { QuantitiesComponent } from './takeoff/quantities/quantities.component';
 
 declare var window: any;
 window.$ = window.jQuery = $;
@@ -70,7 +70,7 @@ window.$ = window.jQuery = $;
     DropZoneComponent,
     PropertyPanelComponent,
     ViewerMenuComponent,
-    QuantitesComponent,
+    QuantitiesComponent,
   ],
   imports: [
     BrowserModule,

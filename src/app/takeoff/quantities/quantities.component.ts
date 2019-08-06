@@ -33,11 +33,11 @@ const ELEMENT_DATA: PeriodicElement[] = [
 ];
 
 @Component({
-  selector: 'app-quantites',
-  templateUrl: './quantites.component.html',
-  styleUrls: ['./quantites.component.scss']
+  selector: 'app-quantities',
+  templateUrl: './quantities.component.html',
+  styleUrls: ['./quantities.component.scss']
 })
-export class QuantitesComponent implements OnInit {
+export class QuantitiesComponent implements OnInit {
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
@@ -49,5 +49,4 @@ export class QuantitesComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.paginator.pageSizeOptions = [5];
   }
-
 }

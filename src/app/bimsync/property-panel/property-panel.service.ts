@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Product, IProject } from 'src/app/shared/models/bimsync.model';
-import { BimsyncService } from '../bimsync.service';
-import { HeaderService } from 'src/app/shared/services/header.service';
 
 @Injectable({
   providedIn: 'root'

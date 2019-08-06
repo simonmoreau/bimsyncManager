@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { IProject, IRevision, ITypeSummary, Product } from 'src/app/shared/models/bimsync.model';
 import { ActivatedRoute } from '@angular/router';
 import { BimsyncService } from 'src/app/bimsync/bimsync.service';
-import { HeaderService } from 'src/app/shared/services/header.service';
+import { RetreivedElementsService } from 'src/app/shared/services/retreived-elements.service';
 import { PropertyTreeService } from '../property-tree/property-tree.service';
 import { SelectedPropertiesService } from '../selected-properties.service';
 import { IPropertiesList } from '../selected-properties.model';
@@ -25,7 +25,7 @@ export class TakeoffComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private bimsyncService: BimsyncService,
-    private headerService: HeaderService,
+    private headerService: RetreivedElementsService,
     private propertyTreeService: PropertyTreeService,
     private selectedPropertiesService: SelectedPropertiesService
   ) {

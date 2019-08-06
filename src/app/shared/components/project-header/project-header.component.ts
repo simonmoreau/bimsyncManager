@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderService } from '../../services/header.service';
+import { RetreivedElementsService } from '../../services/retreived-elements.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { IProject } from '../../models/bimsync.model';
 import { ShareProjectDialogComponent } from 'src/app/share-project/share-project-dialog/share-project-dialog.component';
@@ -14,7 +14,7 @@ export class ProjectHeaderComponent implements OnInit {
   project: IProject;
 
   constructor(
-    private headerService: HeaderService,
+    private headerService: RetreivedElementsService,
     public dialog: MatDialog) { }
 
   ngOnInit() {

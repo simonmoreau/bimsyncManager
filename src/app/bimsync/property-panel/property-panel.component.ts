@@ -3,8 +3,7 @@ import { Product, IProject } from 'src/app/shared/models/bimsync.model';
 import { PropertyPanelService } from './property-panel.service';
 import { IPanelData } from './property-panel.model';
 import { BimsyncService } from '../bimsync.service';
-import { HeaderService } from 'src/app/shared/services/header.service';
-import { flatMap } from 'rxjs/operators';
+import { RetreivedElementsService } from 'src/app/shared/services/retreived-elements.service';
 
 @Component({
   selector: 'app-property-panel',
@@ -19,7 +18,7 @@ export class PropertyPanelComponent implements OnInit {
   constructor(
     private propertyPanelService: PropertyPanelService,
     private bimsyncService: BimsyncService,
-    private headerService: HeaderService) {
+    private headerService: RetreivedElementsService) {
 
     propertyPanelService.productsIdList.subscribe(productsIds => {
       this.loading = true;

@@ -3,6 +3,7 @@ import { BimsyncService } from 'src/app/bimsync/bimsync.service';
 import { IModel, IRevision, ITypeSummary } from 'src/app/shared/models/bimsync.model';
 import { MatSelectChange } from '@angular/material';
 import { SelectedPropertiesService } from '../selected-properties.service';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-revision-selection',
@@ -124,4 +125,27 @@ export class RevisionSelectionComponent implements OnInit {
     this.selectedPropertiesService.ValueProperties.ClearList();
   }
 
+  private GetModels(projectId: string): Observable<IModel[]> {
+    if (projectId) {
+      return this.bimsyncService.getModels(projectId);
+    } else {
+      return of(new Array<IModel>());
+    }
+  }
+
+  private GetRevisions(projectId: string, model: IModel): Observable<IRevision[]> {
+    if (projectId && model) {
+      return this.bimsyncService.getRevisions(projectId, model.id);
+    } else {
+      return of(new Array<IRevision>());
+    }
+  }
+
+  private GetProductTypeSummary(projectId: string, revision: IRevision): Observable<ITypeSummary[]> {
+    if (projectId && revision) {
+      return this.bimsyncService.getProductsTypeSummary(projectId, revision.id);
+    } else {
+      return of(new Array<ITypeSummary>());
+    }
+  }
 }
