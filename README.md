@@ -1,4 +1,4 @@
-![Bimsync](logo.png)
+![Bimsync](bimsync_logo.png)
 
 Bimsync Manager
 ============
