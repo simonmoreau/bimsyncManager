@@ -15,7 +15,7 @@ export class UserService {
   public currentUser: Observable<IUser>;
 
   // url: string = 'https://bimsyncmanager.firebaseapp.com';
-  url = 'http://localhost:4200';
+  url = 'https://localhost:4200';
   // client_id = '6E63g0C2zVOwlNm';
   clientId = 'hl94XJLXaQe3ogX';
   callbackUrl: string = this.url + '/callback';

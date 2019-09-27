@@ -1,3 +1,11 @@
 table {
     width: 100%;
   }
+
+  tr.mat-footer-row, tr.mat-row {
+    height: 38px;
+  }
+
+  tr.mat-header-row {
+    height: 46px;
+  }
