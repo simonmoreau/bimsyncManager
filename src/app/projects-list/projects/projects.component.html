@@ -4,9 +4,9 @@
   </div>
   <div *ngIf="!loading" class="content">
     <mat-nav-list>
-      <h3 mat-subheader>Favorites</h3>
+      <h3 mat-subheader *ngIf="starredVisible">Favorites</h3>
       <app-project *ngFor="let star of starred" [project]="star" [starVisible]="true"></app-project>
-      <mat-divider></mat-divider>
+      <mat-divider *ngIf="starredVisible"></mat-divider>
       <h3 mat-subheader>Projects</h3>
       <app-project *ngFor="let project of projects" [project]="project" [starVisible]="false" ></app-project>
     </mat-nav-list>

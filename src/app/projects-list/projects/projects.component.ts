@@ -18,6 +18,7 @@ export class ProjectsComponent implements OnInit {
   error = '';
   projects: IProject[];
   starred: IProject[];
+  starredVisible: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -27,6 +28,7 @@ export class ProjectsComponent implements OnInit {
 
   ngOnInit() {
 
+    this.starredVisible = false;
     this.loading = true;
     this.activatedRoute.url.pipe(first()).subscribe(
       url => {
@@ -47,7 +49,11 @@ export class ProjectsComponent implements OnInit {
               this.starred = p;
             },
             error: null,
-            complete: null,
+            complete: () => {
+              if (this.starred.length > 0) {
+                this.starredVisible = true
+              }
+            }
           })
         }
       }
