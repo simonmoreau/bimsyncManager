@@ -28,7 +28,7 @@ export class UserComponent implements OnInit {
   ngOnInit() {
 
     this.clientId = this.userService.clientId;
-    this.callbackUrl = this.userService.url + '/callback';
+    this.callbackUrl = this.userService.uri + '/callback';
 
     this.avatarUrl$ = this.bimsyncService.getCurrentUser().pipe(
       map(bimsyncUser => bimsyncUser.avatarUrl ? bimsyncUser.avatarUrl : '../../../../assets/logos/user_account.png' ),
