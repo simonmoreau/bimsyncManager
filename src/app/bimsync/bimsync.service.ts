@@ -22,6 +22,10 @@ export class BimsyncService {
     return this.getsPaginated<IProject>(this.apiUrl + 'projects');
   }
 
+  getStarredProjects(): Observable<IProject[]> {
+    return this.getsPaginated<IProject>(this.apiUrl + 'user/starred_projects');
+  }
+
   getModels(projectId: string): Observable<IModel[]> {
     return this.getsPaginated<IModel>(this.apiUrl + `projects/${projectId}/models`);
   }

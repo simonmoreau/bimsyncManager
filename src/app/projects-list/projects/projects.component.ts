@@ -6,7 +6,6 @@ import { IProject } from 'src/app/shared/models/bimsync.model';
 import { BimsyncService } from 'src/app/bimsync/bimsync.service';
 import { Observable } from 'rxjs';
 import { IUser } from 'src/app/shared/models/user.model';
-import { error } from 'util';
 
 @Component({
   selector: 'app-projects',
@@ -18,7 +17,7 @@ export class ProjectsComponent implements OnInit {
   loading = false;
   error = '';
   projects: IProject[];
-  favorites: IProject[];
+  starred: IProject[];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -39,12 +38,17 @@ export class ProjectsComponent implements OnInit {
           this.bimsyncService.getProjects().subscribe({
             next: p => {
               this.projects = p;
-              this.favorites =  [p[0], p[1], p[2]];
             },
             error: null,
             complete: () => this.loading = false
-          }
-          );
+          });
+          this.bimsyncService.getStarredProjects().subscribe({
+            next:p => {
+              this.starred = p;
+            },
+            error: null,
+            complete: null,
+          })
         }
       }
     );

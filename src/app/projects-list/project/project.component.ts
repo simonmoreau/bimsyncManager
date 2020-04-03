@@ -9,6 +9,7 @@ import { IProject } from 'src/app/shared/models/bimsync.model';
 export class ProjectComponent implements OnInit {
 
   @Input() project: IProject;
+  @Input() starVisible: boolean;
 
   constructor() { }
 

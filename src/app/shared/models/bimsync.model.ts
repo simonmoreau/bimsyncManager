@@ -2,8 +2,11 @@ export interface IProject {
     createdAt: Date;
     description: string;
     id: string;
+    imageUrl: string;
     name: string;
     updatedAt: Date;
+    owner: IUser;
+    isStarred: boolean;
 }
 
 export interface IModel {

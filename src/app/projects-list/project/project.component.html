@@ -1,7 +1,8 @@
 <mat-list-item>
-  <button mat-icon-button mat-list-icon (click)="favorite($event)">
-    <mat-icon style="vertical-align: super;">star</mat-icon>
-  </button>
+  <div mat-icon-button mat-list-icon>
+    <!-- <mat-icon style="vertical-align: super;">grade</mat-icon> -->
+    <mat-icon *ngIf="starVisible" style="vertical-align: super;">grade</mat-icon>
+  </div>
   <a matLine href="#" [routerLink]="['/takeoff', project.id]" routerLinkActive="active">
     {{project.name}}
   </a>
