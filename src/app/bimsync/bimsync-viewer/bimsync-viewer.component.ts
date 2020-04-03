@@ -24,7 +24,7 @@ export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit 
   private areOtherOpaque = true;
   private selectedProductsIds: string[] = new Array();
 
-  @ViewChild('page', { static: false }) page: ElementRef;
+  @ViewChild('page') page: ElementRef;
 
   constructor(private bimsyncService: BimsyncService, private propertyPanelService: PropertyPanelService) { }
 
