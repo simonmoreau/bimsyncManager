@@ -1,5 +1,3 @@
-import { IUser } from './bimsync.model';
-
 export interface IAccessToken {
     access_token: string;
     refresh_token: string;

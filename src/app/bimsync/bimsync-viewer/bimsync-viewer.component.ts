@@ -18,7 +18,7 @@ export class BimsyncViewerComponent implements OnInit, OnChanges, AfterViewInit 
   @Input() projectId: string;
   @Input() highlightedProductsIds: string[] = new Array();
 
-  private isLoaded: boolean;
+  isLoaded: boolean;
   private areSpacesVisible = false;
   private areOtherVisible = true;
   private areOtherOpaque = true;

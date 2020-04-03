@@ -130,5 +130,8 @@
       }
     }
   },
-  "defaultProject": "bimsyncManager"
+  "defaultProject": "bimsyncManager",
+  "cli": {
+    "analytics": "f1983800-d566-4ab1-b751-ed4f9218582d"
+  }
 }
