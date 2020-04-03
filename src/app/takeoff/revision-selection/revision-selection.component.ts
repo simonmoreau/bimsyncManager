@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BimsyncService } from 'src/app/bimsync/bimsync.service';
 import { IModel, IRevision, ITypeSummary } from 'src/app/shared/models/bimsync.model';
-import { MatSelectChange } from '@angular/material';
+import { MatSelectChange } from '@angular/material/select';
 import { SelectedPropertiesService } from '../selected-properties.service';
 import { Observable, of } from 'rxjs';
 

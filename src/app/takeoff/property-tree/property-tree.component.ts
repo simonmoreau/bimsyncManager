@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material';
+import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PropertyTreeService } from './property-tree.service';
 import { PropertyNode } from './property-tree.model';
