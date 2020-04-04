@@ -59,19 +59,17 @@ export class QuantitiesComponent implements OnInit {
     this.filteredProps = selectedPropertiesService.FilterProperties;
   }
 
-
   // Create observer object when the list of properties changes
   onPropertiesListChange = {
     next: (propertiesList => {
-      if (propertiesList.length != 0) {
+      if (propertiesList.length !== 0) {
         if (this.selectedPropertiesService.Products) {
-          console.log(this.selectedPropertiesService.Products?.length);
 
           // build the quantityData object to be passed as data source
           const quantityData = this.selectedPropertiesService.Products.map(p => {
             const quantityObject: QuantityObject = {};
             propertiesList.forEach(property => {
-              quantityObject[property.name] = p.objectId
+              quantityObject[property.name] = this.GetValueByString(p,property.path)
             });
             return quantityObject;
           });
@@ -84,15 +82,12 @@ export class QuantitiesComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           this.dataSource.paginator.pageSizeOptions = [5];
 
-          console.log(quantityData);
         }
       }
-      else
-      {
+      else {
         this.displayedColumns = null;
         this.dataSource = null;
       }
-
 
       console.log(propertiesList.length);
     }),
@@ -105,5 +100,22 @@ export class QuantitiesComponent implements OnInit {
     this.dataSource.paginator.pageSizeOptions = [5];
     this.selectedProps.propertiesListChange.subscribe(this.onPropertiesListChange);
   }
+
+  // Get the value of a property from its path
+  GetValueByString(o:object, s:string) {
+    s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+    s = s.replace(/^\./, '');           // strip a leading dot
+    const a = s.split('.');
+    for (let i = 0, n = a.length; i < n; ++i) {
+        const k = a[i];
+        if (k in o) {
+            o = o[k];
+        } else {
+            return;
+        }
+    }
+    return o;
+  }
+
 
 }

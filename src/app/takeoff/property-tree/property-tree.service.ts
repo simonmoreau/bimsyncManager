@@ -53,9 +53,9 @@ export class PropertyTreeService {
         const identificationNode: PropertyNode = new PropertyNode();
         identificationNode.name = 'Identification';
         const identificationChildrenNodes: PropertyNode[] = new Array();
-        identificationChildrenNodes.push(this.CreateAChildNode('Name'));
-        identificationChildrenNodes.push(this.CreateAChildNode('GUID'));
-        identificationChildrenNodes.push(this.CreateAChildNode('Entity'));
+        identificationChildrenNodes.push(this.CreateAChildNode('Name', 'attributes.Name.value'));
+        identificationChildrenNodes.push(this.CreateAChildNode('GUID', 'attributes.GlobalId.value'));
+        identificationChildrenNodes.push(this.CreateAChildNode('Entity', 'ifcType'));
         identificationNode.children = identificationChildrenNodes;
         nodes.push(identificationNode);
 
@@ -70,7 +70,7 @@ export class PropertyTreeService {
           Object.keys(pSet[propertySetKey].properties).forEach(propertyKey => {
             const childrenNode: PropertyNode = new PropertyNode();
             childrenNode.name = propertyKey;
-            childrenNode.property = new Property(propertyKey);
+            childrenNode.property = new Property(propertyKey, 'propertySets.' + propertySetKey + '.properties.' + propertyKey + '.nominalValue.value' );
             childrenNodes.push(childrenNode);
           });
           node.children = childrenNodes;
@@ -88,7 +88,7 @@ export class PropertyTreeService {
           Object.keys(qSet[quantitySetKey].quantities).forEach(propertyKey => {
             const childrenNode: PropertyNode = new PropertyNode();
             childrenNode.name = propertyKey;
-            childrenNode.property = new Property(propertyKey);
+            childrenNode.property = new Property(propertyKey, 'quantitySets.' + quantitySetKey + '.quantities.' + propertyKey + '.value.value');
             childrenNodes.push(childrenNode);
           });
           node.children = childrenNodes;
@@ -111,10 +111,10 @@ export class PropertyTreeService {
    * Create a children node
    * @param name The name of the children node
    */
-  CreateAChildNode(name: string): PropertyNode {
+  CreateAChildNode(name: string, path:string): PropertyNode {
     const childrenNode: PropertyNode = new PropertyNode();
     childrenNode.name = name;
-    childrenNode.property = new Property(name);
+    childrenNode.property = new Property(name, path);
     return childrenNode;
   }
 

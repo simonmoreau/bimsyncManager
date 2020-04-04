@@ -4,10 +4,12 @@ import { EventEmitter } from '@angular/core';
 
 export class Property {
 
-    constructor(givenName: string) {
+    constructor(givenName: string, path: string) {
         this.name = givenName;
+        this.path = path;
     }
     name: string;
+    path: string;
 }
 
 export class IPropertiesList {
