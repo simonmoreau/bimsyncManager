@@ -76,16 +76,21 @@ export class QuantitiesComponent implements OnInit {
             return quantityObject;
           });
 
-          console.log(quantityData);
-
           // build an array of string for displayedColumns
           this.displayedColumns = propertiesList.map(p => p.name);
 
           // initialize the data source
           this.dataSource = new MatTableDataSource(quantityData);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.paginator.pageSizeOptions = [5];
 
           console.log(quantityData);
         }
+      }
+      else
+      {
+        this.displayedColumns = null;
+        this.dataSource = null;
       }
 
 
