@@ -25,6 +25,7 @@ export class RevisionSelectionComponent implements OnInit {
   selectedRevision: IRevision;
   selectedCategory: ITypeSummary;
   isLoading: boolean;
+
   sortAlphabetically = (a: ITypeSummary, b: ITypeSummary) => {
     if (a.name < b.name) { return -1; }
     if (a.name > b.name) { return 1; }
@@ -121,8 +122,13 @@ export class RevisionSelectionComponent implements OnInit {
   }
 
   onCategoryChange(event: MatSelectChange) {
-    this.categoryChange.emit(event.value as ITypeSummary);
-    this.selectedPropertiesService.ValueProperties.ClearList();
+    this.bimsyncService.listProducts(this.projectId,this.selectedCategory.name,this.selectedRevision.id)
+    .subscribe(p=> {
+      this.selectedPropertiesService.Products = p;
+      const ifcType:ITypeSummary = event.value as ITypeSummary;
+      this.categoryChange.emit(ifcType);
+      this.selectedPropertiesService.ValueProperties.ClearList();
+    });
   }
 
   private GetModels(projectId: string): Observable<IModel[]> {
