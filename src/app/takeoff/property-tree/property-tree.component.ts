@@ -5,7 +5,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { PropertyTreeService } from './property-tree.service';
 import { PropertyNode } from './property-tree.model';
 import { SelectedPropertiesService } from '../selected-properties.service';
-import { Property } from '../selected-properties.model';
+import { DisplayedQuantityProperty } from '../selected-properties.model';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 /** Flat to-do item node with expandable and level information */
@@ -13,7 +13,7 @@ export class PropertyFlatNode {
   expandable: boolean;
   name: string;
   level: number;
-  property: Property;
+  property: DisplayedQuantityProperty;
 }
 
 @Component({
@@ -66,7 +66,7 @@ export class PropertyTreeComponent {
   /**
    * Update the selection to match the list of selected properties
    */
-  private UpdateTreeSelection(selectedProperties: Property[]) {
+  private UpdateTreeSelection(selectedProperties: DisplayedQuantityProperty[]) {
 
     // get all the nodes in the tree
     const nodes: PropertyNode[] = Array.from(this.nestedNodeMap.keys());
@@ -209,7 +209,7 @@ export class PropertyTreeComponent {
     return null;
   }
 
-  public drop(event: CdkDragDrop<Property[]>) {
+  public drop(event: CdkDragDrop<DisplayedQuantityProperty[]>) {
 
   }
 

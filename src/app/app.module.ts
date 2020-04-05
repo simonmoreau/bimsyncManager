@@ -45,6 +45,8 @@ import { PropertyPanelComponent } from './bimsync/property-panel/property-panel.
 import { ViewerMenuComponent } from './bimsync/viewer-menu/viewer-menu.component';
 import { QuantitiesComponent } from './takeoff/quantities/quantities.component';
 
+import { Round } from './shared/pipes/round';
+
 declare var window: any;
 window.$ = window.jQuery = $;
 
@@ -69,6 +71,7 @@ window.$ = window.jQuery = $;
     PropertyPanelComponent,
     ViewerMenuComponent,
     QuantitiesComponent,
+    Round
   ],
   imports: [
     BrowserModule,

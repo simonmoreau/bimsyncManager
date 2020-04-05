@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Property, IPropertiesList } from '../selected-properties.model';
+import { DisplayedQuantityProperty, IPropertiesList } from '../selected-properties.model';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { BehaviorSubject } from 'rxjs';
 import { SelectedPropertiesService } from '../selected-properties.service';
@@ -11,7 +11,7 @@ import { SelectedPropertiesService } from '../selected-properties.service';
 })
 export class DropZoneComponent implements OnInit {
 
-  propertiesList$: BehaviorSubject<Property[]>;
+  propertiesList$: BehaviorSubject<DisplayedQuantityProperty[]>;
   @Input() propertiesList: IPropertiesList;
   @Input() zoneId: string;
 
@@ -22,7 +22,7 @@ export class DropZoneComponent implements OnInit {
     this.propertiesList$ = this.propertiesList.propertiesListChange;
   }
 
-  public drop(event: CdkDragDrop<Property[]>) {
+  public drop(event: CdkDragDrop<DisplayedQuantityProperty[]>) {
     if (event.isPointerOverContainer) {
       if (event.container.id === event.previousContainer.id) {
         // move inside same list

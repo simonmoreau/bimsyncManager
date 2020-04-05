@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { BimsyncService } from 'src/app/bimsync/bimsync.service';
 import { PropertyNode } from './property-tree.model';
 import { SelectedPropertiesService } from '../selected-properties.service';
-import { Property } from '../selected-properties.model';
+import { DisplayedQuantityProperty } from '../selected-properties.model';
 
 @Injectable({
   providedIn: 'root'
@@ -70,7 +70,9 @@ export class PropertyTreeService {
           Object.keys(pSet[propertySetKey].properties).forEach(propertyKey => {
             const childrenNode: PropertyNode = new PropertyNode();
             childrenNode.name = propertyKey;
-            childrenNode.property = new Property(propertyKey, 'propertySets.' + propertySetKey + '.properties.' + propertyKey + '.nominalValue.value' );
+            const quantityProperty = new DisplayedQuantityProperty();
+            quantityProperty.LoadProperty(pSet[propertySetKey].properties[propertyKey],propertySetKey,propertyKey);
+            childrenNode.property = quantityProperty;
             childrenNodes.push(childrenNode);
           });
           node.children = childrenNodes;
@@ -88,7 +90,10 @@ export class PropertyTreeService {
           Object.keys(qSet[quantitySetKey].quantities).forEach(propertyKey => {
             const childrenNode: PropertyNode = new PropertyNode();
             childrenNode.name = propertyKey;
-            childrenNode.property = new Property(propertyKey, 'quantitySets.' + quantitySetKey + '.quantities.' + propertyKey + '.value.value');
+            const quantityProperty = new DisplayedQuantityProperty();
+            quantityProperty.LoadQuantity(qSet[quantitySetKey].quantities[propertyKey],quantitySetKey,propertyKey);
+            childrenNode.property = quantityProperty;
+
             childrenNodes.push(childrenNode);
           });
           node.children = childrenNodes;
@@ -114,7 +119,9 @@ export class PropertyTreeService {
   CreateAChildNode(name: string, path:string): PropertyNode {
     const childrenNode: PropertyNode = new PropertyNode();
     childrenNode.name = name;
-    childrenNode.property = new Property(name, path);
+    const quantityProperty = new DisplayedQuantityProperty();
+    quantityProperty.LoadAttribute(name, path);
+    childrenNode.property = quantityProperty;
     return childrenNode;
   }
 

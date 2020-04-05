@@ -40,6 +40,16 @@ interface QuantityObject {
   [key: string]: any
 }
 
+export class TableColumn {
+
+  constructor(name:string,displayedName:string){
+    this.name = name;
+    this.displayedName = displayedName;
+  }
+  name: string;
+  displayedName: string;
+}
+
 @Component({
   selector: 'app-quantities',
   templateUrl: './quantities.component.html',
@@ -50,6 +60,7 @@ export class QuantitiesComponent implements OnInit {
   selectedProps: IPropertiesList;
   filteredProps: IPropertiesList;
 
+  columns: TableColumn[];
   displayedColumns: string[];
   dataSource = new MatTableDataSource();
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -69,23 +80,24 @@ export class QuantitiesComponent implements OnInit {
           const quantityData = this.selectedPropertiesService.Products.map(p => {
             const quantityObject: QuantityObject = {};
             propertiesList.forEach(property => {
-              quantityObject[property.name] = this.GetValueByString(p,property.path)
+              quantityObject[property.id] = this.GetValueByString(p,property.path)
             });
             return quantityObject;
           });
 
           // build an array of string for displayedColumns
-          this.displayedColumns = propertiesList.map(p => p.name);
+          this.displayedColumns = propertiesList.map(p => p.id);
+          this.columns = propertiesList.map(p => new TableColumn(p.id, p.GetDisplayedName()));
 
           // initialize the data source
           this.dataSource = new MatTableDataSource(quantityData);
           this.dataSource.paginator = this.paginator;
           this.dataSource.paginator.pageSizeOptions = [5];
-
         }
       }
       else {
         this.displayedColumns = null;
+        this.columns = null;
         this.dataSource = null;
       }
 
@@ -116,6 +128,4 @@ export class QuantitiesComponent implements OnInit {
     }
     return o;
   }
-
-
 }
