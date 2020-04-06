@@ -3,40 +3,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { SelectedPropertiesService } from '../selected-properties.service';
-import { IPropertiesList } from '../selected-properties.model';
+import { IPropertiesList, DisplayedQuantityProperty } from '../selected-properties.model';
 import { Property } from '../../shared/models/bimsync.model';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-  { position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na' },
-  { position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg' },
-  { position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al' },
-  { position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si' },
-  { position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P' },
-  { position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S' },
-  { position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl' },
-  { position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar' },
-  { position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K' },
-  { position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca' },
-];
 
-interface QuantityObject {
+interface DataSourceObject {
   [key: string]: any
 }
 
@@ -57,8 +29,8 @@ export class TableColumn {
 })
 export class QuantitiesComponent implements OnInit {
 
-  selectedProps: IPropertiesList;
-  filteredProps: IPropertiesList;
+  selectedValueProperties: IPropertiesList;
+  filteredFilterProperties: IPropertiesList;
 
   columns: TableColumn[];
   displayedColumns: string[];
@@ -66,8 +38,8 @@ export class QuantitiesComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(private selectedPropertiesService: SelectedPropertiesService) {
-    this.selectedProps = selectedPropertiesService.ValueProperties;
-    this.filteredProps = selectedPropertiesService.FilterProperties;
+    this.selectedValueProperties = selectedPropertiesService.ValueProperties;
+    this.filteredFilterProperties = selectedPropertiesService.FilterProperties;
   }
 
   // Create observer object when the list of properties changes
@@ -78,12 +50,16 @@ export class QuantitiesComponent implements OnInit {
 
           // build the quantityData object to be passed as data source
           const quantityData = this.selectedPropertiesService.Products.map(p => {
-            const quantityObject: QuantityObject = {};
+            const dataSourceObject: DataSourceObject = {};
             propertiesList.forEach(property => {
-              quantityObject[property.id] = this.GetValueByString(p,property.path)
+              dataSourceObject[property.id] = this.GetValueByString(p,property.path)
             });
-            return quantityObject;
+            return dataSourceObject;
           });
+
+          // Regroup data in the quantityData object
+          const test = this.GroupDataInArray(quantityData,propertiesList);
+          console.log(test);
 
           // build an array of string for displayedColumns
           this.displayedColumns = propertiesList.map(p => p.id);
@@ -100,8 +76,6 @@ export class QuantitiesComponent implements OnInit {
         this.columns = null;
         this.dataSource = null;
       }
-
-      console.log(propertiesList.length);
     }),
     error: err => console.log(err),
     complete: () => console.log('Observer got a complete notification'),
@@ -110,11 +84,11 @@ export class QuantitiesComponent implements OnInit {
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.paginator.pageSizeOptions = [5];
-    this.selectedProps.propertiesListChange.subscribe(this.onPropertiesListChange);
+    this.selectedValueProperties.propertiesListChange.subscribe(this.onPropertiesListChange);
   }
 
   // Get the value of a property from its path
-  GetValueByString(o:object, s:string) {
+  private GetValueByString(o:object, s:string) : any {
     s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
     s = s.replace(/^\./, '');           // strip a leading dot
     const a = s.split('.');
@@ -127,5 +101,49 @@ export class QuantitiesComponent implements OnInit {
         }
     }
     return o;
+  }
+
+  onlyUnique = function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+}
+
+  private GroupDataInArray(dataSourceObjects: DataSourceObject[], propertiesList : DisplayedQuantityProperty[]):DataSourceObject[] {
+
+    // get the first column unique values
+    const firstColumnUniqueValues:any[] = dataSourceObjects.map(qo => qo[propertiesList[0].id]).filter(this.onlyUnique);
+
+    const resultingDataSourceObjects: DataSourceObject[] = [];
+
+    firstColumnUniqueValues.forEach(firstColumnUniqueValue => {
+
+      // get an array of dataSourceObject for each value of the first column
+      const filteredDataSourceObjects = dataSourceObjects.filter(ds => ds[propertiesList[0].id] === firstColumnUniqueValue);
+
+      // Create a new DataSourceObject with these arrays
+      const dataSourceObject: DataSourceObject = {};
+
+      dataSourceObject[propertiesList[0].id] = firstColumnUniqueValue;
+
+      for (let index = 1; index < propertiesList.length; index++) {
+        dataSourceObject[propertiesList[index].id] = filteredDataSourceObjects.map(o => o[propertiesList[index].id]);
+      }
+
+      resultingDataSourceObjects.push(dataSourceObject);
+    });
+
+    return resultingDataSourceObjects;
+  }
+
+  private AggregateGroupedData(dataSourceObjects: DataSourceObject[], propertiesList : DisplayedQuantityProperty[]):DataSourceObject[] {
+
+
+    dataSourceObjects.forEach(dataSourceObject => {
+      for (let index = 1; index < propertiesList.length; index++) {
+        dataSourceObject[propertiesList[index].id] = dataSourceObject[propertiesList[index].id];
+      }
+    });
+
+    return dataSourceObjects;
+
   }
 }

@@ -10,7 +10,7 @@
     max-height: 10rem;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 1rem 1rem 1rem 0.5rem;
+    padding: 0.5rem 1rem 0.5rem 0.5rem;
 }
 
 .no-property {
@@ -20,6 +20,30 @@
 .cdk-drop-list-dragging .no-property {
     display: none;
 }
+
+.mat-small {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+}
+
+.mat-chip-small {
+    padding: 1px 12px;
+}
+
+.chip-flex{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+.chip-menu-button {
+    height: 30px;
+    line-height: 30px;
+}
+
+
 
 
 

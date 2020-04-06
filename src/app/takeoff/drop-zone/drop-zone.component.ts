@@ -26,16 +26,21 @@ export class DropZoneComponent implements OnInit {
     if (event.isPointerOverContainer) {
       if (event.container.id === event.previousContainer.id) {
         // move inside same list
-        this.propertiesList.changePropertyRank(event.previousIndex, event.currentIndex);
+        this.propertiesList.ChangePropertyRank(event.previousIndex, event.currentIndex);
       } else {
         // move between lists
-        this.propertiesList.insertItem(event.item.data);
+        this.propertiesList.InsertItem(event.item.data);
       }
     } else {
       // Remove from the list
-      this.propertiesList.removeItemAtIndex(event.previousIndex);
+      this.propertiesList.RemoveItemAtIndex(event.previousIndex);
     }
     console.log(event);
+  }
+
+  public RemoveProperty(displayedQuantityProperty: DisplayedQuantityProperty)
+  {
+    this.propertiesList.RemoveItem(displayedQuantityProperty);
   }
 
 }
