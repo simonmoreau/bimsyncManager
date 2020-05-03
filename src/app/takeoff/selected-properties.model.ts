@@ -23,6 +23,11 @@ export class DisplayedQuantityProperty {
     type: string;
     availableGroupingModes: GroupingMode[];
 
+    upDisabled: boolean;
+    downDisabled: boolean;
+    toTopDisabled: boolean;
+    toBottomDisabled: boolean;
+
     private _groupingMode: GroupingMode;
     get groupingMode(): GroupingMode {
         return this._groupingMode;
@@ -130,6 +135,7 @@ export class IPropertiesList {
     propertiesListChange: BehaviorSubject<DisplayedQuantityProperty[]>;
 
     get data(): DisplayedQuantityProperty[] { return this.propertiesListChange.value; }
+    get lenght(): number { return this.propertiesList.length; }
 
     constructor() {
         this.propertiesList = new Array<DisplayedQuantityProperty>();
@@ -152,6 +158,7 @@ export class IPropertiesList {
         if (index === -1) {
             this.propertiesList.push(property);
             property.DisplayedQuantityPropertyChange.subscribe(this.onPropertiesChange);
+            this.UpdatePropertiesAvailableMovements();
         }
         if (notify == null || notify === true) {
             this.propertiesListChange.next(this.propertiesList);
@@ -160,6 +167,7 @@ export class IPropertiesList {
 
     ClearList(notify?: boolean) {
         this.propertiesList = new Array<DisplayedQuantityProperty>();
+        this.UpdatePropertiesAvailableMovements();
         if (notify == null || notify === true) {
             this.propertiesListChange.next(this.propertiesList);
         }
@@ -170,6 +178,7 @@ export class IPropertiesList {
         const index = this.propertiesList.indexOf(property, 0);
         if (index > -1) {
             this.propertiesList.splice(index, 1);
+            this.UpdatePropertiesAvailableMovements();
         }
         if (notify == null || notify === true) {
             this.propertiesListChange.next(this.propertiesList);
@@ -179,14 +188,55 @@ export class IPropertiesList {
     RemoveItemAtIndex(index: number) {
         if (index > -1 && index < this.propertiesList.length) {
             this.propertiesList.splice(index, 1);
+            this.UpdatePropertiesAvailableMovements();
         }
         this.propertiesListChange.next(this.propertiesList);
     }
 
     ChangePropertyRank(previousIndex: number, newIndex: number) {
-        const property: DisplayedQuantityProperty = this.propertiesList[previousIndex];
+
+        const property = this.propertiesList[previousIndex];
         this.propertiesList.splice(previousIndex, 1);
         this.propertiesList.splice(newIndex, 0, property);
+        this.UpdatePropertiesAvailableMovements();
         this.propertiesListChange.next(this.propertiesList);
+    }
+
+    findIndex(property: DisplayedQuantityProperty): number {
+        const index: number = this.propertiesList.findIndex(prop => prop.id === property.id);
+        return index;
+    }
+
+    private UpdatePropertiesAvailableMovements() {
+
+        if (this.propertiesList.length > 0) {
+            const lastIndex = this.propertiesList.length - 1;
+
+            if (lastIndex === 0) {
+                this.propertiesList[0].upDisabled = true;
+                this.propertiesList[0].downDisabled = true;
+                this.propertiesList[0].toTopDisabled = true;
+                this.propertiesList[0].toBottomDisabled = true;
+            }
+            else {
+                this.propertiesList.forEach(property => {
+                    property.upDisabled = false;
+                    property.downDisabled = false;
+                    property.toTopDisabled = false;
+                    property.toBottomDisabled = false;
+                });
+
+                this.propertiesList[0].upDisabled = true;
+                this.propertiesList[0].downDisabled = false;
+                this.propertiesList[0].toTopDisabled = true;
+                this.propertiesList[0].toBottomDisabled = false;
+
+                this.propertiesList[lastIndex].upDisabled = false;
+                this.propertiesList[lastIndex].downDisabled = true;
+                this.propertiesList[lastIndex].toTopDisabled = false;
+                this.propertiesList[lastIndex].toBottomDisabled = true;
+            }
+        }
+
     }
 }

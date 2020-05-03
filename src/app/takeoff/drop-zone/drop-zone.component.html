@@ -29,10 +29,10 @@
         </mat-menu>
 
         <mat-menu #subMenu="matMenu">
-          <button mat-menu-item disabled=true class="chip-menu-button">Up</button>
-          <button mat-menu-item class="chip-menu-button">Down</button>
-          <button mat-menu-item class="chip-menu-button">To top</button>
-          <button mat-menu-item class="chip-menu-button">To bottom</button>
+          <button mat-menu-item class="chip-menu-button" [disabled]="property.upDisabled" (click)="MovePropertyUp(property)">Up</button>
+          <button mat-menu-item class="chip-menu-button" [disabled]="property.downDisabled" (click)="MovePropertyDown(property)">Down</button>
+          <button mat-menu-item class="chip-menu-button" [disabled]="property.toTopDisabled" (click)="MovePropertyToTop(property)">To top</button>
+          <button mat-menu-item class="chip-menu-button" [disabled]="property.toBottomDisabled" (click)="MovePropertyToBottom(property)">To bottom</button>
         </mat-menu>
 
       </mat-chip>

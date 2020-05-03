@@ -12,6 +12,7 @@ import { SelectedPropertiesService } from '../selected-properties.service';
 export class DropZoneComponent implements OnInit {
 
   propertiesList$: BehaviorSubject<DisplayedQuantityProperty[]>;
+
   @Input() propertiesList: IPropertiesList;
   @Input() zoneId: string;
 
@@ -42,5 +43,49 @@ export class DropZoneComponent implements OnInit {
   {
     this.propertiesList.RemoveItem(displayedQuantityProperty);
   }
+
+  public MovePropertyUp(displayedQuantityProperty: DisplayedQuantityProperty)
+  {
+    const previousIndex: number = this.propertiesList.findIndex(displayedQuantityProperty);
+    if (previousIndex !== -1)
+    {
+      if (previousIndex > 0)
+      {
+        this.propertiesList.ChangePropertyRank(previousIndex,previousIndex-1);
+      }
+    }
+  }
+
+  public MovePropertyDown(displayedQuantityProperty: DisplayedQuantityProperty)
+  {
+    const previousIndex: number = this.propertiesList.findIndex(displayedQuantityProperty);
+    if (previousIndex !== -1)
+    {
+      if (previousIndex < this.propertiesList.lenght - 1)
+      {
+        this.propertiesList.ChangePropertyRank(previousIndex,previousIndex+1);
+      }
+    }
+  }
+
+  public MovePropertyToTop(displayedQuantityProperty: DisplayedQuantityProperty)
+  {
+    const previousIndex: number = this.propertiesList.findIndex(displayedQuantityProperty);
+    if (previousIndex !== -1)
+    {
+      this.propertiesList.ChangePropertyRank(previousIndex,0);
+    }
+  }
+
+  public MovePropertyToBottom(displayedQuantityProperty: DisplayedQuantityProperty)
+  {
+    const previousIndex: number = this.propertiesList.findIndex(displayedQuantityProperty);
+    if (previousIndex !== -1)
+    {
+      this.propertiesList.ChangePropertyRank(previousIndex,this.propertiesList.lenght-1);
+    }
+  }
+
+  
 
 }
