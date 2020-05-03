@@ -19,11 +19,12 @@
           <button mat-menu-item class="chip-menu-button" (click)="RemoveProperty(property)">Remove Field</button>
           <button mat-menu-item class="chip-menu-button" [matMenuTriggerFor]="subMenu">Move</button>
           <mat-divider></mat-divider>
-          <button 
+          <button
           mat-menu-item class="chip-menu-button" 
           *ngFor="let groupingMode of property.availableGroupingModes"
           (click)="property.groupingMode = groupingMode">
-            {{groupingMode.modeName}}
+            <mat-icon *ngIf="groupingMode.isEnabled" style="margin-right:4px">done</mat-icon>
+            <span>{{groupingMode.modeName}}</span>
           </button>
         </mat-menu>
 

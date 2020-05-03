@@ -70,6 +70,7 @@ export class DisplayedQuantityProperty {
         }
 
         this.availableGroupingModes = this.GetAvailableGroupingModes();
+        this.groupingMode = this.availableGroupingModes[0];
     }
 
     public LoadQuantity(bimsyncQuantity: Quantity, quantitySetKey: string, quantityKey: string) {
@@ -79,6 +80,7 @@ export class DisplayedQuantityProperty {
         this.type = bimsyncQuantity.value.type;
 
         this.availableGroupingModes = this.GetAvailableGroupingModes();
+        this.groupingMode = this.availableGroupingModes[0];
     }
 
     public LoadAttribute(name: string, path: string) {
@@ -88,6 +90,7 @@ export class DisplayedQuantityProperty {
         this.type = 'string';
 
         this.availableGroupingModes = this.GetAvailableGroupingModes();
+        this.groupingMode = this.availableGroupingModes[0];
     }
 
     private GetAvailableGroupingModes(): GroupingMode[] {
