@@ -67,22 +67,24 @@ export class PropertyTreeComponent {
    * Update the selection to match the list of selected properties
    */
   private UpdateTreeSelection(selectedProperties: DisplayedQuantityProperty[]) {
-
+    console.log('UpdateTreeSelection');
     // get all the nodes in the tree
     const nodes: PropertyNode[] = Array.from(this.nestedNodeMap.keys());
     // Check if these nodes must be selected
     nodes.forEach((node: PropertyNode) => {
       const flatNode = this.nestedNodeMap.get(node);
-      const indexInSelectedProps = selectedProperties.indexOf(node.property, 0);
-      if (indexInSelectedProps !== -1) { // The property must not be selected
-        // Toggle it if necessary
-        if (!this.checklistSelection.isSelected(flatNode)) {
-           this.todoLeafItemSelectionToggle(flatNode);
+      if (flatNode.level !== 0) {
+        const indexInSelectedProps = selectedProperties.indexOf(node.property, 0);
+        if (indexInSelectedProps !== -1) { // The property must not be selected
+          // Toggle it if necessary
+          if (!this.checklistSelection.isSelected(flatNode)) {
+            this.todoLeafItemSelectionToggle(flatNode);
           }
-      } else { // The property must be selected
-        // Toggle it if necessary
-        if (this.checklistSelection.isSelected(flatNode)) {
-          this.todoLeafItemSelectionToggle(flatNode);
+        } else { // The property must be selected
+          // Toggle it if necessary
+          if (this.checklistSelection.isSelected(flatNode)) {
+            this.todoLeafItemSelectionToggle(flatNode);
+          }
         }
       }
     });
@@ -134,25 +136,18 @@ export class PropertyTreeComponent {
   todoItemSelectionToggle(node: PropertyFlatNode): void {
     this.checklistSelection.toggle(node);
     const descendants = this.treeControl.getDescendants(node);
-    this.checklistSelection.isSelected(node)
-      ? this.checklistSelection.select(...descendants)
-      : this.checklistSelection.deselect(...descendants);
 
     if (this.checklistSelection.isSelected(node)) {
-      descendants.forEach(child =>
-        this.selectedPropertiesService.ValueProperties.InsertItem(child.property)
-      );
+      // All children must be selected
+      descendants.forEach(childNode => {
+        if (!this.checklistSelection.isSelected(childNode)) this.todoLeafItemSelectionToggle(childNode);
+      });
     } else {
-      descendants.forEach(child =>
-        this.selectedPropertiesService.ValueProperties.RemoveItem(child.property)
-      );
+      // All children must be deselected
+      descendants.forEach(childNode => {
+        if (this.checklistSelection.isSelected(childNode)) this.todoLeafItemSelectionToggle(childNode);
+      });
     }
-
-    // Force update for the parent
-    descendants.every(child =>
-      this.checklistSelection.isSelected(child)
-    );
-    this.checkAllParentsSelection(node);
   }
 
   /** Toggle a leaf to-do item selection. Check all the parents to see if they changed */
@@ -212,7 +207,4 @@ export class PropertyTreeComponent {
   public drop(event: CdkDragDrop<DisplayedQuantityProperty[]>) {
 
   }
-
 }
-
-
