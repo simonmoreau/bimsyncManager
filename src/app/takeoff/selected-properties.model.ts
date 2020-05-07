@@ -36,7 +36,6 @@ export class DisplayedQuantityProperty {
         this._groupingMode = groupingMode;
         this.SetGroupingMode(groupingMode);
         this.DisplayedQuantityPropertyChange.next(this);
-        console.log(this._groupingMode);
     }
 
     private SetGroupingMode(groupingMode: GroupingMode) {

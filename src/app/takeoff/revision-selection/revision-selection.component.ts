@@ -51,6 +51,7 @@ export class RevisionSelectionComponent implements OnInit {
                     this.categories = s.sort(this.sortAlphabetically);
                     if (s.length !== 0) {
                       this.selectedCategory = s[0];
+                      this.LoadProductList(this.selectedCategory as ITypeSummary);
                       this.categoryChange.emit(this.selectedCategory as ITypeSummary);
                       this.selectedPropertiesService.ValueProperties.ClearList();
                       this.isLoading = false;
@@ -122,10 +123,15 @@ export class RevisionSelectionComponent implements OnInit {
   }
 
   onCategoryChange(event: MatSelectChange) {
+    const typeSummary: ITypeSummary = event.value as ITypeSummary;
+    this.LoadProductList(typeSummary);
+  }
+
+  private LoadProductList(typeSummary: ITypeSummary) {
     this.bimsyncService.listProducts(this.projectId,this.selectedCategory.name,this.selectedRevision.id)
     .subscribe(p=> {
       this.selectedPropertiesService.Products = p;
-      const ifcType:ITypeSummary = event.value as ITypeSummary;
+      const ifcType:ITypeSummary = typeSummary;
       this.categoryChange.emit(ifcType);
       this.selectedPropertiesService.ValueProperties.ClearList();
     });
