@@ -145,7 +145,7 @@ export class QuantitiesComponent implements OnInit {
 
       let filteredDataSourceObjects = dataSourceObjects;
       if (properties[columnNumber].groupingMode.mode === GroupingModeEnum.DontSummarize) {
-        // get an array of dataSourceObject for each value of the first column
+        // get an array of dataSourceObject for each value of the column
         filteredDataSourceObjects = dataSourceObjects.filter(ds => ds[properties[columnNumber].id] === currentColumnValue);
       }
 

@@ -133,7 +133,6 @@ export class IPropertiesList {
 
     private propertiesList: DisplayedQuantityProperty[];
     propertiesListChange: BehaviorSubject<DisplayedQuantityProperty[]>;
-    propertyChange: BehaviorSubject<DisplayedQuantityProperty>;
 
     get data(): DisplayedQuantityProperty[] { return this.propertiesListChange.value; }
     get lenght(): number { return this.propertiesList.length; }
@@ -146,7 +145,7 @@ export class IPropertiesList {
     // Create observer object when one of the property of the list changes
     onPropertyChange = {
         next: (property => {
-            // this.propertyChange.next(property);
+            this.propertiesListChange.next(this.propertiesList);
             console.log('something changed in ' + property.name);
         }),
         error: err => console.log(err),
