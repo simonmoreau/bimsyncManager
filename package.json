@@ -27,7 +27,7 @@
     "@types/jquery": "^3.3.29",
     "@webcomponents/custom-elements": "1.0.0",
     "core-js": "^2.6.9",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "mutationobserver-shim": "^0.3.3",
     "ng-drag-drop": "^5.0.0",
     "prismjs": "^1.16.0",
