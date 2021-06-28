@@ -30,7 +30,7 @@
     "jquery": "^3.5.0",
     "mutationobserver-shim": "^0.3.3",
     "ng-drag-drop": "^5.0.0",
-    "prismjs": "^1.16.0",
+    "prismjs": "^1.24.0",
     "rxjs": "^6.5.2",
     "ts-helpers": "^1.1.1",
     "tslib": "^1.9.3",
